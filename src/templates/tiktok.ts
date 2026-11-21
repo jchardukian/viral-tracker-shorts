@@ -1,6 +1,6 @@
 import { type Ctx, fitWrapped, font } from "../engine/draw.ts";
 import { formatCount, shortCount } from "../engine/util.ts";
-import { avatar, chevron, disclosurePill, glyph, rrect, statusBar, text } from "./common.ts";
+import { avatar, chevron, disclosurePill, glyph, postThumb, rrect, statusBar, text } from "./common.ts";
 import { frameOf, snapshotIndex, type Template, type VideoSpec } from "./types.ts";
 
 // The same time-lapse, as a follower-analytics screen: tabs, total followers
@@ -123,9 +123,7 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   ctx.fillStyle = CARD;
   ctx.fill();
   text(ctx, "Most recent post", L + 26, y + 52, 600, 30, "#fff");
-  rrect(ctx, L + 26, y + 80, 96, 140, 10);
-  ctx.fillStyle = "#2a2a2a";
-  ctx.fill();
+  postThumb(ctx, spec, render, i, 0, L + 26, y + 80, 96, 140, 10);
   text(ctx, s.latest.title, L + 150, y + 122, 500, 30, "#fff");
   text(ctx, s.latest.age, L + 150, y + 162, 400, 26, DIM);
   const stats: ["views" | "likes" | "comments" | "shares", number][] = [
@@ -146,9 +144,7 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   text(ctx, "Earlier posts", L + 26, 1537, 600, 30, "#fff");
   s.older.forEach((o, j) => {
     const oy = 1570 + j * 118;
-    rrect(ctx, L + 26, oy, 66, 96, 8);
-    ctx.fillStyle = "#2a2a2a";
-    ctx.fill();
+    postThumb(ctx, spec, render, i, j + 1, L + 26, oy, 66, 96, 8);
     text(ctx, o.title, L + 116, oy + 38, 500, 28, "#fff");
     glyph(ctx, "views", L + 116, oy + 84, 22, "#bbb");
     text(ctx, shortCount(o.views), L + 150, oy + 84, 500, 25, "#bbb");

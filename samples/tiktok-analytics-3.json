@@ -5,7 +5,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-3.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-3.png",
-  "sha256": "5175cb37aab36080b25dd57152135ef6d4a2306f6717a680b58e964af733e60a",
+  "sha256": "982221b1dc7805d94c5d3a480349a36edadd0d0b94135494a25349661d319071",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -14,7 +14,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 11.633333,
-    "sizeBytes": 1262926,
+    "sizeBytes": 1300597,
     "meanVolumeDb": -12.1
   },
   "audio": {

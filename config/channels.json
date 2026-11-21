@@ -18,7 +18,8 @@
     "youtubeCategoryId": "24",
     "variants": [
       "dashboard"
-    ]
+    ],
+    "avatarImage": "assets/brand/avatar.jpg"
   },
   "tiktok": {
     "name": "Oh My Trillion",
@@ -37,6 +38,7 @@
     "variants": [
       "analytics",
       "profile"
-    ]
+    ],
+    "avatarImage": "assets/brand/avatar.jpg"
   }
 }

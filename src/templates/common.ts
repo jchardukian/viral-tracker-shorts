@@ -1,7 +1,42 @@
-import { type Ctx, fitWrapped, font, rrect } from "../engine/draw.ts";
+import { type Canvas, createCanvas } from "@napi-rs/canvas";
+import { execFileSync } from "node:child_process";
+import { existsSync } from "node:fs";
+import { isAbsolute, join } from "node:path";
+import { type Ctx, fitWrapped, font, ROOT, rrect } from "../engine/draw.ts";
 import type { VideoSpec } from "./types.ts";
 
+const AV = 512;
+const images = new Map<string, Canvas | null>();
+/** Decode an image file to a square canvas, synchronously (ffmpeg does the decoding). */
+function image(rel: string): Canvas | null {
+  if (!images.has(rel)) {
+    const file = isAbsolute(rel) ? rel : join(ROOT, rel);
+    let out: Canvas | null = null;
+    if (existsSync(file)) {
+      const raw = execFileSync("ffmpeg", ["-v", "error", "-i", file, "-vf", `crop='min(iw,ih)':'min(iw,ih)',scale=${AV}:${AV}`, "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgba", "-"], { maxBuffer: 1 << 26 });
+      out = createCanvas(AV, AV);
+      const octx = out.getContext("2d");
+      const data = octx.createImageData(AV, AV);
+      data.data.set(raw);
+      octx.putImageData(data, 0, 0);
+    }
+    images.set(rel, out);
+  }
+  return images.get(rel)!;
+}
+
+/** Profile photo in a circle; falls back to the initial on a gradient. */
 export function avatar(ctx: Ctx, cx: number, cy: number, r: number, spec: VideoSpec) {
+  const img = spec.profile.avatarImage ? image(spec.profile.avatarImage) : null;
+  if (img) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(img, cx - r, cy - r, r * 2, r * 2);
+    ctx.restore();
+    return;
+  }
   const g = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
   g.addColorStop(0, spec.profile.avatar[0]);
   g.addColorStop(1, spec.profile.avatar[1]);
@@ -15,6 +50,61 @@ export function avatar(ctx: Ctx, cx: number, cy: number, r: number, spec: VideoS
   ctx.textBaseline = "middle";
   ctx.fillText(spec.profile.initial, cx, cy + r * 0.04);
   ctx.textBaseline = "alphabetic";
+}
+
+const THUMB_STAGES = 10;
+const thumbCache = new WeakMap<VideoSpec, Canvas[]>();
+
+/**
+ * Thumbnails for the "previous posts" shown inside a video: small renders of
+ * this same template at earlier points of the time-lapse, so the post list
+ * looks like the channel's own uploads (as in the reference) instead of blank
+ * tiles. Built once per video and cached.
+ */
+function thumbs(spec: VideoSpec, render: (ctx: Ctx, spec: VideoSpec, t: number) => void): Canvas[] {
+  let list = thumbCache.get(spec);
+  if (!list) {
+    const full = createCanvas(spec.width, spec.height);
+    const fctx = full.getContext("2d");
+    const inner = { ...spec, noThumbs: true };
+    list = [];
+    for (let k = 0; k < THUMB_STAGES; k++) {
+      const snap = Math.round(((k + 1) / (THUMB_STAGES + 1)) * (spec.snapshots.length - 1));
+      fctx.setTransform(1, 0, 0, 1, 0, 0);
+      render(fctx, inner, (spec.cuts[snap] + 0.5) / spec.fps);
+      const small = createCanvas(360, 640);
+      small.getContext("2d").drawImage(full, 0, 0, 360, 640);
+      list.push(small);
+    }
+    thumbCache.set(spec, list);
+  }
+  return list;
+}
+
+/**
+ * Draw post thumbnail number `age` (0 = most recent) for the snapshot on
+ * screen: older posts show earlier stages of the growth. Cover-cropped into
+ * the rounded rect; plain dark tile while rendering thumbnails themselves.
+ */
+export function postThumb(ctx: Ctx, spec: VideoSpec, render: (ctx: Ctx, spec: VideoSpec, t: number) => void, snapIndex: number, age: number, x: number, y: number, w: number, h: number, radius: number) {
+  ctx.save();
+  rrect(ctx, x, y, w, h, radius);
+  ctx.clip();
+  ctx.fillStyle = "#1b1b1b";
+  ctx.fillRect(x, y, w, h);
+  if (!spec.noThumbs) {
+    const list = thumbs(spec, render);
+    const stage = Math.floor((snapIndex / Math.max(1, spec.snapshots.length - 1)) * THUMB_STAGES) - 1 - age;
+    const img = list[((stage % THUMB_STAGES) + THUMB_STAGES) % THUMB_STAGES];
+    if (stage >= 0 || snapIndex > 0) {
+      const scale = Math.max(w / img.width, h / img.height);
+      const sw = w / scale;
+      const sh = h / scale;
+      // keep the top of the frame (name + count) in view
+      ctx.drawImage(stage >= 0 ? img : list[0], (img.width - sw) / 2, Math.min(img.height - sh, img.height * 0.08), sw, sh, x, y, w, h);
+    }
+  }
+  ctx.restore();
 }
 
 export function text(ctx: Ctx, s: string, x: number, y: number, weight: number, size: number, color: string, align: "left" | "center" | "right" = "left") {

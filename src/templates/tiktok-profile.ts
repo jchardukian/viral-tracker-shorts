@@ -1,6 +1,6 @@
 import { type Ctx, fitWrapped, font } from "../engine/draw.ts";
 import { formatCount, shortCount } from "../engine/util.ts";
-import { avatar, chevron, disclosurePill, glyph, rrect, statusBar, text } from "./common.ts";
+import { avatar, chevron, disclosurePill, glyph, postThumb, rrect, statusBar, text } from "./common.ts";
 import { frameOf, snapshotIndex, type Template, type VideoSpec } from "./types.ts";
 
 // Simplified TikTok variant: a profile screen where the name and the follower
@@ -15,7 +15,8 @@ const layout = {
 };
 
 function render(ctx: Ctx, spec: VideoSpec, t: number) {
-  const s = spec.snapshots[snapshotIndex(spec, frameOf(spec, t))];
+  const snap = snapshotIndex(spec, frameOf(spec, t));
+  const s = spec.snapshots[snap];
   ctx.fillStyle = "#000";
   ctx.fillRect(0, 0, spec.width, spec.height);
   statusBar(ctx, s.clock);
@@ -54,9 +55,13 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   tiles.forEach((c, k) => {
     const x = 28 + (k % 3) * 344;
     const y = 1140 + Math.floor(k / 3) * 392;
-    rrect(ctx, x, y, 336, 384, 6);
-    ctx.fillStyle = k % 2 ? "#141414" : "#1a1a1a";
-    ctx.fill();
+    postThumb(ctx, spec, render, snap, k, x, y, 336, 384, 6);
+    // darken the foot of the tile so the view count stays readable
+    const g = ctx.createLinearGradient(0, y + 290, 0, y + 384);
+    g.addColorStop(0, "rgba(0,0,0,0)");
+    g.addColorStop(1, "rgba(0,0,0,0.75)");
+    ctx.fillStyle = g;
+    ctx.fillRect(x, y + 290, 336, 94);
     glyph(ctx, "views", x + 18, y + 362, 22, "#fff");
     text(ctx, shortCount(Math.round(c.views * (k > 2 ? 0.6 : 1))), x + 50, y + 362, 600, 26, "#fff");
   });

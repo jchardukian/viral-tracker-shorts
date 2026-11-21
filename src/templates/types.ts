@@ -67,7 +67,9 @@ export interface VideoSpec {
   fps: number;
   durationSec: number;
   frames: number;
-  profile: { name: string; handle: string; initial: string; avatar: [string, string] };
+  profile: { name: string; handle: string; initial: string; avatar: [string, string]; avatarImage?: string | null };
+  /** set while rendering post thumbnails, so thumbnails do not nest */
+  noThumbs?: boolean;
   /** one static caption for the whole video, like the reference */
   caption: string;
   snapshots: Snapshot[];

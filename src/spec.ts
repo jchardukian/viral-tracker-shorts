@@ -25,6 +25,8 @@ export interface ChannelConfig extends HistoryConfig {
   handle: string;
   initial: string;
   avatar: [string, string];
+  /** profile photo, relative to the repo root; falls back to the initial on a gradient */
+  avatarImage?: string | null;
   /** template variants to rotate through; defaults to the platform's first */
   variants?: string[];
   bufferChannelId: string | null;
@@ -174,7 +176,7 @@ export function buildSpec(input: SpecInput): VideoSpec {
     fps: FPS,
     durationSec,
     frames,
-    profile: { name: channel.name, handle: channel.handle, initial: channel.initial, avatar: channel.avatar },
+    profile: { name: channel.name, handle: channel.handle, initial: channel.initial, avatar: channel.avatar, avatarImage: channel.avatarImage ?? null },
     caption: input.caption,
     snapshots,
     cuts,

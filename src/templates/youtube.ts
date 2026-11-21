@@ -1,6 +1,6 @@
 import { type Ctx, wrap } from "../engine/draw.ts";
 import { formatCount, shortCount, shortHours } from "../engine/util.ts";
-import { avatar, chevron, disclosurePill, glyph, outlinedCaption, rrect, statusBar, text, trendIcon } from "./common.ts";
+import { avatar, chevron, disclosurePill, glyph, outlinedCaption, postThumb, rrect, statusBar, text, trendIcon } from "./common.ts";
 import { type ContentCard, frameOf, type Snapshot, snapshotIndex, type Template, type VideoSpec } from "./types.ts";
 
 // A creator-dashboard screen in the style of the reference recording:
@@ -20,15 +20,9 @@ const layout = {
   caption: { x: 100, y: 940, w: 800, h: 230 },
 };
 
-function contentHead(ctx: Ctx, c: ContentCard, y: number, open: boolean | null) {
-  // thumbnail: a tiny dashboard screenshot, like the reference's own uploads
-  rrect(ctx, L + 30, y + 26, 76, 116, 8);
-  ctx.fillStyle = "#101010";
-  ctx.fill();
-  ctx.fillStyle = "#3d3d3d";
-  [18, 34, 50, 66, 84].forEach((dy, i) => ctx.fillRect(L + 40, y + 26 + dy, i % 2 ? 40 : 56, 6));
-  ctx.fillStyle = "#c33";
-  ctx.fillRect(L + 40, y + 34, 14, 6);
+function contentHead(ctx: Ctx, spec: VideoSpec, snap: number, age: number, c: ContentCard, y: number, open: boolean | null) {
+  // thumbnail: a small render of an earlier upload, like the reference's own posts
+  postThumb(ctx, spec, render, snap, age, L + 30, y + 26, 76, 116, 8);
   text(ctx, c.title, L + 150, y + 68, 500, 30, "#fff");
   text(ctx, c.age, L + 150, y + 112, 400, 27, DIM);
   const sy = y + 226;
@@ -48,27 +42,27 @@ function row(ctx: Ctx, y: number, label: string, value: string, trend: number | 
   if (link) chevron(ctx, R - 52, y - 10, "right");
 }
 
-function latest(ctx: Ctx, s: Snapshot) {
+function latest(ctx: Ctx, spec: VideoSpec, snap: number, s: Snapshot) {
   const y = 965;
   const c = s.latest;
   if (!c.expanded) {
     rrect(ctx, L, y, W, 270, 14);
     ctx.fillStyle = CARD;
     ctx.fill();
-    contentHead(ctx, c, y, false);
+    contentHead(ctx, spec, snap, 0, c, y, false);
     s.older.forEach((o, i) => {
       const oy = y + 300 + i * 300;
       rrect(ctx, L, oy, W, 270, 14);
       ctx.fillStyle = CARD;
       ctx.fill();
-      contentHead(ctx, o, oy, false);
+      contentHead(ctx, spec, snap, i + 1, o, oy, false);
     });
     return;
   }
   rrect(ctx, L, y, W, 900, 14);
   ctx.fillStyle = CARD;
   ctx.fill();
-  contentHead(ctx, c, y, true);
+  contentHead(ctx, spec, snap, 0, c, y, true);
   let ry = y + 300;
   if (c.note) {
     rrect(ctx, L + 28, ry - 20, W - 56, 124, 12);
@@ -110,7 +104,8 @@ function tabBar(ctx: Ctx) {
 }
 
 function render(ctx: Ctx, spec: VideoSpec, t: number) {
-  const s = spec.snapshots[snapshotIndex(spec, frameOf(spec, t))];
+  const snap = snapshotIndex(spec, frameOf(spec, t));
+  const s = spec.snapshots[snap];
   ctx.fillStyle = BG;
   ctx.fillRect(0, 0, spec.width, spec.height);
   statusBar(ctx, s.clock);
@@ -153,7 +148,7 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   metric(ctx, L + (W + 24) / 2, "Watch time (hours)", shortHours(s.watch28), s.up);
 
   text(ctx, "Latest published content", L, 928, 700, 42, "#fff");
-  latest(ctx, s);
+  latest(ctx, spec, snap, s);
   tabBar(ctx);
 
   // static caption over the content card, exactly where the reference keeps it
