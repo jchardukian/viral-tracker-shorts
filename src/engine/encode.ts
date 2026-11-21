@@ -4,7 +4,7 @@ import { once } from "node:events";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { TEMPLATES } from "../spec.ts";
+import { templateFor } from "../spec.ts";
 import { snapshotIndex, type VideoSpec } from "../templates/types.ts";
 import { registerFonts } from "./draw.ts";
 
@@ -12,7 +12,7 @@ export function renderFrame(spec: VideoSpec, t: number) {
   registerFonts();
   const canvas = createCanvas(spec.width, spec.height);
   const ctx = canvas.getContext("2d");
-  TEMPLATES[spec.platform].render(ctx, spec, t);
+  templateFor(spec).render(ctx, spec, t);
   return canvas;
 }
 
@@ -50,7 +50,7 @@ export async function renderVideo(spec: VideoSpec, out: string, opts: { forceSil
   const closed = once(ff, "close");
   const canvas = createCanvas(spec.width, spec.height);
   const ctx = canvas.getContext("2d");
-  const tpl = TEMPLATES[spec.platform];
+  const tpl = templateFor(spec);
   let last = -1;
   for (let f = 0; f < spec.frames; f++) {
     const snap = snapshotIndex(spec, f);

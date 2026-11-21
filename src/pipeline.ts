@@ -1,16 +1,17 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { loadLibrary, pickSound, resolveAudio } from "./audio/library.ts";
+import { activeSounds, loadLibrary, pickSound, resolveAudio } from "./audio/library.ts";
 import { fileSha256, probe, type Probe, renderStill, renderVideo } from "./engine/encode.ts";
 import { hashSeed, rng } from "./engine/util.ts";
 import { Queue, slotKey } from "./publish/queue.ts";
 import { addDays, zonedIso } from "./publish/schedule.ts";
-import { buildSpec, loadCaptions, loadChannels, readJson } from "./spec.ts";
+import { buildSpec, loadCaptions, loadChannels, readJson, TEMPLATES } from "./spec.ts";
 import { type Platform, PLATFORMS, type VideoSpec } from "./templates/types.ts";
 
 export interface Manifest {
   id: string;
   platform: Platform;
+  variant: string;
   file: string;
   silentFile: string | null;
   still: string;
@@ -50,6 +51,7 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
   const m: Manifest = {
     id: spec.id,
     platform: spec.platform,
+    variant: spec.variant,
     file,
     silentFile,
     still,
@@ -73,6 +75,7 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
 interface SampleDef {
   id: string;
   platform: Platform;
+  variant?: string;
   soundIndex: number;
   caption: number;
   targetSec: number;
@@ -90,6 +93,7 @@ export function planSamples(date: string): Planned[] {
       spec: buildSpec({
         id: s.id,
         platform: s.platform,
+        variant: s.variant,
         // samples show three differently shaped growth curves
         channel: { ...channels[s.platform], history: null, asOf: date, currentCount: s.currentCount, historySeed: s.historySeed },
         caption: cap.captions[s.caption % cap.captions.length],
@@ -121,25 +125,28 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
     const lib = loadLibrary(platform);
     const cap = captions[platform];
     const perDay = schedule.slots[platform].length;
+    const variants = channels[platform].variants?.length ? channels[platform].variants! : [Object.keys(TEMPLATES[platform])[0]];
     const dayOffset = Math.round((Date.parse(start) - Date.parse("2026-01-01")) / 86400000);
     for (let d = 0; d < days; d++) {
       const date = addDays(start, d);
       schedule.slots[platform].forEach((hhmm, slot) => {
         const idx = (dayOffset + d) * perDay + slot;
+        const r = rotation(idx, cap.captions.length, Math.max(1, activeSounds(lib, date).length), variants.length);
         const id = `${platform}-${date}-${String.fromCharCode(97 + slot)}`;
         out.push({
           spec: buildSpec({
             id,
             platform,
+            variant: variants[r.variant],
             channel: channels[platform],
-            caption: cap.captions[idx % cap.captions.length],
+            caption: cap.captions[r.caption],
             contentTitles: cap.contentTitles,
-            audio: resolveAudio(pickSound(lib, date, idx), platform),
+            audio: resolveAudio(pickSound(lib, date, r.sound), platform),
             date,
             targetSec: 13 + rng(hashSeed(id))() * 5,
             disclosure: channels.disclosure,
           }),
-          title: cap.titles[idx % cap.titles.length],
+          title: cap.titles[r.caption % cap.titles.length],
           text: cap.description,
           dueAt: zonedIso(date, hhmm, schedule.timezone),
         });
@@ -147,6 +154,29 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
     }
   }
   return out;
+}
+
+/**
+ * Which caption / sound / template variant post number `idx` gets.
+ * Caption changes every post, sound every `nCaptions` posts, and the variant
+ * is offset by both, so the three dimensions are crossed rather than moving
+ * together: every caption meets every sound, and each variant meets both.
+ */
+export function rotation(idx: number, nCaptions: number, nSounds: number, nVariants: number) {
+  const caption = idx % nCaptions;
+  const block = Math.floor(idx / nCaptions);
+  const sound = block % nSounds;
+  const variant = (caption + sound + Math.floor(block / nSounds)) % nVariants;
+  return { caption, sound, variant };
+}
+
+/** The experiment plan as a CSV: one row per planned post, before anything is rendered. */
+export function planCsv(plans: Planned[]): string {
+  const q = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const head = "platform,video_id,due_at,caption,audio_id,audio_mode,native_sound_link,template_variant,duration_sec,final_count,title";
+  return (
+    [head, ...plans.map((p) => [p.spec.platform, p.spec.id, p.dueAt, p.spec.caption, p.spec.audio.soundId, p.spec.audio.mode, p.spec.audio.link, p.spec.variant, p.spec.durationSec.toFixed(2), p.spec.endCount, p.title].map(q).join(","))].join("\n") + "\n"
+  );
 }
 
 /** Adds rendered videos to the publish queue as pending_approval. Duplicate slots are skipped. */
@@ -162,6 +192,9 @@ export function enqueueBatch(queue: Queue, batchId: string, manifests: Manifest[
       platform: m.platform,
       file: m.file,
       audioMode: m.audio.mode,
+      caption: m.caption,
+      audioId: m.audio.soundId,
+      variant: m.variant,
       title: m.title,
       text: m.text,
       dueAt: m.dueAt,

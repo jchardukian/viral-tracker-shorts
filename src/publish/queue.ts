@@ -14,6 +14,14 @@ export interface QueueItem {
   /** file to upload: embedded-audio MP4 when licensed, otherwise the silent MP4 */
   file: string;
   audioMode: "embedded" | "silent";
+  /** experiment dimensions, carried through to the analytics ledger */
+  caption: string;
+  audioId: string | null;
+  variant: string;
+  /** public HTTPS URL of the uploaded MP4; set by `media upload`, required to publish */
+  mediaUrl: string | null;
+  /** filled by `queue sync` once the platform has the post */
+  published?: { status: string; sentAt: string | null; externalLink: string | null; error: string | null; checkedAt: string };
   title: string;
   text: string;
   /** ISO 8601 with UTC offset */
@@ -56,10 +64,11 @@ export class Queue {
   }
 
   /** Adds an item unless its slot or video is already queued. Returns false for duplicates. */
-  enqueue(item: Omit<QueueItem, "status" | "attempts" | "remoteId" | "lastError" | "history">, now = new Date()): boolean {
+  enqueue(item: Omit<QueueItem, "status" | "attempts" | "remoteId" | "lastError" | "history" | "mediaUrl" | "published">, now = new Date()): boolean {
     if (this.items.some((i) => i.key === item.key || (i.videoId === item.videoId && i.platform === item.platform))) return false;
     this.items.push({
       ...item,
+      mediaUrl: null,
       status: "pending_approval",
       attempts: 0,
       remoteId: null,
@@ -89,6 +98,8 @@ export interface PublishOptions {
   sleep?: (ms: number) => Promise<void>;
   now?: () => Date;
   log?: (line: string) => void;
+  /** restrict this run to matching items (e.g. a single validation post) */
+  filter?: (item: QueueItem) => boolean;
 }
 
 /**
@@ -106,6 +117,7 @@ export async function publishQueue(queue: Queue, publisher: Publisher, opts: Pub
   const log = opts.log ?? (() => {});
   const summary = { sent: 0, failed: 0, skipped: 0 };
   for (const item of queue.items) {
+    if (opts.filter && !opts.filter(item)) continue;
     if (item.status !== "approved" && !(item.status === "failed" && item.attempts < maxAttempts)) {
       summary.skipped++;
       continue;

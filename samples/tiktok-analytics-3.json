@@ -1,10 +1,11 @@
 {
-  "id": "tiktok-sample-3",
+  "id": "tiktok-analytics-3",
   "platform": "tiktok",
-  "file": "/home/user/viral-tracker-shorts/samples/tiktok-sample-3.mp4",
+  "variant": "analytics",
+  "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-3.mp4",
   "silentFile": null,
-  "still": "/home/user/viral-tracker-shorts/samples/tiktok-sample-3.png",
-  "sha256": "9379f07d47976840e63cb1178bb6586b15c6e7a2f7236759696b6ebe6e0692fb",
+  "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-3.png",
+  "sha256": "dad2c486aeeee52cd93b3c2cb0c28730f21f1843db598adce8a286fe642aaed3",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,7 +14,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 12.733333,
-    "sizeBytes": 1333898,
+    "sizeBytes": 1398193,
     "meanVolumeDb": -12.7
   },
   "audio": {
@@ -25,16 +26,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-c.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "try this sound #fyp #smallcreator",
+  "title": "the follower growth everyone wants #fyp",
   "text": "growth time-lapse animation · simulated numbers",
   "dueAt": null,
   "counter": {
     "start": 0,
     "end": 127400
   },
-  "caption": "try this sound to grow your account",
+  "caption": "The follower growth everyone wants",
   "cuts": 134,
   "dataSource": "simulated",
-  "seed": 3912215083,
+  "seed": 2598103499,
   "durationSec": 12.733333333333333
 }

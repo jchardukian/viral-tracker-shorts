@@ -1,28 +1,41 @@
 {
   "disclosure": "simulated numbers",
   "youtube": {
-    "name": "Road to 100K",
-    "handle": "@roadto100k",
+    "name": "Road to Viral",
+    "handle": "@roadtoviral",
     "initial": "R",
-    "avatar": ["#ff5a36", "#e5322d"],
+    "avatar": [
+      "#ff5a36",
+      "#e5322d"
+    ],
     "startDate": "2026-01-12",
     "asOf": "2026-11-21",
     "currentCount": 110266,
     "dailyGrowth": 310,
     "history": null,
     "bufferChannelId": null,
-    "youtubeCategoryId": "24"
+    "youtubeCategoryId": "24",
+    "variants": [
+      "dashboard"
+    ]
   },
   "tiktok": {
-    "name": "road to 100k",
-    "handle": "@roadto100k",
+    "name": "Road to Viral",
+    "handle": "@roadtoviral",
     "initial": "R",
-    "avatar": ["#7b6bff", "#fe2c55"],
+    "avatar": [
+      "#7b6bff",
+      "#fe2c55"
+    ],
     "startDate": "2026-03-02",
     "asOf": "2026-11-21",
     "currentCount": 48350,
     "dailyGrowth": 190,
     "history": null,
-    "bufferChannelId": null
+    "bufferChannelId": null,
+    "variants": [
+      "analytics",
+      "profile"
+    ]
   }
 }

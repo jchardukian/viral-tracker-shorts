@@ -1,10 +1,11 @@
 {
-  "id": "tiktok-sample-1",
+  "id": "tiktok-analytics-1",
   "platform": "tiktok",
-  "file": "/home/user/viral-tracker-shorts/samples/tiktok-sample-1.mp4",
+  "variant": "analytics",
+  "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-1.mp4",
   "silentFile": null,
-  "still": "/home/user/viral-tracker-shorts/samples/tiktok-sample-1.png",
-  "sha256": "c84c36243aede40307e973e249c396b30accd86750fd417742165b92498dee45",
+  "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-1.png",
+  "sha256": "b57f70abc6a93f47263205be82e1f35ff496ce11b1ceef435925b9a0c38b3bf0",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,7 +14,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 17.433333,
-    "sizeBytes": 1817309,
+    "sizeBytes": 1922414,
     "meanVolumeDb": -13
   },
   "audio": {
@@ -25,16 +26,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-a.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "use this sound to get more followers #fyp",
+  "title": "POV: your TikTok finally blows up #fyp",
   "text": "growth time-lapse animation · simulated numbers",
   "dueAt": null,
   "counter": {
     "start": 0,
     "end": 48350
   },
-  "caption": "use this sound to get more followers",
+  "caption": "POV: Your TikTok finally blows up",
   "cuts": 203,
   "dataSource": "simulated",
-  "seed": 1283706709,
+  "seed": 869337284,
   "durationSec": 17.433333333333334
 }

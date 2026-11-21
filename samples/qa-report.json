@@ -1,62 +1,92 @@
 [
   {
-    "file": "tiktok-sample-1.mp4",
+    "file": "tiktok-analytics-1.mp4",
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
     "audio": "aac -13 dB",
     "sec": 17.43,
-    "MB": 1.82,
+    "MB": 1.92,
     "result": "pass"
   },
   {
-    "file": "tiktok-sample-2.mp4",
+    "file": "tiktok-analytics-2.mp4",
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
     "audio": "aac -13.4 dB",
     "sec": 15,
-    "MB": 1.36,
+    "MB": 1.48,
     "result": "pass"
   },
   {
-    "file": "tiktok-sample-3.mp4",
+    "file": "tiktok-analytics-3.mp4",
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
     "audio": "aac -12.7 dB",
     "sec": 12.73,
-    "MB": 1.33,
+    "MB": 1.4,
     "result": "pass"
   },
   {
-    "file": "youtube-sample-1.mp4",
+    "file": "tiktok-profile-1.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13 dB",
+    "sec": 17.43,
+    "MB": 1.32,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-profile-2.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13.4 dB",
+    "sec": 15,
+    "MB": 0.99,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-profile-3.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -12.7 dB",
+    "sec": 12.73,
+    "MB": 0.97,
+    "result": "pass"
+  },
+  {
+    "file": "youtube-dashboard-1.mp4",
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
     "audio": "aac -13.1 dB",
     "sec": 18,
-    "MB": 2.4,
+    "MB": 2.5,
     "result": "pass"
   },
   {
-    "file": "youtube-sample-2.mp4",
+    "file": "youtube-dashboard-2.mp4",
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
     "audio": "aac -12.9 dB",
     "sec": 15,
-    "MB": 1.83,
+    "MB": 1.86,
     "result": "pass"
   },
   {
-    "file": "youtube-sample-3.mp4",
+    "file": "youtube-dashboard-3.mp4",
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
     "audio": "aac -13.7 dB",
     "sec": 11.53,
-    "MB": 1.45,
+    "MB": 1.53,
     "result": "pass"
   }
 ]

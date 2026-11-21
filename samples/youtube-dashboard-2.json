@@ -1,10 +1,11 @@
 {
-  "id": "youtube-sample-2",
+  "id": "youtube-dashboard-2",
   "platform": "youtube",
-  "file": "/home/user/viral-tracker-shorts/samples/youtube-sample-2.mp4",
+  "variant": "dashboard",
+  "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-2.mp4",
   "silentFile": null,
-  "still": "/home/user/viral-tracker-shorts/samples/youtube-sample-2.png",
-  "sha256": "4531b182ef8293d597265cfab6a9fae7bcb5df6ed7d1fd31d5e7998ca26bef8c",
+  "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-2.png",
+  "sha256": "3107e5fc3169a0eeec901408c853d3c3ad9167f0eb7164422ae79ee7315f96a0",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,7 +14,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 15,
-    "sizeBytes": 1826207,
+    "sizeBytes": 1856525,
     "meanVolumeDb": -12.9
   },
   "audio": {
@@ -25,16 +26,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-b.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "Use this audio to gain more subscribers #shorts",
+  "title": "Imagine waking up to this #shorts",
   "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
   "dueAt": null,
   "counter": {
     "start": 0,
     "end": 43871
   },
-  "caption": "Use this audio to gain more subscribers",
+  "caption": "Imagine waking up to this",
   "cuts": 168,
   "dataSource": "simulated",
-  "seed": 3651390141,
+  "seed": 4012235032,
   "durationSec": 15
 }

@@ -1,31 +1,40 @@
 {
   "youtube": {
     "captions": [
-      "Use this sound to get more subscribers",
-      "Use this audio to gain more subscribers",
-      "Try this sound to get more subscribers",
-      "Use this sound to grow your channel"
+      "POV: Your channel finally takes off",
+      "Imagine waking up to this",
+      "One viral video changes everything"
     ],
-    "contentTitles": ["Use this sound", "Use this audio", "Try this audio", "Use this sound to grow", "Day by day"],
+    "contentTitles": [
+      "Day 1",
+      "The one that took off",
+      "Posting every day",
+      "Small channel update",
+      "Why this worked"
+    ],
     "titles": [
-      "Use this sound to get more subscribers #shorts",
-      "Use this audio to gain more subscribers #shorts",
-      "Try this sound #shorts"
+      "POV: Your channel finally takes off #shorts",
+      "Imagine waking up to this #shorts",
+      "One viral video changes everything #shorts"
     ],
     "description": "Growth time-lapse animation. The figures shown are simulated, not live analytics."
   },
   "tiktok": {
     "captions": [
-      "use this sound to get more followers",
-      "use this audio to gain more followers",
-      "try this sound to grow your account",
-      "use this sound if you want more followers"
+      "POV: Your TikTok finally blows up",
+      "Imagine opening TikTok to this",
+      "The follower growth everyone wants"
     ],
-    "contentTitles": ["use this sound", "use this audio", "try this sound", "day by day"],
+    "contentTitles": [
+      "day 1",
+      "the one that blew up",
+      "posting every day",
+      "small account update"
+    ],
     "titles": [
-      "use this sound to get more followers #fyp",
-      "use this audio to gain followers #fyp #growth",
-      "try this sound #fyp #smallcreator"
+      "POV: your TikTok finally blows up #fyp",
+      "imagine opening TikTok to this #fyp",
+      "the follower growth everyone wants #fyp"
     ],
     "description": "growth time-lapse animation · simulated numbers"
   }

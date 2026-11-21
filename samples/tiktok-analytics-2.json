@@ -1,10 +1,11 @@
 {
-  "id": "tiktok-sample-2",
+  "id": "tiktok-analytics-2",
   "platform": "tiktok",
-  "file": "/home/user/viral-tracker-shorts/samples/tiktok-sample-2.mp4",
+  "variant": "analytics",
+  "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-2.mp4",
   "silentFile": null,
-  "still": "/home/user/viral-tracker-shorts/samples/tiktok-sample-2.png",
-  "sha256": "7d5aea64ace512c74cffef135a85464097c0acfb5208a10bebd40052711d9c5d",
+  "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-2.png",
+  "sha256": "a285fc57c49ac5318712edfbb10c2f48fe61299b44e56787370e234172f984b8",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,7 +14,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 15,
-    "sizeBytes": 1358690,
+    "sizeBytes": 1479465,
     "meanVolumeDb": -13.4
   },
   "audio": {
@@ -25,16 +26,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-b.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "use this audio to gain followers #fyp #growth",
+  "title": "imagine opening TikTok to this #fyp",
   "text": "growth time-lapse animation · simulated numbers",
   "dueAt": null,
   "counter": {
     "start": 0,
     "end": 9820
   },
-  "caption": "use this audio to gain more followers",
+  "caption": "Imagine opening TikTok to this",
   "cuts": 164,
   "dataSource": "simulated",
-  "seed": 1243091918,
+  "seed": 3893291891,
   "durationSec": 15
 }

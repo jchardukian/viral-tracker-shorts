@@ -1,0 +1,41 @@
+{
+  "id": "tiktok-profile-2",
+  "platform": "tiktok",
+  "variant": "profile",
+  "file": "/home/user/viral-tracker-shorts/samples/tiktok-profile-2.mp4",
+  "silentFile": null,
+  "still": "/home/user/viral-tracker-shorts/samples/tiktok-profile-2.png",
+  "sha256": "b9a71bc23a52f747daff962d69bfc349476c0095ff5345f65eb6cde058a48bda",
+  "probe": {
+    "width": 1080,
+    "height": 1920,
+    "vcodec": "h264",
+    "pixFmt": "yuv420p",
+    "fps": 30,
+    "acodec": "aac",
+    "durationSec": 15,
+    "sizeBytes": 991269,
+    "meanVolumeDb": -13.4
+  },
+  "audio": {
+    "soundId": "tt-test-beat-b",
+    "bpm": 112,
+    "beatOffsetSec": 0,
+    "link": null,
+    "mode": "embedded",
+    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-b.wav",
+    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+  },
+  "title": "imagine opening TikTok to this #fyp",
+  "text": "growth time-lapse animation · simulated numbers",
+  "dueAt": null,
+  "counter": {
+    "start": 0,
+    "end": 9820
+  },
+  "caption": "Imagine opening TikTok to this",
+  "cuts": 164,
+  "dataSource": "simulated",
+  "seed": 2118477422,
+  "durationSec": 15
+}

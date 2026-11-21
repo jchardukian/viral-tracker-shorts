@@ -3,9 +3,23 @@
 Automated YouTube Shorts and TikTok growth time-lapse videos, modelled on the
 reference recording in this repo: a rapid hard-cut run through a creator
 dashboard, day by day from 0 to the current count, under one static caption
-— rendered as 1080x1920 H.264/AAC MP4s from config, with a gated publishing queue.
+— rendered as 1080x1920 H.264/AAC MP4s from config, with media hosting, a
+gated publishing queue and an analytics ledger.
 
 See `PROJECT_BRIEF.md` for the product spec.
+
+## Status
+
+| Area | State |
+| --- | --- |
+| Renderer, three templates, samples | done, tested |
+| Audio rotation, licence gate, silent exports | done, tested |
+| 14-day experiment (28 + 28) | planned and rendered locally, queued as **pending approval**, not scheduled |
+| MP4 hosting on Cloudflare R2 | done, **verified live** (upload + public download) |
+| Buffer scheduling | built against Buffer's live schema, unit-tested; **not yet run live** |
+| Analytics ledger (export / import / Buffer pull / report) | done, tested; Buffer pull not yet run live |
+
+What still needs the owner is listed under [Remaining blockers](#remaining-blockers).
 
 ## What the reference does (measured from the MP4)
 
@@ -18,95 +32,117 @@ per-frame change detection on the subscriber number:
 | Structure | time-lapse of daily dashboard screenshots, hard cuts, no transitions | same |
 | Cut rate | ~260 changes; about every 2 frames (~15/s), slowing over the last ~3 s | 2-frame cuts, 16-step slowing tail |
 | Ending / loop | final dashboard held ~2 s, then restarts at 0 | 2 s hold starting on a beat, loops to 0 |
-| Subscribers | 0 → 110,266; long flat stretches and sudden spikes | generated curve with the same shape, or your real history CSV |
-| Views / watch time | 28-day figures that rise *and* fall (874 → 17.2M → 3.6M) | rolling 28-day window over daily views |
-| Latest content card | changes every cut; sometimes expanded with ranking / views / average % viewed / likes / comments, sometimes a notice, sometimes collapsed with older videos below | same states, re-rolled every cut |
-| Caption | one caption for the whole video, two lines, white with black outline, over the content card | same position and style |
-| Other motion | none: no CTA button, no progress bar, no captions changing | none |
+| Subscribers | 0 → 110,266; long flat stretches and sudden spikes | generated curve with the same shape, or a real history CSV |
+| Views / watch time | 28-day figures that rise *and* fall | rolling 28-day window over daily views |
+| Latest content card | changes every cut; expanded, with a notice, or collapsed | same states, re-rolled every cut |
+| Caption | one caption for the whole video, two lines, over the content card | same position; static for the whole video |
+| Other motion | none | none |
 
-The YouTube template reproduces that dashboard layout with an original mark
-and icons (no platform logos). The TikTok template is the same time-lapse as a
-follower-analytics screen: tabs, total followers with a 7-day delta, key
-metrics, a follower growth chart that draws itself as days cut past, and the
-most recent post.
+## Templates
+
+| Platform | Variant | What it is |
+| --- | --- | --- |
+| YouTube | `dashboard` | creator-dashboard layout from the recording: channel + total subscribers, 28-day cards, latest published content |
+| TikTok | `analytics` | follower-analytics screen: total followers with 7-day change, key metrics, growth chart that draws itself, recent posts |
+| TikTok | `profile` | simplified profile screen: profile name, avatar, one very large follower count, posts grid |
+
+Original mark and icons; no platform logos. `variants` in
+`config/channels.json` lists which variants a batch rotates through.
 
 ## Preview the samples
 
-`samples/` holds the six approval samples (3 YouTube, 3 TikTok):
+`samples/` holds nine approval samples:
 
-- `samples/contact-sheet.png` — all six at a glance
-- `samples/<id>.mp4` — playable video (GitHub plays MP4s in the file view)
-- `samples/<id>.png` — still, `samples/<id>.json` — render manifest
-- `samples/qa-report.json` — technical check results
+- `samples/contact-sheet.png` — final frame of all nine
+- `samples/tiktok-variants.png` — the two TikTok variants side by side, same data
+- `samples/reference-comparison.png` — reference frame next to the YouTube template
+- `samples/youtube-dashboard-{1,2,3}.mp4`, `samples/tiktok-analytics-{1,2,3}.mp4`,
+  `samples/tiktok-profile-{1,2,3}.mp4` (GitHub plays MP4s in the file view)
+- `samples/<id>.json` — render manifest, `samples/qa-report.json` — technical checks
 
-Regenerate them with `npm install && npm run samples` (needs Node 22+ and
-`ffmpeg`/`ffprobe` on PATH; about 40 s on 4 cores). Renders are deterministic.
+Regenerate with `npm install && npm run samples` (Node 22+, `ffmpeg`/`ffprobe`
+on PATH; about a minute). Renders are deterministic.
 
 ## Commands
 
 ```
-npm run samples                                   # the 6 approval samples
-npm run batch -- --start 2026-11-23 --days 14     # 2/day/platform -> out/batches/
-npm run batch -- --start 2026-11-23 --days 1 --platform tiktok --limit 1
-npm run qa -- <dir>                               # technical checks on MP4s
+npm run samples                                    # the 9 approval samples
+npm run batch -- --start 2026-11-30 --days 14      # plan + render + queue (pending approval)
+npm run batch -- --start 2026-11-30 --days 14 --plan-only
+npm run qa -- <dir>                                # technical checks on MP4s
 npm run queue -- list
-npm run queue -- approve --batch 2026-11-23_14d   # explicit approval
-npm run queue -- publish                          # DRY RUN (default)
-npm run queue -- publish --live                   # schedule approved items in Buffer
-npm run queue -- export                           # upload-ready folder + schedule.csv
+npm run queue -- approve --batch 2026-11-30_14d    # or --id <videoId>
+npm run media -- upload [--id <videoId>]           # host approved MP4s on R2, verify public URLs
+npm run queue -- publish                           # DRY RUN (default)
+npm run queue -- publish --live [--id <videoId>]   # schedule approved items in Buffer
+npm run queue -- sync                              # what happened to each scheduled post
+npm run queue -- export                            # upload-ready folder + schedule.csv
+npm run analytics -- export | import <csv> | pull | report
 npm test && npm run typecheck
 ```
 
-A batch renders each video, a silent twin (`*.silent.mp4`) when music is
-embedded, a still and a manifest, runs QA, then adds the videos to
-`state/queue.json` as `pending_approval`. Re-running a batch never queues the
-same slot twice.
+The order for going live is: `batch` → review → `queue approve` →
+`media upload` → `queue publish --live` → `queue sync` → `analytics …`.
+Every step before `publish --live` is safe to run; nothing reaches Buffer
+without both an approval and `--live`.
 
 ## How it is built
 
 | Path | What |
 | --- | --- |
-| `src/engine/` | canvas drawing helpers, odometer counter, ffmpeg encoder, ffprobe QA |
-| `src/templates/youtube.ts`, `tiktok.ts` | the two platform-native layouts, each with declared safe areas |
-| `src/spec.ts` | deterministic video spec: cut schedule, daily snapshots, caption |
+| `src/engine/` | canvas drawing helpers, ffmpeg encoder, ffprobe QA |
+| `src/templates/` | `youtube.ts`, `tiktok.ts`, `tiktok-profile.ts`, each with declared safe areas |
+| `src/spec.ts` | deterministic video spec: cut schedule, daily snapshots, caption, variant |
 | `src/history.ts` | simulated growth curve, or real history from CSV |
 | `src/audio/` | per-platform sound library, licence gate, rotation, test-beat synth |
-| `src/pipeline.ts` | sample + batch planning, manifests, queueing |
-| `src/publish/` | queue (idempotency, approval, retries), Buffer adapter, scheduling |
+| `src/pipeline.ts` | sample + batch planning, rotation, manifests, queueing |
+| `src/publish/` | queue (idempotency, approval, retries), R2 media hosting, Buffer adapter, scheduling |
+| `src/analytics.ts` | experiment ledger: CSV export/import, Buffer metrics, comparison report |
 | `config/` | channel names/numbers, captions, schedule, audio libraries, sample defs |
+| `experiments/` | committed plan for each prepared experiment |
 
 Rendering is plain `@napi-rs/canvas` → raw frames → `ffmpeg`. No browser, no
 paid services, no AI video generation; a video takes 5–8 s to render.
 
 ### Configuration
 
-- `config/channels.json` — channel/profile name, handle, avatar colours, and the
-  growth story: `startDate` (count is 0), `asOf` + `currentCount` (where the
-  count stands today), `dailyGrowth` (after `asOf`), optional `history` CSV,
+- `config/channels.json` — brand name (`Road to Viral`), handle (unconfirmed,
+  change freely), avatar colours, template `variants`, the growth story
+  (`startDate`, `asOf` + `currentCount`, `dailyGrowth`, optional `history` CSV),
   Buffer channel ids, on-screen disclosure.
 - `config/captions.json` — on-screen captions, content-card titles, post titles
   and description per platform.
 - `config/schedule.json` — timezone and the two daily slots per platform.
 - `config/audio/youtube.json`, `config/audio/tiktok.json` — the sound rotation.
 
-The names in `channels.json` are placeholders.
+### Simulated numbers
 
-### Simulated versus real numbers
+The growth curve is generated, so a small "simulated numbers" pill sits beside
+the count and the post description says so. This is deliberate: the videos
+must not present simulated growth as genuine account analytics. `history` in
+`channels.json` can point at a CSV of real daily figures
+(`date,count,views28,watch_hours28`) if that ever becomes the better story.
 
-By default the curve is generated, and a small "simulated numbers" pill is
-shown beside the count (and the post description says so). The reference
-works because its numbers are the channel's own; to do the same, export your
-daily figures to a CSV and point `history` at it:
+## The 14-day experiment
 
-```
-date,count,views28,watch_hours28
-2026-01-12,0,0,0
-2026-01-13,6,874,0.4
-```
+`experiments/2026-11-30_14d/plan.csv` is the committed plan: 28 YouTube Shorts
+and 28 TikToks, two per day per platform, 2026-11-30 to 2026-12-13.
 
-With a history file the headline numbers are real. The content-card detail
-rows are still generated, so only set `disclosure` to `null` if you are
-comfortable with that.
+- **Captions:** three per platform, changing every post.
+- **Sounds:** three per platform, changing every third post, so every caption
+  runs with every sound (9 combinations, each used at least 3 times).
+- **TikTok variant:** `analytics` and `profile`, 14 posts each, crossed with
+  caption and sound so the comparison is not confounded.
+- **Counts:** every video is the full time-lapse up to its own date, so the
+  final number rises each day.
+
+The start date is a placeholder. To move it, re-run `batch` with a new
+`--start`; nothing has been scheduled. The rendered MP4s live in `out/`
+(git-ignored) and the 56 queue entries are `pending_approval`.
+
+What to read at the end: `npm run analytics -- report` compares captions,
+sounds and variants on views, viewed rate, average watch %, and followers and
+shares per 1,000 views.
 
 ## Music workflow
 
@@ -120,76 +156,124 @@ on a beat (`bpm` + `beatOffsetSec`, or an explicit `beats` timestamp list).
 {
   "id": "yt-2026-12-track-a",
   "title": "Track name",
-  "approvedPlatforms": ["youtube"],
-  "link": "https://…",                       // reference only, never downloaded
-  "file": "assets/audio/licensed/track-a.mp3", // git-ignored
+  "approvedPlatforms": ["youtube"],              // embedded only on these
+  "link": "https://…",                           // native sound, kept in metadata, never downloaded
+  "file": "assets/audio/licensed/track-a.mp3",   // git-ignored
   "license": { "status": "licensed", "embedAllowed": true, "proof": "invoice / licence id" },
   "bpm": 124, "beatOffsetSec": 0.12,
   "activeFrom": "2026-12-01", "expiresAt": "2026-12-28"
 }
 ```
 
-What the system does with a sound:
-
 | Sound entry | Result |
 | --- | --- |
-| `owned`/`licensed` + `embedAllowed: true` + file present | mixed into the MP4, fully automated |
-| link only, `platform-native-only`, `unknown`, or `embedAllowed: false` | **never embedded**; video exported silent, still beat-synced to the configured BPM; link recorded in the manifest |
-| embeddable but file missing | batch fails loudly |
+| `owned`/`licensed` + `embedAllowed: true` + file present + platform approved | mixed into the MP4, fully automated |
+| link only, `platform-native-only`, `unknown`, or `embedAllowed: false` | **never embedded**; silent export; link kept in the manifest and `plan.csv` (`native_sound_link`) for optional manual tests |
+| embeddable but file missing, or wrong platform | batch fails loudly |
 | nothing active for the date | silent export |
 
 **Limitation:** a YouTube or TikTok sound link gives neither the right nor a
 way to download and embed that track, and Buffer's API has no field for
-attaching a platform-native sound on either platform (checked against its
-schema: `metadata.tiktok` is `title` + `isAiGenerated` only). A trending native
-sound can only be attached by hand in the app. So fully hands-off posting with
-music requires audio files licensed for embedding and third-party upload;
-otherwise videos post silent.
+attaching a platform-native sound on either platform (`metadata.tiktok` is
+`title` + `isAiGenerated` only). A native sound can only be attached by hand
+in the app. Nothing here tries to work around that.
 
 The three sounds shipped per platform are original test beats generated by
-`src/audio/synth.ts` so the samples have audio to sync to. They are
-placeholders, not a music recommendation.
+`src/audio/synth.ts`. They are placeholders for the experiment's audio slots.
 
-## Publishing
+## Media hosting (Cloudflare R2)
 
-`src/publish/buffer.ts` uses Buffer's GraphQL API (`createPost`,
-`mode: customScheduled`, `schedulingType: automatic`, video asset by URL,
-YouTube `title` + `categoryId`). Field names and enums were verified against
-Buffer's live schema on 2026-11-21.
+Buffer has no upload endpoint; it fetches each MP4 from a public HTTPS URL at
+publish time. `npm run media -- upload` puts approved videos in an R2 bucket
+through the Cloudflare API, then downloads each one back with no credentials
+and checks status, content type and exact size before recording the URL on the
+queue item. Keys include a content hash, so re-running is a no-op and a URL
+never changes meaning.
+
+Environment (never committed):
+
+```
+CLOUDFLARE_ACCOUNT_ID=…
+CLOUDFLARE_API_TOKEN=…          # R2 object write on the bucket
+R2_BUCKET=viral-tracker-shorts-media
+MEDIA_BASE_URL=https://pub-….r2.dev
+```
+
+Verified on 2026-11-21 against the real account: bucket
+`viral-tracker-shorts-media` created, public `r2.dev` URL enabled, one sample
+uploaded via this command, downloaded anonymously byte-identical (HTTP 200,
+`video/mp4`, H.264 + AAC intact, range requests answered with 206).
+
+Cloudflare describes `r2.dev` URLs as rate-limited and meant for
+non-production use. At four fetches a day that is fine; attach a custom domain
+to the bucket and change `MEDIA_BASE_URL` if volume grows. Storage for 56
+videos is about 100 MB, inside R2's free allowance.
+
+## Publishing (Buffer)
+
+`src/publish/buffer.ts` uses Buffer's GraphQL API: `createPost` with
+`mode: customScheduled`, `schedulingType: automatic`, the video by URL, and
+YouTube `title` + `categoryId`; `post` for status, platform link, error and
+metrics. Field names and enums were checked against Buffer's live schema.
 
 Safety rules enforced in code and tests:
 
 - nothing is sent unless the item was explicitly approved (`queue approve`)
 - `queue publish` is a dry run unless `--live` is passed
+- an item cannot be published without a verified public media URL
 - one post per platform/channel/time slot (idempotency key), state saved
   atomically before and after every attempt, scheduled items never re-sent
 - transient errors (429/5xx) retry with exponential backoff; invalid input,
   auth and limit errors fail immediately and are logged on the item
 
-### Deployment blockers
+Environment: `BUFFER_API_KEY` (create at publish.buffer.com/settings/api).
 
-The Buffer adapter is unit-tested against mocked responses but has **not been
-run against a live account**. To go live:
+## Analytics ledger
 
-1. **Buffer API key** — create at publish.buffer.com/settings/api, set `BUFFER_API_KEY`.
-2. **Buffer channel ids** — connect the YouTube and TikTok accounts in Buffer
-   and put their ids in `config/channels.json` (`bufferChannelId`).
-3. **Public media host** — Buffer has no upload endpoint; it fetches each MP4
-   from a public HTTPS URL that must stay reachable until the post publishes.
-   Upload batch output to a bucket/CDN and set `MEDIA_BASE_URL` to its prefix.
-   The upload step itself is not built yet.
-4. **Real channel names/handles** in `config/channels.json`.
-5. **Licensed audio files**, if posts should carry music (see above).
+`data/analytics/posts.csv`, one row per post:
 
-Until then, `queue export` produces an upload-ready folder plus `schedule.csv`.
+`platform, post_id, video_id, publish_date, caption, audio_id,
+template_variant, views, viewed_rate, avg_watch_pct, followers_gained, shares,
+post_url, source`
+
+- `analytics export` — creates/refreshes rows from the queue (`--all` includes
+  posts not yet published). Existing metrics are kept.
+- `analytics import <csv>` — merges numbers typed in from YouTube Studio /
+  TikTok Studio. Rows match on `platform` + `video_id` or on `post_id`; accepts
+  `12,000` and `33.8%`; only metric columns and `post_url` are taken, so an
+  import cannot rewrite which caption or sound a post used.
+- `analytics pull` — fills views, shares and follows from Buffer where Buffer
+  reports them.
+- `analytics report` — compares captions, sounds and variants.
+
+Buffer's metric types do not include a viewed-versus-swiped rate or average
+percentage viewed. Those two columns have to come from the platform dashboards
+through `analytics import`.
+
+## Remaining blockers
+
+1. **Destination channels.** The Buffer account has nine channels connected
+   and none is "Road to Viral". The YouTube and TikTok accounts need to exist,
+   be connected in Buffer, and their ids put in `config/channels.json`
+   (`bufferChannelId`). The Buffer plan allows nine channels and all nine are
+   in use, so two must be freed or the plan raised.
+2. **Buffer API key** for this repo's automation (`BUFFER_API_KEY`).
+3. **Live validation, one post per platform.** Needs 1 and 2 plus explicit
+   approval to publish. Until it has run, these are unknown: whether Buffer
+   accepts the R2 URL, whether audio survives each platform's upload, and
+   whether TikTok posts publish automatically or fall back to a reminder.
+4. **Licensed audio files**, if posts should carry real music.
+5. **Handle** `@roadtoviral` is unconfirmed on both platforms.
+6. **Experiment start date** to be confirmed once 1–3 are done.
 
 ## Tests
 
-`npm test` covers spec determinism, the 0-to-current time-lapse, cut pacing
-against the reference, simulated and CSV history, safe
-areas for both layouts, frame and MP4 output (resolution, codecs, fps, audio
-present/silent), audio licence gating, rotation and expiry, missing files,
-batch planning, DST-aware scheduling, duplicate prevention, the approval gate,
-dry runs, retries, and the Buffer payload.
+`npm test` (28 tests) covers spec determinism, the 0-to-current time-lapse,
+cut pacing against the reference, simulated and CSV history, safe areas for
+all three templates, frame and MP4 output, audio licence gating, rotation and
+expiry, batch planning, the experiment's crossed design, DST-aware scheduling,
+duplicate prevention, the approval gate, dry runs, retries, single-item
+publishing, the Buffer payload and post lookup, R2 upload and public
+verification, and the analytics ledger.
 
 Fonts: Inter (SIL Open Font License), bundled in `assets/fonts/`.

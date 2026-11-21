@@ -5,8 +5,10 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { activeSounds, AudioError, type AudioLibrary, loadLibrary, pickSound, resolveAudio, type Sound } from "../src/audio/library.ts";
 import { probe, renderFrame, renderVideo } from "../src/engine/encode.ts";
-import { enqueueBatch, type Manifest, planBatch, planSamples } from "../src/pipeline.ts";
-import { BufferPublisher, buildCreatePostInput } from "../src/publish/buffer.ts";
+import { applyBufferMetrics, COLUMNS, importMetrics, parseCsv, readLedger, summarize, syncFromQueue, writeLedger } from "../src/analytics.ts";
+import { enqueueBatch, type Manifest, planBatch, planCsv, planSamples, rotation } from "../src/pipeline.ts";
+import { BufferPublisher, buildCreatePostInput, fetchPost } from "../src/publish/buffer.ts";
+import { mediaConfigFromEnv, mediaKey, publicUrl, uploadVideo, verifyPublicUrl } from "../src/publish/media.ts";
 import { DryRunPublisher, PermanentError, type Publisher, publishQueue, Queue, type QueueItem, slotKey } from "../src/publish/queue.ts";
 import { zonedIso } from "../src/publish/schedule.ts";
 import { buildSpec, loadChannels, TEMPLATES } from "../src/spec.ts";
@@ -94,20 +96,21 @@ test("explicit beat timestamps override the bpm grid", () => {
 
 test("headline numbers and caption are inside the platform safe area and clear of the action rail", () => {
   for (const platform of PLATFORMS) {
-    const tpl = TEMPLATES[platform];
-    for (const [name, r] of Object.entries(tpl.layout)) assert.ok(rectInSafe(r, tpl.safe), `${platform}.${name}`);
+    for (const [variant, tpl] of Object.entries(TEMPLATES[platform]))
+      for (const [name, r] of Object.entries(tpl.layout)) assert.ok(rectInSafe(r, tpl.safe), `${platform}.${variant}.${name}`);
   }
 });
 
 test("the two platforms use different layouts", () => {
-  assert.notDeepEqual(Object.keys(TEMPLATES.youtube.layout), Object.keys(TEMPLATES.tiktok.layout));
+  assert.notDeepEqual(Object.keys(TEMPLATES.youtube.dashboard.layout), Object.keys(TEMPLATES.tiktok.analytics.layout));
+  assert.notDeepEqual(TEMPLATES.tiktok.analytics.layout, TEMPLATES.tiktok.profile.layout);
 });
 
 // ---------- rendering ---------------------------------------------------------
 
 test("frames render at 1080x1920 and are not blank", () => {
-  for (const platform of PLATFORMS) {
-    const c = renderFrame(spec("f", platform), 3);
+  for (const [platform, variant] of [["youtube", "dashboard"], ["tiktok", "analytics"], ["tiktok", "profile"]] as const) {
+    const c = renderFrame({ ...spec("f", platform), variant }, 3);
     assert.deepEqual([c.width, c.height], [1080, 1920]);
     const d = c.data();
     let lit = 0;
@@ -179,16 +182,17 @@ test("batch plan: 2/day/platform, unique ids and slots, final count grows daily,
     for (let i = 1; i < ps.length; i++) {
       assert.ok(ps[i].spec.endCount >= ps[i - 1].spec.endCount);
       if (i % 2 === 0) assert.ok(ps[i].spec.endCount > ps[i - 1].spec.endCount, "next day ends higher");
-      const sig = (p: (typeof ps)[number]) => `${p.spec.caption}#${p.spec.audio.soundId}`;
+      const sig = (p: (typeof ps)[number]) => `${p.spec.caption}#${p.spec.audio.soundId}#${p.spec.variant}`;
       assert.notEqual(sig(ps[i]), sig(ps[i - 1]));
     }
   }
   assert.deepEqual(planBatch("2026-11-23", 2), planBatch("2026-11-23", 2));
 });
 
-test("sample plan is three per platform", () => {
+test("sample plan: 3 YouTube, and both TikTok variants x 3", () => {
   const s = planSamples("2026-11-21");
-  assert.deepEqual(PLATFORMS.map((p) => s.filter((x) => x.spec.platform === p).length), [3, 3]);
+  assert.deepEqual(PLATFORMS.map((p) => s.filter((x) => x.spec.platform === p).length), [3, 6]);
+  assert.deepEqual([...new Set(s.map((x) => x.spec.variant))], ["dashboard", "analytics", "profile"]);
 });
 
 test("schedule times carry the right UTC offset across DST", () => {
@@ -202,7 +206,7 @@ const FUTURE = "2099-01-01T12:00:00-06:00";
 function item(dir: string, id: string, dueAt = FUTURE) {
   const file = join(dir, `${id}.mp4`);
   writeFileSync(file, "x");
-  return { key: slotKey("youtube", "ch", dueAt), videoId: id, batchId: "b1", platform: "youtube" as const, file, audioMode: "silent" as const, title: "t", text: "x", dueAt };
+  return { key: slotKey("youtube", "ch", dueAt), videoId: id, batchId: "b1", platform: "youtube" as const, file, audioMode: "silent" as const, caption: "cap", audioId: "s1", variant: "dashboard", title: "t", text: "x", dueAt };
 }
 const livePublisher = (fn: (i: QueueItem) => Promise<{ remoteId: string }>): Publisher => ({ name: "fake", live: true, publish: fn });
 const fast = { sleep: async () => {}, baseDelayMs: 1 };
@@ -269,7 +273,7 @@ test("transient errors retry with backoff; permanent errors fail fast; past slot
 test("enqueueBatch is idempotent", () => {
   const dir = tmp();
   const q = new Queue(join(dir, "q.json"));
-  const m = planBatch("2026-11-23", 1).map((p) => ({ id: p.spec.id, platform: p.spec.platform, file: join(dir, `${p.spec.id}.mp4`), audio: p.spec.audio, title: p.title, text: p.text, dueAt: p.dueAt }) as Manifest);
+  const m = planBatch("2026-11-23", 1).map((p) => ({ id: p.spec.id, platform: p.spec.platform, variant: p.spec.variant, caption: p.spec.caption, file: join(dir, `${p.spec.id}.mp4`), audio: p.spec.audio, title: p.title, text: p.text, dueAt: p.dueAt }) as Manifest);
   assert.equal(enqueueBatch(q, "b", m), 4);
   assert.equal(enqueueBatch(new Queue(join(dir, "q.json")), "b", m), 0);
   assert.ok(existsSync(join(dir, "q.json")));
@@ -280,15 +284,16 @@ test("Buffer payload matches the verified createPost schema", async () => {
   const q = new Queue(join(dir, "q.json"));
   q.enqueue(item(dir, "v1"));
   const it = q.items[0];
-  const cfg = { apiKey: "k", mediaBaseUrl: "https://media.example.com/vts/", channelIds: { youtube: "a".repeat(24), tiktok: null }, youtubeCategoryId: "24" };
+  const cfg = { apiKey: "k", channelIds: { youtube: "a".repeat(24), tiktok: null }, youtubeCategoryId: "24" };
+  assert.throws(() => buildCreatePostInput(it, cfg), PermanentError, "no media URL yet");
+  it.mediaUrl = "https://media.example.com/vts/v1-abc.mp4";
   const input = buildCreatePostInput(it, cfg);
   assert.equal(input.mode, "customScheduled");
   assert.equal(input.schedulingType, "automatic");
   assert.equal(input.dueAt, "2099-01-01T18:00:00.000Z");
-  assert.deepEqual(input.assets, [{ video: { url: "https://media.example.com/vts/v1.mp4" } }]);
+  assert.deepEqual(input.assets, [{ video: { url: it.mediaUrl } }]);
   assert.deepEqual(Object.keys(input.metadata), ["youtube"]);
   assert.throws(() => buildCreatePostInput({ ...it, platform: "tiktok" }, cfg), PermanentError);
-  assert.throws(() => buildCreatePostInput(it, { ...cfg, mediaBaseUrl: "/local/path" }), PermanentError);
 
   const respond = (status: number, body: unknown) => (async () => new Response(JSON.stringify(body), { status })) as unknown as typeof fetch;
   const ok = new BufferPublisher({ ...cfg, fetchImpl: respond(200, { data: { createPost: { __typename: "PostActionSuccess", post: { id: "p1" } } } }) });
@@ -297,4 +302,119 @@ test("Buffer payload matches the verified createPost schema", async () => {
   await assert.rejects(invalid.publish(it), PermanentError);
   const limited = new BufferPublisher({ ...cfg, fetchImpl: respond(429, {}) });
   await assert.rejects(limited.publish(it), (e: Error) => !(e instanceof PermanentError));
+  const post = await fetchPost({ ...cfg, fetchImpl: respond(200, { data: { post: { id: "p1", status: "sent", sentAt: "2099-01-01T18:00:05Z", externalLink: "https://x/y", error: null, metrics: [{ type: "views", name: "Views", value: 1200, unit: null }] } } }) }, "p1");
+  assert.deepEqual([post.status, post.externalLink, post.metrics[0].value], ["sent", "https://x/y", 1200]);
+});
+
+test("publishQueue filter sends only the selected item", async () => {
+  const dir = tmp();
+  const q = new Queue(join(dir, "q.json"));
+  q.enqueue(item(dir, "v1"));
+  q.enqueue(item(dir, "v2", "2099-01-02T12:00:00-06:00"));
+  q.approve(() => true);
+  const sent: string[] = [];
+  await publishQueue(q, livePublisher(async (i) => (sent.push(i.videoId), { remoteId: "r" })), { ...fast, filter: (i) => i.videoId === "v2" });
+  assert.deepEqual(sent, ["v2"]);
+  assert.deepEqual(q.items.map((i) => i.status), ["approved", "scheduled"]);
+});
+
+// ---------- experiment design ---------------------------------------------------
+
+test("14-day experiment: 28 posts per platform; captions, sounds and variants are crossed, not confounded", () => {
+  const plan = planBatch("2026-11-30", 14);
+  for (const platform of PLATFORMS) {
+    const ps = plan.filter((p) => p.spec.platform === platform);
+    assert.equal(ps.length, 28);
+    const count = (f: (p: (typeof ps)[number]) => string) => ps.reduce((m, p) => m.set(f(p), (m.get(f(p)) ?? 0) + 1), new Map<string, number>());
+    const caps = count((p) => p.spec.caption);
+    assert.equal(caps.size, 3);
+    assert.ok([...caps.values()].every((n) => n >= 9 && n <= 10));
+    const combos = count((p) => `${p.spec.caption}|${p.spec.audio.soundId}`);
+    assert.equal(combos.size, 9, "every caption meets every sound");
+    assert.ok([...combos.values()].every((n) => n >= 3));
+    if (platform === "tiktok") {
+      const vc = count((p) => `${p.spec.variant}|${p.spec.caption}`);
+      assert.equal(vc.size, 6);
+      assert.ok([...vc.values()].every((n) => n >= 4), JSON.stringify([...vc]));
+      assert.ok([...count((p) => p.spec.variant).values()].every((n) => n === 14));
+    }
+  }
+  const csv = planCsv(plan).trim().split("\n");
+  assert.equal(csv.length, 57);
+  assert.ok(csv[0].startsWith("platform,video_id,due_at,caption,audio_id"));
+});
+
+test("rotation crosses all three dimensions", () => {
+  const seen = new Set(Array.from({ length: 18 }, (_, i) => Object.values(rotation(i, 3, 3, 2)).join("")));
+  assert.equal(seen.size, 18);
+});
+
+// ---------- media hosting ---------------------------------------------------------
+
+test("media: content-addressed keys, upload then public verification, failures surface", async () => {
+  const dir = tmp();
+  const file = join(dir, "clip one.mp4");
+  writeFileSync(file, "fake-mp4-bytes");
+  const key = mediaKey(file, "vts/b1");
+  assert.match(key, /^vts\/b1\/clip one-[0-9a-f]{12}\.mp4$/);
+  assert.equal(publicUrl({ publicBaseUrl: "https://pub.example.dev/" }, key), `https://pub.example.dev/vts/b1/clip%20one-${key.slice(-16)}`);
+
+  const store = new Map<string, Buffer>();
+  const calls: string[] = [];
+  const fake = (async (url: string, init?: RequestInit) => {
+    calls.push(`${init?.method ?? "GET"} ${new URL(url).host}`);
+    if (init?.method === "PUT") {
+      assert.equal((init.headers as Record<string, string>).Authorization, "Bearer tok");
+      store.set(decodeURIComponent(new URL(url).pathname.split("/objects/")[1]), init.body as Buffer);
+      return new Response(JSON.stringify({ success: true }), { status: 200 });
+    }
+    const body = store.get(decodeURIComponent(new URL(url).pathname.slice(1)));
+    return body ? new Response(new Uint8Array(body), { status: 200, headers: { "content-type": "video/mp4" } }) : new Response("no", { status: 404 });
+  }) as unknown as typeof fetch;
+  const cfg = { accountId: "acc", apiToken: "tok", bucket: "b", publicBaseUrl: "https://pub.example.dev", fetchImpl: fake };
+  const r = await uploadVideo(file, cfg, "vts/b1");
+  assert.ok(r.verification.ok);
+  assert.deepEqual(calls, ["GET pub.example.dev", "PUT api.cloudflare.com", "GET pub.example.dev"]);
+  await uploadVideo(file, cfg, "vts/b1"); // already hosted: no second upload
+  assert.equal(calls.filter((c) => c.startsWith("PUT")).length, 1);
+
+  const v = await verifyPublicUrl("https://pub.example.dev/vts/b1/missing.mp4", 5, fake);
+  assert.deepEqual([v.ok, v.problem], [false, "HTTP 404"]);
+  assert.throws(() => mediaConfigFromEnv({}), /CLOUDFLARE_ACCOUNT_ID/);
+});
+
+// ---------- analytics ledger --------------------------------------------------------
+
+test("analytics: export from queue, import metrics, per-1k-view comparison", () => {
+  const dir = tmp();
+  const q = new Queue(join(dir, "q.json"));
+  q.enqueue({ ...item(dir, "v1"), caption: "Imagine waking up to this", audioId: "a1" });
+  q.enqueue({ ...item(dir, "v2", "2099-01-02T12:00:00-06:00"), caption: "POV: Your channel finally takes off", audioId: "a1" });
+  q.items[0].status = "scheduled";
+  q.items[0].remoteId = "post1";
+  assert.equal(syncFromQueue([], q.items).length, 1, "only published posts by default");
+  let rows = syncFromQueue([], q.items, { includeUnpublished: true });
+  assert.deepEqual(Object.keys(rows[0]), [...COLUMNS]);
+  assert.deepEqual([rows[0].post_id, rows[0].publish_date, rows[0].caption, rows[0].audio_id, rows[0].template_variant], ["post1", "2099-01-01", "Imagine waking up to this", "a1", "dashboard"]);
+
+  const csv = "platform,video_id,views,viewed_rate,avg_watch_pct,followers_gained,shares,caption\nyoutube,v1,\"12,000\",33.8%,92.5,24,6,HACKED\nyoutube,v2,4000,,61,2,1,\nyoutube,nope,1,,,,,\n";
+  const res = importMetrics(rows, parseCsv(csv));
+  assert.deepEqual([res.updated, res.unmatched], [2, ["nope"]]);
+  assert.deepEqual([rows[0].views, rows[0].viewed_rate, rows[0].caption, rows[0].source], ["12000", "33.8", "Imagine waking up to this", "manual"]);
+  assert.throws(() => importMetrics(rows, [{ platform: "youtube", video_id: "v1", views: "lots" }]), /views/);
+
+  writeLedger(join(dir, "posts.csv"), rows);
+  rows = readLedger(join(dir, "posts.csv"));
+  assert.equal(rows.length, 2);
+  // re-syncing from the queue must not wipe imported metrics
+  assert.equal(syncFromQueue(rows, q.items, { includeUnpublished: true }).find((r) => r.video_id === "v1")!.views, "12000");
+
+  const g = summarize(rows, "caption");
+  const a = g.find((x) => x.key.includes("Imagine"))!;
+  assert.deepEqual([a.posts, a.views, a.followersPer1kViews, a.sharesPer1kViews, a.avgWatchPct], [1, 12000, 2, 0.5, 92.5]);
+
+  const row = rows.find((r) => r.video_id === "v2")!;
+  row.source = "";
+  assert.ok(applyBufferMetrics(row, { id: "p", status: "sent", sentAt: null, externalLink: "https://x/2", error: null, metrics: [{ type: "views", name: "Views", value: 5000, unit: null }, { type: "shares", name: "Shares", value: 3, unit: null }] }));
+  assert.deepEqual([row.views, row.shares, row.post_url, row.source], ["5000", "3", "https://x/2", "buffer"]);
 });

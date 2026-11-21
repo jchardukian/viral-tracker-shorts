@@ -2,8 +2,10 @@ import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync
 import { basename, join } from "node:path";
 import { contactSheet, probe, renderStill } from "./engine/encode.ts";
 import { ROOT } from "./engine/draw.ts";
-import { enqueueBatch, type Manifest, planBatch, planSamples, renderOne } from "./pipeline.ts";
-import { BufferPublisher } from "./publish/buffer.ts";
+import { applyBufferMetrics, importMetrics, parseCsv, readLedger, summarize, syncFromQueue, writeLedger } from "./analytics.ts";
+import { enqueueBatch, type Manifest, planBatch, planCsv, planSamples, renderOne } from "./pipeline.ts";
+import { type BufferConfig, BufferPublisher, fetchPost } from "./publish/buffer.ts";
+import { mediaConfigFromEnv, uploadVideo } from "./publish/media.ts";
 import { DryRunPublisher, publishQueue, Queue } from "./publish/queue.ts";
 import { loadChannels } from "./spec.ts";
 import { type Platform, PLATFORMS } from "./templates/types.ts";
@@ -15,7 +17,18 @@ const flag = (name: string, def?: string) => {
   return i >= 0 ? (argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[i + 1] : "true") : def;
 };
 const QUEUE_PATH = flag("queue-file", join(ROOT, "state", "queue.json"))!;
+const LEDGER_PATH = flag("ledger", join(ROOT, "data", "analytics", "posts.csv"))!;
 const today = () => new Date().toISOString().slice(0, 10);
+
+function bufferConfig(): BufferConfig {
+  if (!process.env.BUFFER_API_KEY) throw new Error("this needs BUFFER_API_KEY in the environment");
+  const ch = loadChannels();
+  return {
+    apiKey: process.env.BUFFER_API_KEY,
+    channelIds: { youtube: ch.youtube.bufferChannelId, tiktok: ch.tiktok.bufferChannelId },
+    youtubeCategoryId: ch.youtube.youtubeCategoryId ?? "24",
+  };
+}
 
 /** Technical checks on every MP4 in a directory. Returns true when all pass. */
 function qa(dir: string): boolean {
@@ -63,6 +76,7 @@ async function main() {
       console.log(`rendered ${p.spec.id} (${p.spec.durationSec.toFixed(2)}s, ${p.spec.audio.bpm} bpm, ${p.spec.audio.mode}) in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
     }
     await contactSheet(manifests.map((m) => m.still), join(dir, "contact-sheet.png"), 3);
+    await contactSheet(manifests.filter((m) => m.platform === "tiktok").sort((a, b) => a.id.slice(-1).localeCompare(b.id.slice(-1)) || a.variant.localeCompare(b.variant)).map((m) => m.still), join(dir, "tiktok-variants.png"), 2);
     // filmstrips for visual inspection of the animation (not committed)
     const strips = join(ROOT, "out", "filmstrips");
     for (const p of plans) {
@@ -84,6 +98,16 @@ async function main() {
     const dir = flag("out", join(ROOT, "out", "batches", batchId))!;
     let plans = planBatch(start, days, platforms);
     if (limit) plans = plans.slice(0, limit);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, "plan.csv"), planCsv(plans));
+    if (flag("plan-out")) {
+      mkdirSync(join(flag("plan-out")!, ".."), { recursive: true });
+      writeFileSync(flag("plan-out")!, planCsv(plans));
+    }
+    if (flag("plan-only") === "true") {
+      console.log(`planned ${plans.length} videos (not rendered) -> ${join(dir, "plan.csv")}`);
+      return;
+    }
     console.log(`batch ${batchId}: ${plans.length} videos -> ${dir}`);
     const manifests: Manifest[] = [];
     for (const p of plans) {
@@ -116,16 +140,20 @@ async function main() {
         console.log(await publishQueue(queue, new DryRunPublisher(), { log }));
         return;
       }
-      const { BUFFER_API_KEY, MEDIA_BASE_URL } = process.env;
-      if (!BUFFER_API_KEY || !MEDIA_BASE_URL) throw new Error("--live needs BUFFER_API_KEY and MEDIA_BASE_URL in the environment");
-      const ch = loadChannels();
-      const publisher = new BufferPublisher({
-        apiKey: BUFFER_API_KEY,
-        mediaBaseUrl: MEDIA_BASE_URL,
-        channelIds: { youtube: ch.youtube.bufferChannelId, tiktok: ch.tiktok.bufferChannelId },
-        youtubeCategoryId: ch.youtube.youtubeCategoryId ?? "24",
-      });
-      console.log(await publishQueue(queue, publisher, { log }));
+      // --id sends exactly one approved item (used for live validation)
+      const only = flag("id");
+      if (only && !queue.items.some((i) => i.videoId === only)) throw new Error(`no queued video with id ${only}`);
+      const publisher = new BufferPublisher(bufferConfig());
+      console.log(await publishQueue(queue, publisher, { log, filter: only ? (i) => i.videoId === only : undefined }));
+    } else if (sub === "sync") {
+      // what actually happened to each scheduled post: sent? link? error?
+      const cfg = bufferConfig();
+      for (const i of queue.items.filter((i) => i.status === "scheduled" && i.remoteId)) {
+        const p = await fetchPost(cfg, i.remoteId!);
+        i.published = { status: p.status, sentAt: p.sentAt, externalLink: p.externalLink, error: p.error, checkedAt: new Date().toISOString() };
+        console.log(`${i.videoId}: ${p.status}${p.sentAt ? ` at ${p.sentAt}` : ""}${p.externalLink ? ` ${p.externalLink}` : ""}${p.error ? ` ERROR: ${p.error}` : ""}`);
+      }
+      queue.save();
     } else if (sub === "export") {
       // Upload-ready package for manual/other-tool scheduling when Buffer is unavailable.
       const dir = flag("out", join(ROOT, "out", "export"))!;
@@ -138,6 +166,52 @@ async function main() {
       writeFileSync(join(dir, "schedule.csv"), rows.join("\n") + "\n");
       console.log(`exported ${rows.length - 1} approved item(s) to ${dir}`);
     } else throw new Error("queue <list|approve|publish|export>");
+  } else if (cmd === "media") {
+    // upload approved videos to R2 and record their public URLs on the queue
+    if (argv[1] !== "upload") throw new Error("media upload [--id <videoId>] [--file <mp4>]");
+    const cfg = mediaConfigFromEnv();
+    if (flag("file")) {
+      const r = await uploadVideo(flag("file")!, cfg, flag("prefix", "vts"));
+      console.log(`${r.url}  (${r.bytes} bytes, public fetch: HTTP ${r.verification.status} ${r.verification.contentType})`);
+      return;
+    }
+    const queue = new Queue(QUEUE_PATH);
+    const todo = queue.items.filter((i) => i.status === "approved" && (!flag("id") || i.videoId === flag("id")));
+    for (const i of todo) {
+      const r = await uploadVideo(i.file, cfg, `vts/${i.batchId}`);
+      i.mediaUrl = r.url;
+      i.history.push({ at: new Date().toISOString(), event: `uploaded, publicly retrievable: ${r.url}` });
+      queue.save();
+      console.log(`${i.videoId} -> ${r.url}`);
+    }
+    console.log(`uploaded and verified ${todo.length} approved video(s)`);
+  } else if (cmd === "analytics") {
+    const sub = argv[1];
+    const queue = new Queue(QUEUE_PATH);
+    let rows = readLedger(LEDGER_PATH);
+    if (sub === "export") {
+      rows = syncFromQueue(rows, queue.items, { includeUnpublished: flag("all") === "true" });
+      writeLedger(LEDGER_PATH, rows);
+      console.log(`${rows.length} row(s) -> ${LEDGER_PATH}`);
+    } else if (sub === "import") {
+      if (!argv[2]) throw new Error("analytics import <file.csv>");
+      rows = syncFromQueue(rows, queue.items, { includeUnpublished: flag("all") === "true" });
+      const res = importMetrics(rows, parseCsv(readFileSync(argv[2], "utf8")));
+      writeLedger(LEDGER_PATH, res.rows);
+      console.log(`updated ${res.updated} row(s)${res.unmatched.length ? `; no match for: ${res.unmatched.join(", ")}` : ""}`);
+    } else if (sub === "pull") {
+      const cfg = bufferConfig();
+      rows = syncFromQueue(rows, queue.items);
+      let n = 0;
+      for (const r of rows.filter((r) => r.post_id)) if (applyBufferMetrics(r, await fetchPost(cfg, r.post_id))) n++;
+      writeLedger(LEDGER_PATH, rows);
+      console.log(`updated ${n} row(s) from Buffer`);
+    } else if (sub === "report") {
+      for (const by of ["platform", "caption", "audio_id", "template_variant"] as const) {
+        console.log(`\nby ${by}`);
+        console.table(summarize(rows, by));
+      }
+    } else throw new Error("analytics <export|import|pull|report>");
   } else {
     console.log(`usage:
   npm run samples                          render the 6 approval samples into samples/
@@ -145,8 +219,11 @@ async function main() {
   npm run qa -- <dir>                      technical checks on rendered MP4s
   npm run queue -- list
   npm run queue -- approve --batch <id> | --id <videoId>
-  npm run queue -- publish [--live]        dry run unless --live
-  npm run queue -- export                  upload-ready package of approved items`);
+  npm run queue -- publish [--live] [--id <videoId>]   dry run unless --live
+  npm run queue -- sync                    fetch what happened to scheduled posts
+  npm run queue -- export                  upload-ready package of approved items
+  npm run media -- upload [--id <videoId>] upload approved MP4s to R2, verify public URLs
+  npm run analytics -- export|import <csv>|pull|report`);
   }
 }
 

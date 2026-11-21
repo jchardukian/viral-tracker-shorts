@@ -1,10 +1,11 @@
 {
-  "id": "youtube-sample-1",
+  "id": "youtube-dashboard-1",
   "platform": "youtube",
-  "file": "/home/user/viral-tracker-shorts/samples/youtube-sample-1.mp4",
+  "variant": "dashboard",
+  "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-1.mp4",
   "silentFile": null,
-  "still": "/home/user/viral-tracker-shorts/samples/youtube-sample-1.png",
-  "sha256": "e5b8b8c96747787186b8e3435d3b7922e765e2f5922939b78b5b7dceda74a3e3",
+  "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-1.png",
+  "sha256": "656b3365c7240371e33192400ff3517bc2e7c9a3796299021214b2bfb2fe105f",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,7 +14,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 18,
-    "sizeBytes": 2401045,
+    "sizeBytes": 2498256,
     "meanVolumeDb": -13.1
   },
   "audio": {
@@ -25,16 +26,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-a.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "Use this sound to get more subscribers #shorts",
+  "title": "POV: Your channel finally takes off #shorts",
   "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
   "dueAt": null,
   "counter": {
     "start": 0,
     "end": 110266
   },
-  "caption": "Use this sound to get more subscribers",
+  "caption": "POV: Your channel finally takes off",
   "cuts": 211,
   "dataSource": "simulated",
-  "seed": 3395422531,
+  "seed": 1670033675,
   "durationSec": 18
 }

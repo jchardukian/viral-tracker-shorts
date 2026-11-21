@@ -10,7 +10,9 @@
     "qa": "tsx src/cli.ts qa",
     "queue": "tsx src/cli.ts queue",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "media": "tsx src/cli.ts media",
+    "analytics": "tsx src/cli.ts analytics"
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.68"

@@ -1,10 +1,11 @@
 {
-  "id": "youtube-sample-3",
+  "id": "youtube-dashboard-3",
   "platform": "youtube",
-  "file": "/home/user/viral-tracker-shorts/samples/youtube-sample-3.mp4",
+  "variant": "dashboard",
+  "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-3.mp4",
   "silentFile": null,
-  "still": "/home/user/viral-tracker-shorts/samples/youtube-sample-3.png",
-  "sha256": "8054e2c817c5a853f3afc8fadea720dd8aa7c327ce26a3b870db32c94eac27f1",
+  "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-3.png",
+  "sha256": "369272c63b80586089ea216656f7ba7ba555a887005eb3841559b5c79f797000",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,7 +14,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 11.533333,
-    "sizeBytes": 1448783,
+    "sizeBytes": 1527188,
     "meanVolumeDb": -13.7
   },
   "audio": {
@@ -25,16 +26,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-c.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "Try this sound #shorts",
+  "title": "One viral video changes everything #shorts",
   "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
   "dueAt": null,
   "counter": {
     "start": 0,
     "end": 251940
   },
-  "caption": "Try this sound to get more subscribers",
+  "caption": "One viral video changes everything",
   "cuts": 118,
   "dataSource": "simulated",
-  "seed": 3723231963,
+  "seed": 4020225342,
   "durationSec": 11.533333333333333
 }

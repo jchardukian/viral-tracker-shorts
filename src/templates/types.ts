@@ -59,6 +59,8 @@ export interface Snapshot {
 export interface VideoSpec {
   id: string;
   platform: Platform;
+  /** template variant name, e.g. dashboard / analytics / profile */
+  variant: string;
   seed: number;
   width: number;
   height: number;

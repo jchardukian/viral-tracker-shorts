@@ -3,17 +3,30 @@ import { join } from "node:path";
 import { ROOT } from "./engine/draw.ts";
 import { hashSeed, pick, rng } from "./engine/util.ts";
 import { type DayPoint, type HistoryConfig, historyFor } from "./history.ts";
+import { tiktokProfileTemplate } from "./templates/tiktok-profile.ts";
 import { tiktokTemplate } from "./templates/tiktok.ts";
 import { type AudioAssignment, type ContentCard, FPS, HEIGHT, type Platform, type Snapshot, type Template, type VideoSpec, WIDTH } from "./templates/types.ts";
 import { youtubeTemplate } from "./templates/youtube.ts";
 
-export const TEMPLATES: Record<Platform, Template> = { youtube: youtubeTemplate, tiktok: tiktokTemplate };
+/** Template variants per platform; the first one is the default. */
+export const TEMPLATES: Record<Platform, Record<string, Template>> = {
+  youtube: { dashboard: youtubeTemplate },
+  tiktok: { analytics: tiktokTemplate, profile: tiktokProfileTemplate },
+};
+
+export function templateFor(spec: Pick<VideoSpec, "platform" | "variant">): Template {
+  const t = TEMPLATES[spec.platform][spec.variant];
+  if (!t) throw new Error(`unknown ${spec.platform} template variant "${spec.variant}"`);
+  return t;
+}
 
 export interface ChannelConfig extends HistoryConfig {
   name: string;
   handle: string;
   initial: string;
   avatar: [string, string];
+  /** template variants to rotate through; defaults to the platform's first */
+  variants?: string[];
   bufferChannelId: string | null;
   youtubeCategoryId?: string;
 }
@@ -40,6 +53,8 @@ export interface SpecInput {
   id: string;
   platform: Platform;
   channel: ChannelConfig;
+  /** template variant; defaults to the platform's first */
+  variant?: string;
   caption: string;
   contentTitles: string[];
   audio: AudioAssignment;
@@ -152,6 +167,7 @@ export function buildSpec(input: SpecInput): VideoSpec {
   return {
     id: input.id,
     platform,
+    variant: input.variant ?? Object.keys(TEMPLATES[platform])[0],
     seed,
     width: WIDTH,
     height: HEIGHT,
