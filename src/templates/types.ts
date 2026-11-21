@@ -1,5 +1,4 @@
 import type { Ctx, Rect } from "../engine/draw.ts";
-import { clamp, easeOutCubic, lerp, prog } from "../engine/util.ts";
 
 export type Platform = "youtube" | "tiktok";
 export const PLATFORMS: Platform[] = ["youtube", "tiktok"];
@@ -7,22 +6,6 @@ export const PLATFORMS: Platform[] = ["youtube", "tiktok"];
 export const WIDTH = 1080;
 export const HEIGHT = 1920;
 export const FPS = 30;
-
-export interface CounterStep {
-  /** start time (sec) */
-  t: number;
-  dur: number;
-  from: number;
-  to: number;
-  /** true for the single +1 triggered by the on-screen CTA tap */
-  tap?: boolean;
-}
-
-export interface Caption {
-  t0: number;
-  t1: number;
-  text: string;
-}
 
 export interface AudioAssignment {
   soundId: string | null;
@@ -38,6 +21,41 @@ export interface AudioAssignment {
   link: string | null;
 }
 
+export interface ContentCard {
+  title: string;
+  age: string;
+  views: number;
+  likes: number;
+  comments: number;
+}
+
+/** One "day" of the dashboard: everything drawn for a single cut of the time-lapse. */
+export interface Snapshot {
+  date: string;
+  /** subscribers (YouTube) / followers (TikTok) */
+  count: number;
+  views28: number;
+  watch28: number;
+  /** headline metrics are up versus the previous period */
+  up: boolean;
+  /** status-bar clock of the "screenshot" */
+  clock: string;
+  latest: ContentCard & {
+    expanded: boolean;
+    note: string | null;
+    rank: number;
+    avgPct: number;
+    /** per-row trend: 1 up, 0 flat, -1 down (views, avg % viewed, likes) */
+    trend: [number, number, number];
+  };
+  older: ContentCard[];
+  /** TikTok-only headline metrics */
+  delta7: number;
+  profileViews: number;
+  likesTotal: number;
+  shares: number;
+}
+
 export interface VideoSpec {
   id: string;
   platform: Platform;
@@ -48,18 +66,19 @@ export interface VideoSpec {
   durationSec: number;
   frames: number;
   profile: { name: string; handle: string; initial: string; avatar: [string, string] };
-  theme: string;
-  goal: number;
-  /** tracker bar spans [trackFrom, goal] */
-  trackFrom: number;
+  /** one static caption for the whole video, like the reference */
+  caption: string;
+  snapshots: Snapshot[];
+  /** first frame of each snapshot (same length as snapshots) */
+  cuts: number[];
+  /** frame at which the final snapshot starts its hold */
+  holdFrame: number;
   startCount: number;
   endCount: number;
-  steps: CounterStep[];
-  captions: Caption[];
-  tapAt: number;
   beats: number[];
-  extras: { following: number; likes: number };
   audio: AudioAssignment;
+  /** where the numbers come from: generated curve or the owner's exported history */
+  dataSource: "simulated" | "history";
   /** small on-screen note that the numbers are an animation, or null to hide */
   disclosure: string | null;
 }
@@ -76,45 +95,27 @@ export interface SafeArea {
 export interface Template {
   platform: Platform;
   safe: SafeArea;
-  /** bounding boxes of every critical element; tested against `safe` */
+  /** bounding boxes of the elements that must stay readable under the player UI */
   layout: Record<string, Rect>;
-  themes: string[];
   render(ctx: Ctx, spec: VideoSpec, t: number): void;
 }
 
-/** Counter value at time t. Fractional while a step is rolling. */
-export function countAt(spec: VideoSpec, t: number): number {
-  let v = spec.startCount;
-  for (const s of spec.steps) {
-    if (t < s.t) break;
-    v = lerp(s.from, s.to, easeOutCubic(prog(t, s.t, s.dur)));
+/** Index of the snapshot on screen at frame f (hard cuts, no blending). */
+export function snapshotIndex(spec: VideoSpec, f: number): number {
+  let lo = 0;
+  let hi = spec.cuts.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi + 1) >> 1;
+    if (spec.cuts[mid] <= f) lo = mid;
+    else hi = mid - 1;
   }
-  return v;
+  return lo;
 }
 
-/** 0..1 decaying pulse after the most recent beat. */
-export function beatPulse(spec: VideoSpec, t: number): number {
-  let last = -1;
-  for (const b of spec.beats) {
-    if (b <= t) last = b;
-    else break;
-  }
-  return last < 0 ? 0 : Math.exp(-(t - last) * 7);
-}
-
-export function captionAt(spec: VideoSpec, t: number): Caption | null {
-  return spec.captions.find((c) => t >= c.t0 && t < c.t1) ?? null;
-}
-
-/** Fraction of the tracker bar filled, including the intro sweep from empty. */
-export function trackerFill(spec: VideoSpec, t: number): number {
-  const real = clamp((countAt(spec, t) - spec.trackFrom) / (spec.goal - spec.trackFrom));
-  return real * easeOutCubic(prog(t, 0.25, 1.1));
-}
+export const frameOf = (spec: VideoSpec, t: number) => Math.min(spec.frames - 1, Math.max(0, Math.floor(t * spec.fps + 1e-6)));
 
 export function rectInSafe(r: Rect, s: SafeArea): boolean {
-  const inside =
-    r.x >= s.left && r.x + r.w <= s.right && r.y >= s.top && r.y + r.h <= s.bottom;
+  const inside = r.x >= s.left && r.x + r.w <= s.right && r.y >= s.top && r.y + r.h <= s.bottom;
   const hitsRail = r.x + r.w > s.rail.x && r.y + r.h > s.rail.y0 && r.y < s.rail.y1;
   return inside && !hitsRail;
 }

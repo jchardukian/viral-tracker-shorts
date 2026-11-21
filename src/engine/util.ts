@@ -37,11 +37,18 @@ export function sha256(s: string): string {
 
 export const formatCount = (n: number) => Math.round(n).toLocaleString("en-US");
 
-/** 100000 -> "100K", 1500000 -> "1.5M" */
+/** Dashboard-style compact number: 874, 13.6K, 346.6K, 3.6M */
 export function shortCount(n: number): string {
-  if (n >= 1e6) return `${+(n / 1e6).toFixed(1)}M`;
-  if (n >= 1e3) return `${+(n / 1e3).toFixed(1)}K`;
-  return String(n);
+  if (n >= 999950) return `${(n / 1e6).toFixed(1)}M`;
+  if (n >= 1000) return `${(n / 1e3).toFixed(1)}K`;
+  return String(Math.round(n));
+}
+
+/** Watch-time style: 0.4, 10.5, 264, 4.5K */
+export function shortHours(n: number): string {
+  if (n >= 1000) return shortCount(n);
+  if (n >= 100) return String(Math.round(n));
+  return n.toFixed(1);
 }
 
 export function pick<T>(r: () => number, arr: readonly T[]): T {

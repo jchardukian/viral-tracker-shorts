@@ -5,7 +5,7 @@ import { fileSha256, probe, type Probe, renderStill, renderVideo } from "./engin
 import { hashSeed, rng } from "./engine/util.ts";
 import { Queue, slotKey } from "./publish/queue.ts";
 import { addDays, zonedIso } from "./publish/schedule.ts";
-import { buildSpec, type ChannelConfig, loadCaptions, loadChannels, readJson, TEMPLATES } from "./spec.ts";
+import { buildSpec, loadCaptions, loadChannels, readJson } from "./spec.ts";
 import { type Platform, PLATFORMS, type VideoSpec } from "./templates/types.ts";
 
 export interface Manifest {
@@ -20,9 +20,10 @@ export interface Manifest {
   title: string;
   text: string;
   dueAt: string | null;
-  counter: { start: number; end: number; goal: number; trackFrom: number };
-  captions: string[];
-  theme: string;
+  counter: { start: number; end: number };
+  caption: string;
+  cuts: number;
+  dataSource: VideoSpec["dataSource"];
   seed: number;
   durationSec: number;
 }
@@ -45,7 +46,7 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
     silentFile = join(dir, `${spec.id}.silent.mp4`);
     await renderVideo(spec, silentFile, { forceSilent: true });
   }
-  renderStill(spec, spec.tapAt - 0.03, still); // counter at rest, pointer on the CTA
+  renderStill(spec, spec.durationSec - 0.1, still); // the final held dashboard
   const m: Manifest = {
     id: spec.id,
     platform: spec.platform,
@@ -58,9 +59,10 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
     title: p.title,
     text: p.text,
     dueAt: p.dueAt,
-    counter: { start: spec.startCount, end: spec.endCount, goal: spec.goal, trackFrom: spec.trackFrom },
-    captions: spec.captions.map((c) => c.text),
-    theme: spec.theme,
+    counter: { start: spec.startCount, end: spec.endCount },
+    caption: spec.caption,
+    cuts: spec.cuts.length,
+    dataSource: spec.dataSource,
     seed: spec.seed,
     durationSec: spec.durationSec,
   };
@@ -72,11 +74,10 @@ interface SampleDef {
   id: string;
   platform: Platform;
   soundIndex: number;
-  captionSet: number;
-  theme: string;
-  startCount: number;
-  trackFrom: number;
-  gainFrac: number;
+  caption: number;
+  targetSec: number;
+  currentCount: number;
+  historySeed: string;
 }
 
 export function planSamples(date: string): Planned[] {
@@ -89,29 +90,27 @@ export function planSamples(date: string): Planned[] {
       spec: buildSpec({
         id: s.id,
         platform: s.platform,
-        channel: channels[s.platform],
-        captions: cap.sets[s.captionSet % cap.sets.length],
+        // samples show three differently shaped growth curves
+        channel: { ...channels[s.platform], history: null, asOf: date, currentCount: s.currentCount, historySeed: s.historySeed },
+        caption: cap.captions[s.caption % cap.captions.length],
+        contentTitles: cap.contentTitles,
         audio,
-        theme: s.theme,
-        startCount: s.startCount,
-        trackFrom: s.trackFrom,
-        gainFrac: s.gainFrac,
+        date,
+        targetSec: s.targetSec,
         disclosure: channels.disclosure,
       }),
-      title: cap.titles[s.captionSet % cap.titles.length],
+      title: cap.titles[s.caption % cap.titles.length],
       text: cap.description,
       dueAt: null,
     };
   });
 }
 
-const GOAL_LADDER = [1e3, 5e3, 1e4, 2.5e4, 5e4, 1e5, 2.5e5, 5e5, 1e6, 5e6, 1e7];
-
 /**
  * Deterministic plan for `days` days starting at `start` (YYYY-MM-DD): one
- * video per configured slot per platform. Counters continue from video to
- * video, sounds/captions/themes rotate, and no two videos in a batch share the
- * same caption set + theme + sound combination back-to-back.
+ * video per configured slot per platform. Every video is the full time-lapse
+ * from day one up to its own date, so the final count grows day by day.
+ * Captions and sounds rotate and length varies, so consecutive videos differ.
  */
 export function planBatch(start: string, days: number, platforms: Platform[] = PLATFORMS): Planned[] {
   const channels = loadChannels();
@@ -119,51 +118,31 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
   const schedule = readJson<{ timezone: string; slots: Record<Platform, string[]> }>("config/schedule.json");
   const out: Planned[] = [];
   for (const platform of platforms) {
-    const ch: ChannelConfig = { ...channels[platform] };
     const lib = loadLibrary(platform);
     const cap = captions[platform];
-    const tpl = TEMPLATES[platform];
-    const r = rng(hashSeed(`batch|${platform}|${start}`));
+    const perDay = schedule.slots[platform].length;
     const dayOffset = Math.round((Date.parse(start) - Date.parse("2026-01-01")) / 86400000);
-    let count = ch.startCount;
-    let n = 0;
     for (let d = 0; d < days; d++) {
       const date = addDays(start, d);
       schedule.slots[platform].forEach((hhmm, slot) => {
-        const idx = dayOffset * schedule.slots[platform].length + n;
-        // move to the next goal tier once the current one is effectively reached
-        if (count >= ch.goal * 0.985) {
-          ch.goal = GOAL_LADDER.find((g) => g > ch.goal) ?? ch.goal * 2;
-          ch.trackFrom = 0;
-        }
-        // alternate the full-range tracker with a zoomed "last stretch" one;
-        // the absolute gain per video stays the same either way
-        const zoom = n % 2 === 1;
-        const tenth = ch.goal / 10;
-        const trackFrom = zoom ? Math.max(ch.trackFrom, Math.min(Math.floor(count / tenth) * tenth, ch.goal - tenth)) : ch.trackFrom;
-        const gainFrac = (ch.gainFrac * (ch.goal - ch.trackFrom)) / (ch.goal - trackFrom);
-        const spec = buildSpec({
-          id: `${platform}-${date}-${String.fromCharCode(97 + slot)}`,
-          platform,
-          channel: ch,
-          captions: cap.sets[idx % cap.sets.length],
-          audio: resolveAudio(pickSound(lib, date, idx), platform),
-          theme: tpl.themes[Math.floor(idx / 2) % tpl.themes.length],
-          startCount: Math.round(count),
-          trackFrom,
-          gainFrac,
-          disclosure: channels.disclosure,
-          targetSec: 7.6 + r() * 1.8,
-        });
+        const idx = (dayOffset + d) * perDay + slot;
+        const id = `${platform}-${date}-${String.fromCharCode(97 + slot)}`;
         out.push({
-          spec,
+          spec: buildSpec({
+            id,
+            platform,
+            channel: channels[platform],
+            caption: cap.captions[idx % cap.captions.length],
+            contentTitles: cap.contentTitles,
+            audio: resolveAudio(pickSound(lib, date, idx), platform),
+            date,
+            targetSec: 13 + rng(hashSeed(id))() * 5,
+            disclosure: channels.disclosure,
+          }),
           title: cap.titles[idx % cap.titles.length],
           text: cap.description,
           dueAt: zonedIso(date, hhmm, schedule.timezone),
         });
-        // growth "between" videos so the next one does not start exactly where this ended
-        count = spec.endCount + Math.round((spec.endCount - spec.startCount) * (0.2 + r() * 0.5));
-        n++;
       });
     }
   }

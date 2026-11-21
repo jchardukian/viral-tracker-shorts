@@ -1,35 +1,32 @@
 {
   "youtube": {
-    "sets": [
-      ["Watch this number go up", "Subscribe to move the bar", "Every sub counts"],
-      ["Can we hit the goal today?", "One tap moves the bar", "Thank you for subscribing"],
-      ["The bar is almost full", "Be the one who fills it", "Subscribe and watch it jump"],
-      ["Day by day to the goal", "Your sub shows up right here", "Let's finish this bar"],
-      ["Help me reach the goal", "Tap subscribe, watch the count", "So close now"],
-      ["This bar fills one sub at a time", "Yours could be next", "Subscribe to push it"]
+    "captions": [
+      "Use this sound to get more subscribers",
+      "Use this audio to gain more subscribers",
+      "Try this sound to get more subscribers",
+      "Use this sound to grow your channel"
     ],
+    "contentTitles": ["Use this sound", "Use this audio", "Try this audio", "Use this sound to grow", "Day by day"],
     "titles": [
-      "Subscribe and watch the bar move #shorts",
-      "How close are we to the goal? #shorts",
-      "Every subscriber moves this bar #shorts",
-      "Road to the goal, one sub at a time #shorts"
+      "Use this sound to get more subscribers #shorts",
+      "Use this audio to gain more subscribers #shorts",
+      "Try this sound #shorts"
     ],
-    "description": "Animated goal tracker. The counter in this video is a simulated animation, not live analytics."
+    "description": "Growth time-lapse animation. The figures shown are simulated, not live analytics."
   },
   "tiktok": {
-    "sets": [
-      ["pov: you follow and the bar moves", "be the reason this hits the goal"],
-      ["one follow = one step closer", "watch the number jump"],
-      ["we're so close to the goal", "tap follow and watch it go"],
-      ["this ring fills one follow at a time", "yours could be the next one"],
-      ["help me finish this bar", "follow to push it over"],
-      ["tiny account, big goal", "every follow shows up here"]
+    "captions": [
+      "use this sound to get more followers",
+      "use this audio to gain more followers",
+      "try this sound to grow your account",
+      "use this sound if you want more followers"
     ],
+    "contentTitles": ["use this sound", "use this audio", "try this sound", "day by day"],
     "titles": [
-      "follow to move the bar #fyp #goals",
-      "how close are we? #fyp #growth",
-      "one follow at a time #fyp #smallcreator"
+      "use this sound to get more followers #fyp",
+      "use this audio to gain followers #fyp #growth",
+      "try this sound #fyp #smallcreator"
     ],
-    "description": "animated goal tracker · simulated counter"
+    "description": "growth time-lapse animation · simulated numbers"
   }
 }

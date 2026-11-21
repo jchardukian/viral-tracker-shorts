@@ -10,7 +10,8 @@ import { BufferPublisher, buildCreatePostInput } from "../src/publish/buffer.ts"
 import { DryRunPublisher, PermanentError, type Publisher, publishQueue, Queue, type QueueItem, slotKey } from "../src/publish/queue.ts";
 import { zonedIso } from "../src/publish/schedule.ts";
 import { buildSpec, loadChannels, TEMPLATES } from "../src/spec.ts";
-import { countAt, PLATFORMS, rectInSafe } from "../src/templates/types.ts";
+import { simulateHistory } from "../src/history.ts";
+import { PLATFORMS, rectInSafe, snapshotIndex } from "../src/templates/types.ts";
 
 const tmp = () => mkdtempSync(join(tmpdir(), "vts-"));
 const sound = (over: Partial<Sound> = {}): Sound => ({
@@ -19,7 +20,7 @@ const sound = (over: Partial<Sound> = {}): Sound => ({
   approvedPlatforms: ["youtube"],
   link: null,
   file: "assets/audio/generated/test-s1.wav",
-  generator: { type: "synth", seed: 1, seconds: 4 },
+  generator: { type: "synth", seed: 1, seconds: 8 },
   license: { status: "owned", embedAllowed: true, proof: "test" },
   bpm: 120,
   beatOffsetSec: 0,
@@ -28,46 +29,70 @@ const sound = (over: Partial<Sound> = {}): Sound => ({
   ...over,
 });
 const silent = () => resolveAudio(null, "youtube");
-const spec = (id = "t1", platform: "youtube" | "tiktok" = "youtube") =>
-  buildSpec({ id, platform, channel: loadChannels()[platform], captions: ["one", "two"], audio: silent() });
+const spec = (id = "t1", platform: "youtube" | "tiktok" = "youtube", targetSec = 16) =>
+  buildSpec({ id, platform, channel: loadChannels()[platform], caption: "Use this sound to get more subscribers", contentTitles: ["a", "b"], audio: silent(), date: "2026-11-21", targetSec });
 
-// ---------- spec / animation --------------------------------------------------
+// ---------- spec / time-lapse ---------------------------------------------------
 
 test("specs are deterministic and vary by id", () => {
   assert.deepEqual(spec("a"), spec("a"));
-  assert.notDeepEqual(spec("a").steps, spec("b").steps);
+  assert.notDeepEqual(spec("a").snapshots, spec("b").snapshots);
 });
 
-test("counter only goes up, lands on integers, stays below the goal, includes one +1 tap", () => {
+test("time-lapse runs from zero to the configured count and never goes down", () => {
   for (const platform of PLATFORMS) {
     const s = spec("mono", platform);
-    let prev = -1;
-    for (let f = 0; f <= s.frames; f++) {
-      const v = countAt(s, f / s.fps);
-      assert.ok(v >= prev - 1e-9);
-      prev = v;
-    }
-    assert.equal(countAt(s, s.durationSec), s.endCount);
-    assert.ok(Number.isInteger(s.endCount) && s.endCount > s.startCount && s.endCount < s.goal);
-    assert.equal(s.steps.filter((x) => x.tap).length, 1);
-    assert.equal(s.steps.find((x) => x.tap)!.to - s.steps.find((x) => x.tap)!.from, 1);
+    assert.equal(s.snapshots[0].count, 0);
+    assert.equal(s.endCount, loadChannels()[platform].currentCount);
+    for (let i = 1; i < s.snapshots.length; i++) assert.ok(s.snapshots[i].count >= s.snapshots[i - 1].count);
+    // 28-day views are a rolling window, so they must fall at some point as well as rise
+    assert.ok(s.snapshots.some((x, i) => i > 0 && x.views28 < s.snapshots[i - 1].views28));
   }
 });
 
-test("counter steps and caption changes sit on the beat grid", () => {
-  const s = spec("grid");
-  for (const st of s.steps.filter((x) => !x.tap)) assert.ok(s.beats.includes(st.t), `step at ${st.t}`);
-  for (const c of s.captions.slice(1)) assert.ok(s.beats.includes(c.t0));
-  assert.equal(s.frames, Math.round(s.durationSec * 30));
+test("pacing matches the reference: ~15 hard cuts/s, slowing tail, ~2 s final hold on a beat", () => {
+  const s = spec("pace", "youtube", 18);
+  assert.equal(s.cuts.length, s.snapshots.length);
+  assert.equal(s.cuts[0], 0);
+  const lens = s.cuts.slice(1).map((c, i) => c - s.cuts[i]);
+  assert.ok(lens.every((l) => l >= 2));
+  assert.ok(lens.filter((l) => l === 2).length / lens.length > 0.8, "most cuts last 2 frames");
+  const tail = lens.slice(-16);
+  for (let i = 1; i < tail.length; i++) assert.ok(tail[i] >= tail[i - 1], "tail only slows down");
+  const hold = (s.frames - s.holdFrame) / s.fps;
+  assert.ok(hold >= 1.5 && hold <= 2.6, `hold ${hold}`);
+  assert.ok(s.beats.some((b) => Math.round(b * s.fps) === s.holdFrame));
+  assert.equal(snapshotIndex(s, s.frames - 1), s.snapshots.length - 1);
+  assert.equal(snapshotIndex(s, 0), 0);
+  assert.ok(s.cuts.length > 200, `${s.cuts.length} cuts in 18 s`);
+});
+
+test("simulated history hits the configured count on asOf and keeps growing after it", () => {
+  const cfg = loadChannels().youtube;
+  const h = simulateHistory(cfg, "2026-12-05");
+  assert.equal(h[0].count, 0);
+  assert.equal(h.find((p) => p.date === cfg.asOf)!.count, cfg.currentCount);
+  assert.ok(h[h.length - 1].count > cfg.currentCount);
+  assert.equal(h[h.length - 1].date, "2026-12-05");
+});
+
+test("a real history CSV replaces the simulated curve", () => {
+  const dir = tmp();
+  const rows = ["date,count,views28,watch_hours28", ...Array.from({ length: 40 }, (_, i) => `2026-10-${String(1 + (i % 31)).padStart(2, "0")},${i * 10},${i * 1000},${i * 2}`).slice(0, 31)];
+  writeFileSync(join(dir, "h.csv"), rows.join("\n"));
+  const s = buildSpec({ id: "h", platform: "youtube", channel: { ...loadChannels().youtube, history: join(dir, "h.csv") }, caption: "c", contentTitles: ["a"], audio: silent(), date: "2026-10-31" });
+  assert.equal(s.dataSource, "history");
+  assert.equal(s.endCount, 300);
+  assert.equal(spec().dataSource, "simulated");
 });
 
 test("explicit beat timestamps override the bpm grid", () => {
-  const beats = [0.1, 0.7, 1.2, 1.9, 2.4, 3.0, 3.7, 4.2, 4.9, 5.5, 6.1, 6.8];
-  const s = buildSpec({ id: "b", platform: "tiktok", channel: loadChannels().tiktok, captions: ["x"], audio: { ...silent(), beats } });
+  const beats = Array.from({ length: 24 }, (_, i) => +(0.1 + i * 0.55).toFixed(2));
+  const s = buildSpec({ id: "b", platform: "tiktok", channel: loadChannels().tiktok, caption: "c", contentTitles: ["a"], audio: { ...silent(), beats }, date: "2026-11-21" });
   assert.deepEqual(s.beats, beats);
 });
 
-test("every critical element is inside the platform safe area and clear of the action rail", () => {
+test("headline numbers and caption are inside the platform safe area and clear of the action rail", () => {
   for (const platform of PLATFORMS) {
     const tpl = TEMPLATES[platform];
     for (const [name, r] of Object.entries(tpl.layout)) assert.ok(rectInSafe(r, tpl.safe), `${platform}.${name}`);
@@ -93,7 +118,7 @@ test("frames render at 1080x1920 and are not blank", () => {
 
 test("encoded video is 1080x1920 H.264/yuv420p 30fps with AAC; embedded has sound, silent is silent", async () => {
   const dir = tmp();
-  const base = buildSpec({ id: "enc", platform: "youtube", channel: loadChannels().youtube, captions: ["a"], audio: resolveAudio(sound(), "youtube"), targetSec: 2 });
+  const base = buildSpec({ id: "enc", platform: "youtube", channel: loadChannels().youtube, caption: "a", contentTitles: ["a"], audio: resolveAudio(sound(), "youtube"), date: "2026-11-21", targetSec: 6 });
   await renderVideo(base, join(dir, "a.mp4"));
   await renderVideo(base, join(dir, "s.mp4"), { forceSilent: true });
   const a = probe(join(dir, "a.mp4"));
@@ -143,7 +168,7 @@ test("missing licensed file and wrong-platform sound are hard errors", () => {
 
 // ---------- batch planning ----------------------------------------------------
 
-test("batch plan: 2/day/platform, unique ids and slots, counters continue, no adjacent look-alikes", () => {
+test("batch plan: 2/day/platform, unique ids and slots, final count grows daily, no adjacent look-alikes", () => {
   const plan = planBatch("2026-11-23", 14);
   assert.equal(plan.length, 14 * 2 * 2);
   assert.equal(new Set(plan.map((p) => p.spec.id)).size, plan.length);
@@ -152,8 +177,9 @@ test("batch plan: 2/day/platform, unique ids and slots, counters continue, no ad
     const ps = plan.filter((p) => p.spec.platform === platform);
     assert.equal(ps.length, 28);
     for (let i = 1; i < ps.length; i++) {
-      assert.ok(ps[i].spec.startCount > ps[i - 1].spec.endCount);
-      const sig = (p: (typeof ps)[number]) => [p.spec.captions.map((c) => c.text).join("|"), p.spec.audio.soundId, p.spec.trackFrom].join("#");
+      assert.ok(ps[i].spec.endCount >= ps[i - 1].spec.endCount);
+      if (i % 2 === 0) assert.ok(ps[i].spec.endCount > ps[i - 1].spec.endCount, "next day ends higher");
+      const sig = (p: (typeof ps)[number]) => `${p.spec.caption}#${p.spec.audio.soundId}`;
       assert.notEqual(sig(ps[i]), sig(ps[i - 1]));
     }
   }

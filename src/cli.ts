@@ -29,7 +29,7 @@ function qa(dir: string): boolean {
       h264: p.vcodec === "h264" && p.pixFmt === "yuv420p",
       "30fps": Math.abs(p.fps - 30) < 0.01,
       aac: p.acodec === "aac",
-      duration: p.durationSec >= 5 && p.durationSec <= 15,
+      duration: p.durationSec >= 8 && p.durationSec <= 30,
       audio: silent ? (p.meanVolumeDb ?? 0) < -80 : (p.meanVolumeDb ?? -99) > -40,
       size: p.sizeBytes < 30e6,
     };
@@ -66,7 +66,8 @@ async function main() {
     // filmstrips for visual inspection of the animation (not committed)
     const strips = join(ROOT, "out", "filmstrips");
     for (const p of plans) {
-      const frames = [0.15, 0.6, 1.6, p.spec.durationSec * 0.5, p.spec.tapAt + 0.02, p.spec.tapAt + 0.5, p.spec.durationSec - 0.05].map((t, i) => {
+      const d = p.spec.durationSec;
+      const frames = [0, d * 0.12, d * 0.3, d * 0.5, d * 0.7, d * 0.85, d - 0.05].map((t, i) => {
         const f = join(strips, `${p.spec.id}-${i}.png`);
         renderStill(p.spec, t, f);
         return f;
@@ -87,7 +88,7 @@ async function main() {
     const manifests: Manifest[] = [];
     for (const p of plans) {
       manifests.push(await renderOne(p, join(dir, p.spec.platform), { silentTwin: true }));
-      console.log(`  ${p.spec.id}  ${p.dueAt}  sound=${p.spec.audio.soundId ?? "none"} (${p.spec.audio.mode})  ${p.spec.startCount} -> ${p.spec.endCount}`);
+      console.log(`  ${p.spec.id}  ${p.dueAt}  sound=${p.spec.audio.soundId ?? "none"} (${p.spec.audio.mode})  0 -> ${p.spec.endCount} in ${p.spec.cuts.length} cuts`);
     }
     writeFileSync(join(dir, "manifest.json"), JSON.stringify({ batchId, start, days, videos: manifests }, null, 2));
     for (const pf of new Set(manifests.map((m) => m.platform))) if (!qa(join(dir, pf))) process.exit(1);

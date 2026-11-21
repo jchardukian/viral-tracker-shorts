@@ -4,7 +4,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-sample-1.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-sample-1.png",
-  "sha256": "81252303ba80ba213d54475cbb386d99cd61a023cbf722a7027b881a8c7bf9ce",
+  "sha256": "c84c36243aede40307e973e249c396b30accd86750fd417742165b92498dee45",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -12,8 +12,8 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 7.733333,
-    "sizeBytes": 1472169,
+    "durationSec": 17.433333,
+    "sizeBytes": 1817309,
     "meanVolumeDb": -13
   },
   "audio": {
@@ -25,20 +25,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-a.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "follow to move the bar #fyp #goals",
-  "text": "animated goal tracker · simulated counter",
+  "title": "use this sound to get more followers #fyp",
+  "text": "growth time-lapse animation · simulated numbers",
   "dueAt": null,
   "counter": {
-    "start": 8120,
-    "end": 8241,
-    "goal": 10000,
-    "trackFrom": 0
+    "start": 0,
+    "end": 48350
   },
-  "captions": [
-    "pov: you follow and the bar moves",
-    "be the reason this hits the goal"
-  ],
-  "theme": "neon",
+  "caption": "use this sound to get more followers",
+  "cuts": 203,
+  "dataSource": "simulated",
   "seed": 1283706709,
-  "durationSec": 7.733333333333333
+  "durationSec": 17.433333333333334
 }

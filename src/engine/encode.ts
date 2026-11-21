@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { TEMPLATES } from "../spec.ts";
-import type { VideoSpec } from "../templates/types.ts";
+import { snapshotIndex, type VideoSpec } from "../templates/types.ts";
 import { registerFonts } from "./draw.ts";
 
 export function renderFrame(spec: VideoSpec, t: number) {
@@ -51,10 +51,16 @@ export async function renderVideo(spec: VideoSpec, out: string, opts: { forceSil
   const canvas = createCanvas(spec.width, spec.height);
   const ctx = canvas.getContext("2d");
   const tpl = TEMPLATES[spec.platform];
+  let last = -1;
   for (let f = 0; f < spec.frames; f++) {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.globalAlpha = 1;
-    tpl.render(ctx, spec, f / spec.fps);
+    const snap = snapshotIndex(spec, f);
+    if (snap !== last) {
+      // hard cuts only: redraw when the snapshot changes, otherwise resend the frame
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.globalAlpha = 1;
+      tpl.render(ctx, spec, f / spec.fps);
+      last = snap;
+    }
     if (!ff.stdin.write(canvas.data())) await once(ff.stdin, "drain");
   }
   ff.stdin.end();

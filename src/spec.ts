@@ -1,41 +1,28 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "./engine/draw.ts";
-import { hashSeed, rng } from "./engine/util.ts";
+import { hashSeed, pick, rng } from "./engine/util.ts";
+import { type DayPoint, type HistoryConfig, historyFor } from "./history.ts";
 import { tiktokTemplate } from "./templates/tiktok.ts";
-import {
-  type AudioAssignment,
-  type Caption,
-  type CounterStep,
-  FPS,
-  HEIGHT,
-  type Platform,
-  type Template,
-  type VideoSpec,
-  WIDTH,
-} from "./templates/types.ts";
+import { type AudioAssignment, type ContentCard, FPS, HEIGHT, type Platform, type Snapshot, type Template, type VideoSpec, WIDTH } from "./templates/types.ts";
 import { youtubeTemplate } from "./templates/youtube.ts";
 
 export const TEMPLATES: Record<Platform, Template> = { youtube: youtubeTemplate, tiktok: tiktokTemplate };
 
-export interface ChannelConfig {
+export interface ChannelConfig extends HistoryConfig {
   name: string;
   handle: string;
   initial: string;
   avatar: [string, string];
-  goal: number;
-  trackFrom: number;
-  startCount: number;
-  /** share of the visible tracker range gained during one video */
-  gainFrac: number;
-  following?: number;
-  likes?: number;
   bufferChannelId: string | null;
   youtubeCategoryId?: string;
 }
 
 export interface CaptionConfig {
-  sets: string[][];
+  /** on-screen caption; one is used, unchanged, for a whole video */
+  captions: string[];
+  /** titles of the simulated "latest content" cards */
+  contentTitles: string[];
   titles: string[];
   description: string;
 }
@@ -53,15 +40,68 @@ export interface SpecInput {
   id: string;
   platform: Platform;
   channel: ChannelConfig;
-  captions: string[];
+  caption: string;
+  contentTitles: string[];
   audio: AudioAssignment;
-  theme?: string;
-  startCount?: number;
-  trackFrom?: number;
-  gainFrac?: number;
+  /** the time-lapse ends on this date (YYYY-MM-DD) */
+  date: string;
   disclosure?: string | null;
-  /** target length; snapped to a whole number of 4-beat bars */
+  /** target length; snapped to whole 4-beat bars */
   targetSec?: number;
+}
+
+/**
+ * Pacing measured from the reference recording (18.4 s, ~260 cuts):
+ * hard cuts about every 2 frames at 30 fps, slowing over the last ~3 s,
+ * then a ~2 s hold on the final dashboard before the loop restarts.
+ */
+const FAST = 2;
+const TAIL = [3, 3, 3, 3, 4, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10, 12];
+const HOLD_SEC = 2.0;
+
+const NOTES = [
+  "Nice! Views are about what you usually get.",
+  "Great job! Views and watch time are higher than usual.",
+  "Great job! You got more views and likes than usual.",
+];
+
+function ageText(r: () => number) {
+  const h = 2 + Math.floor(r() * 70);
+  const m = Math.floor(r() * 60);
+  return h >= 24 ? `First ${Math.floor(h / 24)} days ${h % 24} hours` : `First ${h} hours ${m} minutes`;
+}
+
+function card(r: () => number, titles: string[], base: number): ContentCard {
+  const views = Math.max(3, Math.round(base * (0.15 + r() * r() * 3)));
+  const likes = Math.round(views * (0.012 + r() * 0.03));
+  return { title: pick(r, titles), age: ageText(r), views, likes, comments: Math.round(likes * (0.1 + r() * 0.6)) };
+}
+
+function snapshot(r: () => number, p: DayPoint, prev: DayPoint | null, week: DayPoint | null, titles: string[]): Snapshot {
+  const base = Math.max(40, p.views28 / 60);
+  const latest = card(r, titles, base);
+  const t = () => (r() < 0.45 ? 1 : r() < 0.5 ? 0 : -1);
+  return {
+    date: p.date,
+    count: p.count,
+    views28: p.views28,
+    watch28: p.watch28,
+    up: !!prev && p.views28 > prev.views28,
+    clock: `${1 + Math.floor(r() * 12)}:${String(Math.floor(r() * 60)).padStart(2, "0")}`,
+    latest: {
+      ...latest,
+      expanded: r() < 0.7,
+      note: r() < 0.3 ? pick(r, NOTES) : null,
+      rank: 1 + Math.floor(r() * 10),
+      avgPct: +(40 + r() * 140).toFixed(1),
+      trend: [t(), t(), t()],
+    },
+    older: [card(r, titles, base), card(r, titles, base)],
+    delta7: p.count - (week?.count ?? 0),
+    profileViews: Math.round(p.views28 * (0.01 + r() * 0.01)),
+    likesTotal: Math.round(p.views28 * (0.03 + r() * 0.01)),
+    shares: Math.round(latest.likes * (0.05 + r() * 0.2)),
+  };
 }
 
 /** Deterministic: the same input always yields the same spec (and the same pixels). */
@@ -71,63 +111,44 @@ export function buildSpec(input: SpecInput): VideoSpec {
   const r = rng(seed);
   const interval = 60 / audio.bpm;
 
-  // beat grid: explicit timestamps win, otherwise bpm + offset
   let beats: number[];
   let durationSec: number;
   if (audio.beats && audio.beats.length >= 8) {
     beats = [...audio.beats].sort((a, b) => a - b);
     durationSec = beats[beats.length - 1] + interval;
   } else {
-    const bars = Math.max(2, Math.round((input.targetSec ?? 8.4) / (interval * 4)));
-    const n = bars * 4;
-    beats = Array.from({ length: n }, (_, i) => +(audio.beatOffsetSec + i * interval).toFixed(4));
-    durationSec = audio.beatOffsetSec + n * interval;
+    const bars = Math.max(3, Math.round((input.targetSec ?? 16) / (interval * 4)));
+    beats = Array.from({ length: bars * 4 }, (_, i) => +(audio.beatOffsetSec + i * interval).toFixed(4));
+    durationSec = audio.beatOffsetSec + bars * 4 * interval;
   }
   const frames = Math.round(durationSec * FPS);
   durationSec = frames / FPS;
 
-  const goal = channel.goal;
-  const trackFrom = input.trackFrom ?? channel.trackFrom;
-  const startCount = input.startCount ?? channel.startCount;
-  const gainFrac = input.gainFrac ?? channel.gainFrac;
-  if (!(trackFrom <= startCount && startCount < goal)) throw new Error(`${input.id}: need trackFrom <= startCount < goal`);
+  // cut schedule: fast run, slowing tail, final hold starting on a beat
+  const target = durationSec - HOLD_SEC;
+  const holdBeat = beats.reduce((best, b) => (Math.abs(b - target) < Math.abs(best - target) ? b : best), beats[0]);
+  const holdFrame = Math.round(holdBeat * FPS);
+  const tailFrames = TAIL.reduce((a, b) => a + b, 0);
+  const nFast = Math.max(8, Math.floor((holdFrame - tailFrames) / FAST));
+  const lens = [...Array(nFast).fill(FAST), ...TAIL];
+  lens[0] += holdFrame - (nFast * FAST + tailFrames); // absorb rounding in the opening frame
+  const cuts: number[] = [];
+  let f = 0;
+  for (const len of lens) {
+    cuts.push(f);
+    f += len;
+  }
+  cuts.push(holdFrame);
+  const n = cuts.length;
 
-  // counter steps land on beats; the CTA tap adds exactly +1
-  const tapBeat = beats[Math.min(beats.length - 3, Math.round(beats.length * 0.68))];
-  const stepBeats = beats.filter((b) => b >= 0.85 && b !== tapBeat && b < durationSec - 0.45 && r() < 0.86);
-  const budget = Math.max(stepBeats.length, Math.min((goal - trackFrom) * gainFrac, goal - startCount - 2));
-  const weights = stepBeats.map(() => 0.35 + r());
-  const wsum = weights.reduce((a, b) => a + b, 0);
-  const stepDur = Math.min(0.34, interval * 0.62);
-  const steps: CounterStep[] = [];
-  let v = startCount;
-  const push = (t: number, inc: number, dur: number, tap = false) => {
-    if (v + inc >= goal) inc = Math.max(0, goal - 1 - v);
-    if (inc <= 0) return;
-    steps.push({ t, dur, from: v, to: v + inc, ...(tap ? { tap } : {}) });
-    v += inc;
-  };
-  const tapAt = tapBeat;
-  const events = [
-    ...stepBeats.map((t, i) => ({ t, inc: Math.max(1, Math.round((budget * weights[i]) / wsum)), dur: stepDur, tap: false })),
-    { t: +(tapAt + 0.1).toFixed(4), inc: 1, dur: 0.22, tap: true },
-  ].sort((x, y) => x.t - y.t);
-  for (const e of events) push(e.t, e.inc, e.dur, e.tap);
+  // pick n days out of the history, always ending on the final day
+  const { points, source } = historyFor(channel, input.date);
+  const snapshots: Snapshot[] = [];
+  for (let i = 0; i < n; i++) {
+    const idx = Math.round((i / (n - 1)) * (points.length - 1));
+    snapshots.push(snapshot(r, points[idx], idx > 0 ? points[idx - 1] : null, points[idx - 7] ?? null, input.contentTitles));
+  }
 
-  // captions change on bar lines
-  const lines = input.captions;
-  const captions: Caption[] = lines.map((text, i) => {
-    const b0 = Math.round((beats.length * i) / lines.length / 2) * 2;
-    const b1 = Math.round((beats.length * (i + 1)) / lines.length / 2) * 2;
-    return {
-      text,
-      t0: i === 0 ? 0.35 : beats[b0],
-      t1: i === lines.length - 1 ? durationSec + 1 : beats[b1],
-    };
-  });
-
-  const tpl = TEMPLATES[platform];
-  const theme = input.theme ?? tpl.themes[Math.floor(r() * tpl.themes.length)];
   return {
     id: input.id,
     platform,
@@ -138,17 +159,15 @@ export function buildSpec(input: SpecInput): VideoSpec {
     durationSec,
     frames,
     profile: { name: channel.name, handle: channel.handle, initial: channel.initial, avatar: channel.avatar },
-    theme,
-    goal,
-    trackFrom,
-    startCount,
-    endCount: v,
-    steps,
-    captions,
-    tapAt,
+    caption: input.caption,
+    snapshots,
+    cuts,
+    holdFrame,
+    startCount: snapshots[0].count,
+    endCount: snapshots[n - 1].count,
     beats,
-    extras: { following: channel.following ?? 0, likes: channel.likes ?? 0 },
     audio,
-    disclosure: input.disclosure === undefined ? "simulated counter · animation" : input.disclosure,
+    dataSource: source,
+    disclosure: input.disclosure === undefined ? "simulated numbers" : input.disclosure,
   };
 }

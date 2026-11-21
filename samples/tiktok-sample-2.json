@@ -4,7 +4,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-sample-2.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-sample-2.png",
-  "sha256": "d2f617d99771da10a0226d86d6799fd7bd09f378353f34ef95a5dc9b5360f62c",
+  "sha256": "7d5aea64ace512c74cffef135a85464097c0acfb5208a10bebd40052711d9c5d",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -12,8 +12,8 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 8.566667,
-    "sizeBytes": 1537135,
+    "durationSec": 15,
+    "sizeBytes": 1358690,
     "meanVolumeDb": -13.4
   },
   "audio": {
@@ -25,20 +25,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-b.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "one follow at a time #fyp #smallcreator",
-  "text": "animated goal tracker · simulated counter",
+  "title": "use this audio to gain followers #fyp #growth",
+  "text": "growth time-lapse animation · simulated numbers",
   "dueAt": null,
   "counter": {
-    "start": 9655,
-    "end": 9778,
-    "goal": 10000,
-    "trackFrom": 9000
+    "start": 0,
+    "end": 9820
   },
-  "captions": [
-    "we're so close to the goal",
-    "tap follow and watch it go"
-  ],
-  "theme": "blush",
+  "caption": "use this audio to gain more followers",
+  "cuts": 164,
+  "dataSource": "simulated",
   "seed": 1243091918,
-  "durationSec": 8.566666666666666
+  "durationSec": 15
 }

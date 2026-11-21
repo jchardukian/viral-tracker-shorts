@@ -4,7 +4,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/youtube-sample-2.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-sample-2.png",
-  "sha256": "999b9158c0acd22cb14ad0fc53d77f6f5fa2baade07afe577d749e3ad6790bfd",
+  "sha256": "4531b182ef8293d597265cfab6a9fae7bcb5df6ed7d1fd31d5e7998ca26bef8c",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -12,8 +12,8 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 7.5,
-    "sizeBytes": 1303064,
+    "durationSec": 15,
+    "sizeBytes": 1826207,
     "meanVolumeDb": -12.9
   },
   "audio": {
@@ -25,21 +25,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-b.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "Every subscriber moves this bar #shorts",
-  "text": "Animated goal tracker. The counter in this video is a simulated animation, not live analytics.",
+  "title": "Use this audio to gain more subscribers #shorts",
+  "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
   "dueAt": null,
   "counter": {
-    "start": 98310,
-    "end": 99209,
-    "goal": 100000,
-    "trackFrom": 90000
+    "start": 0,
+    "end": 43871
   },
-  "captions": [
-    "The bar is almost full",
-    "Be the one who fills it",
-    "Subscribe and watch it jump"
-  ],
-  "theme": "crimson",
+  "caption": "Use this audio to gain more subscribers",
+  "cuts": 168,
+  "dataSource": "simulated",
   "seed": 3651390141,
-  "durationSec": 7.5
+  "durationSec": 15
 }

@@ -1,179 +1,170 @@
-import { type Ctx, drawOdometer, fitWrapped, font, odometerWidth, withTransform } from "../engine/draw.ts";
-import { clamp, easeOutBack, formatCount, prog, shortCount } from "../engine/util.ts";
-import { avatar, checkIcon, ctaScale, disclosure, enter, floatChips, glow, rrect, tapPointer } from "./common.ts";
-import { beatPulse, captionAt, countAt, type Template, trackerFill, type VideoSpec } from "./types.ts";
+import { type Ctx, wrap } from "../engine/draw.ts";
+import { formatCount, shortCount, shortHours } from "../engine/util.ts";
+import { avatar, chevron, disclosurePill, glyph, outlinedCaption, rrect, statusBar, text, trendIcon } from "./common.ts";
+import { type ContentCard, frameOf, type Snapshot, snapshotIndex, type Template, type VideoSpec } from "./types.ts";
 
-const THEMES: Record<string, { panel: [string, string]; bar: [string, string]; glow: string; tip: string }> = {
-  // deep red panel + green bar: the classic tracker look
-  crimson: { panel: ["#8a0d0d", "#190303"], bar: ["#19e23a", "#5dff5a"], glow: "#ff2a2a", tip: "#ff5a3c" },
-  midnight: { panel: ["#3a1020", "#0d0509"], bar: ["#ff2e2e", "#ff7a59"], glow: "#ff3355", tip: "#ffffff" },
-  ember: { panel: ["#7a2a05", "#170802"], bar: ["#ffd21f", "#fff27a"], glow: "#ff6a1a", tip: "#ffffff" },
-};
+// A creator-dashboard screen in the style of the reference recording:
+// header, channel + total subscribers, 28-day analytics cards, latest content
+// with its detail rows, tab bar. Original mark and icons; no platform logos.
+
+const BG = "#0f0f0f";
+const CARD = "#1f1f1f";
+const DIM = "#aaaaaa";
+const L = 90; // content left edge
+const R = 978; // content right edge
+const W = R - L;
 
 const layout = {
-  profile: { x: 60, y: 250, w: 960, h: 270 },
-  tracker: { x: 60, y: 560, w: 960, h: 440 },
-  caption: { x: 160, y: 1040, w: 740, h: 230 },
-  cta: { x: 270, y: 1300, w: 540, h: 124 },
-  disclosure: { x: 240, y: 1436, w: 600, h: 40 },
+  profile: { x: L, y: 300, w: W, h: 200 },
+  analytics: { x: L, y: 555, w: W, h: 270 },
+  caption: { x: 100, y: 940, w: 800, h: 230 },
 };
 
-function render(ctx: Ctx, spec: VideoSpec, t: number) {
-  const th = THEMES[spec.theme] ?? THEMES.crimson;
-  const count = countAt(spec, t);
-  const pulse = beatPulse(spec, t);
-  const L = layout;
+function contentHead(ctx: Ctx, c: ContentCard, y: number, open: boolean | null) {
+  // thumbnail: a tiny dashboard screenshot, like the reference's own uploads
+  rrect(ctx, L + 30, y + 26, 76, 116, 8);
+  ctx.fillStyle = "#101010";
+  ctx.fill();
+  ctx.fillStyle = "#3d3d3d";
+  [18, 34, 50, 66, 84].forEach((dy, i) => ctx.fillRect(L + 40, y + 26 + dy, i % 2 ? 40 : 56, 6));
+  ctx.fillStyle = "#c33";
+  ctx.fillRect(L + 40, y + 34, 14, 6);
+  text(ctx, c.title, L + 150, y + 68, 500, 30, "#fff");
+  text(ctx, c.age, L + 150, y + 112, 400, 27, DIM);
+  const sy = y + 226;
+  glyph(ctx, "views", L + 38, sy, 26, "#ddd");
+  text(ctx, shortCount(c.views), L + 78, sy, 500, 28, "#ddd");
+  glyph(ctx, "likes", L + 210, sy, 26, "#ddd");
+  text(ctx, shortCount(c.likes), L + 250, sy, 500, 28, "#ddd");
+  glyph(ctx, "comments", L + 370, sy, 26, "#ddd");
+  text(ctx, formatCount(c.comments), L + 410, sy, 500, 28, "#ddd");
+  if (open !== null) chevron(ctx, R - 44, sy - 10, open ? "up" : "down");
+}
 
-  // background
-  ctx.fillStyle = "#0f0f0f";
-  ctx.fillRect(0, 0, spec.width, spec.height);
-  glow(ctx, 540 + Math.sin(t * 0.7) * 60, 760, 900, th.glow, 0.1 + 0.03 * pulse);
+function row(ctx: Ctx, y: number, label: string, value: string, trend: number | null, link = false) {
+  text(ctx, label, L + 38, y, 400, 29, "#e6e6e6");
+  text(ctx, value, R - (trend === null && !link ? 44 : 96), y, 400, 29, "#e6e6e6", "right");
+  if (trend !== null) trendIcon(ctx, R - 56, y - 10, trend);
+  if (link) chevron(ctx, R - 52, y - 10, "right");
+}
 
-  // --- profile: channel name + subscriber count together -------------------
-  enter(ctx, t, 0, () => {
-    const p = L.profile;
-    rrect(ctx, p.x, p.y, p.w, p.h, 44);
-    ctx.fillStyle = "#1a1a1a";
+function latest(ctx: Ctx, s: Snapshot) {
+  const y = 965;
+  const c = s.latest;
+  if (!c.expanded) {
+    rrect(ctx, L, y, W, 270, 14);
+    ctx.fillStyle = CARD;
     ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,0.07)";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    avatar(ctx, p.x + 130, p.y + p.h / 2, 90, spec);
-    const tx = p.x + 252;
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#fff";
-    ctx.font = font(600, 44);
-    ctx.fillText(spec.profile.name, tx, p.y + 78);
-    const w = odometerWidth(ctx, count, 104, 800);
-    withTransform(ctx, tx, p.y + 180, 1 + 0.025 * pulse, 1, () =>
-      drawOdometer(ctx, count, tx, p.y + 184, 104, 800, "#fff"),
-    );
-    ctx.font = font(500, 34);
-    ctx.fillStyle = "#aaa";
-    ctx.fillText("subscribers", tx, p.y + 236);
-    floatChips(ctx, spec, t, Math.min(tx + w + 22, p.x + p.w - 190), p.y + 150, th.bar[1]);
-  });
-
-  // --- tracker --------------------------------------------------------------
-  enter(ctx, t, 0.12, () => {
-    const p = L.tracker;
-    const g = ctx.createRadialGradient(p.x + p.w / 2, p.y + p.h * 0.45, 40, p.x + p.w / 2, p.y + p.h / 2, p.w * 0.62);
-    g.addColorStop(0, th.panel[0]);
-    g.addColorStop(1, th.panel[1]);
-    rrect(ctx, p.x, p.y, p.w, p.h, 44);
-    ctx.fillStyle = g;
-    ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,0.08)";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.textAlign = "left";
-    ctx.fillStyle = "rgba(255,255,255,0.82)";
-    ctx.font = font(800, 36);
-    ctx.fillText(`ROAD TO ${shortCount(spec.goal).toUpperCase()}`, p.x + 52, p.y + 86);
-    const fill = trackerFill(spec, t);
-    const pct = ((spec.trackFrom + fill * (spec.goal - spec.trackFrom)) / spec.goal) * 100;
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#fff";
-    ctx.font = font(900, 68);
-    ctx.fillText(`${pct.toFixed(1)}%`, p.x + p.w - 52, p.y + 98);
-
-    const bx = p.x + 76;
-    const bw = p.w - 152;
-    const by = p.y + 196;
-    const bh = 40;
-    rrect(ctx, bx - 8, by - 8, bw + 16, bh + 16, 30);
-    ctx.fillStyle = "rgba(0,0,0,0.45)";
-    ctx.fill();
-    const fw = Math.max(bh, bw * fill);
-    const bg = ctx.createLinearGradient(bx, 0, bx + fw, 0);
-    bg.addColorStop(0, th.bar[0]);
-    bg.addColorStop(1, th.bar[1]);
-    ctx.save();
-    ctx.shadowColor = th.bar[0];
-    ctx.shadowBlur = 34 + 30 * pulse;
-    rrect(ctx, bx, by, fw, bh, bh / 2);
-    ctx.fillStyle = bg;
-    ctx.fill();
-    ctx.restore();
-    // tip
-    ctx.save();
-    ctx.shadowColor = th.tip;
-    ctx.shadowBlur = 30;
-    ctx.fillStyle = th.tip;
-    ctx.beginPath();
-    ctx.arc(bx + fw - bh / 2, by + bh / 2, 15 + 9 * pulse, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    // ticks + labels
-    ctx.textAlign = "center";
-    for (let i = 0; i <= 4; i++) {
-      const x = bx + (bw * i) / 4;
-      const v = spec.trackFrom + ((spec.goal - spec.trackFrom) * i) / 4;
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(x - 3, by + bh + 20, 6, 26);
-      ctx.font = font(700, 38);
-      ctx.fillText(shortCount(v).toLowerCase(), x, by + bh + 96);
-    }
-    ctx.font = font(600, 38);
-    ctx.textAlign = "left";
-    ctx.fillStyle = "rgba(255,255,255,0.72)";
-    ctx.fillText(`${formatCount(Math.max(0, spec.goal - Math.floor(count)))} to go`, p.x + 52, p.y + p.h - 40);
-    ctx.textAlign = "right";
-    ctx.fillText(`goal ${formatCount(spec.goal)}`, p.x + p.w - 52, p.y + p.h - 40);
-  });
-
-  // --- caption ---------------------------------------------------------------
-  const cap = captionAt(spec, t);
-  if (cap) {
-    const c = L.caption;
-    const { size, lines } = fitWrapped(ctx, cap.text, 900, 78, c.w - 20, 2);
-    const p = prog(t, cap.t0, 0.28);
-    const out = 1 - prog(t, cap.t1 - 0.12, 0.12);
-    const lh = size * 1.16;
-    const cy = c.y + c.h / 2;
-    withTransform(ctx, c.x + c.w / 2, cy, 0.78 + 0.22 * easeOutBack(p), clamp(p * 3) * out, () => {
-      ctx.font = font(900, size);
-      ctx.textAlign = "center";
-      ctx.lineJoin = "round";
-      lines.forEach((ln, i) => {
-        const y = cy - ((lines.length - 1) * lh) / 2 + i * lh + size * 0.35;
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = size * 0.15;
-        ctx.strokeText(ln, c.x + c.w / 2, y);
-        ctx.fillStyle = "#fff";
-        ctx.fillText(ln, c.x + c.w / 2, y);
-      });
-    });
-  }
-
-  // --- subscribe CTA -----------------------------------------------------------
-  enter(ctx, t, 0.3, () => {
-    const b = L.cta;
-    const done = t >= spec.tapAt + 0.12;
-    withTransform(ctx, b.x + b.w / 2, b.y + b.h / 2, ctaScale(spec, t, pulse), 1, () => {
-      rrect(ctx, b.x, b.y, b.w, b.h, b.h / 2);
-      ctx.fillStyle = done ? "#2b2b2b" : "#fff";
+    contentHead(ctx, c, y, false);
+    s.older.forEach((o, i) => {
+      const oy = y + 300 + i * 300;
+      rrect(ctx, L, oy, W, 270, 14);
+      ctx.fillStyle = CARD;
       ctx.fill();
-      ctx.font = font(700, 52);
-      ctx.textAlign = "center";
-      ctx.fillStyle = done ? "#fff" : "#0f0f0f";
-      if (done) {
-        checkIcon(ctx, b.x + 118, b.y + b.h / 2, 44, "#fff");
-        ctx.fillText("Subscribed", b.x + b.w / 2 + 30, b.y + b.h / 2 + 18);
-      } else ctx.fillText("Subscribe", b.x + b.w / 2, b.y + b.h / 2 + 18);
+      contentHead(ctx, o, oy, false);
     });
-  }, 0);
-  tapPointer(ctx, spec, t, L.cta);
-  disclosure(ctx, spec, L.disclosure);
+    return;
+  }
+  rrect(ctx, L, y, W, 900, 14);
+  ctx.fillStyle = CARD;
+  ctx.fill();
+  contentHead(ctx, c, y, true);
+  let ry = y + 300;
+  if (c.note) {
+    rrect(ctx, L + 28, ry - 20, W - 56, 124, 12);
+    ctx.fillStyle = "#3a3a3a";
+    ctx.fill();
+    ctx.font = `600 28px "VTS Inter"`;
+    wrap(ctx, c.note, W - 130).slice(0, 2).forEach((ln, i) => text(ctx, ln, L + 58, ry + 32 + i * 38, 600, 28, "#fff"));
+    ry += 150;
+  }
+  ry += 44;
+  row(ctx, ry, "Ranking by views", `${c.rank} of 10`, null, true);
+  row(ctx, ry + 88, "Views", shortCount(c.views), c.trend[0]);
+  row(ctx, ry + 176, "Average percentage viewed", `${c.avgPct.toFixed(1)}%`, c.trend[1]);
+  row(ctx, ry + 264, "Likes", shortCount(c.likes), c.trend[2]);
+  row(ctx, ry + 352, "Comments", formatCount(c.comments), null);
+}
+
+function metric(ctx: Ctx, x: number, label: string, value: string, up: boolean) {
+  rrect(ctx, x, 640, (W - 24) / 2, 180, 14);
+  ctx.fillStyle = CARD;
+  ctx.fill();
+  text(ctx, label, x + 36, 702, 400, 27, DIM);
+  text(ctx, value, x + 36, 770, 700, 42, "#fff");
+  if (up) trendIcon(ctx, x + 36 + ctx.measureText(value).width + 28, 756, 1, 14);
+}
+
+function tabBar(ctx: Ctx) {
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 1790, 1080, 130);
+  ["Dashboard", "Content", "Analytics", "Community", "Earn"].forEach((name, i) => {
+    const cx = 150 + i * 195;
+    const col = i === 0 ? "#fff" : "#9a9a9a";
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 4;
+    rrect(ctx, cx - 20, 1812, 40, 36, 8);
+    ctx.stroke();
+    text(ctx, name, cx, 1888, 500, 23, col, "center");
+  });
+}
+
+function render(ctx: Ctx, spec: VideoSpec, t: number) {
+  const s = spec.snapshots[snapshotIndex(spec, frameOf(spec, t))];
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, spec.width, spec.height);
+  statusBar(ctx, s.clock);
+
+  // header: original bar-chart mark + wordmark, action icons
+  rrect(ctx, L, 172, 56, 42, 11);
+  ctx.fillStyle = "#e5322d";
+  ctx.fill();
+  ctx.fillStyle = "#fff";
+  [14, 24, 18].forEach((h, i) => ctx.fillRect(L + 14 + i * 11, 172 + 33 - h, 7, h));
+  text(ctx, "Studio", L + 70, 208, 600, 40, "#fff");
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(778, 194, 20, 0, Math.PI * 2);
+  ctx.moveTo(768, 194);
+  ctx.lineTo(788, 194);
+  ctx.moveTo(778, 184);
+  ctx.lineTo(778, 204);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(866, 196, 17, Math.PI, 0);
+  ctx.lineTo(886, 212);
+  ctx.lineTo(846, 212);
+  ctx.closePath();
+  ctx.stroke();
+  avatar(ctx, 950, 194, 22, spec);
+
+  // channel + total subscribers
+  avatar(ctx, L + 92, 400, 92, spec);
+  text(ctx, spec.profile.name, L + 226, 352, 600, 40, "#fff");
+  text(ctx, formatCount(s.count), L + 226, 426, 700, 58, "#fff");
+  text(ctx, "Total subscribers", L + 226, 480, 400, 30, DIM);
+  disclosurePill(ctx, spec, R, 480);
+
+  // channel analytics, last 28 days
+  text(ctx, "Channel analytics", L, 598, 700, 42, "#fff");
+  text(ctx, "Last 28 days", R, 596, 400, 26, DIM, "right");
+  metric(ctx, L, "Views", shortCount(s.views28), s.up);
+  metric(ctx, L + (W + 24) / 2, "Watch time (hours)", shortHours(s.watch28), s.up);
+
+  text(ctx, "Latest published content", L, 928, 700, 42, "#fff");
+  latest(ctx, s);
+  tabBar(ctx);
+
+  // static caption over the content card, exactly where the reference keeps it
+  const c = layout.caption;
+  outlinedCaption(ctx, spec.caption, 540, c.y + c.h / 2, c.w, 80);
 }
 
 export const youtubeTemplate: Template = {
   platform: "youtube",
   // Shorts player chrome: top bar, bottom title/channel block, right action rail.
-  safe: { top: 240, bottom: 1480, left: 48, right: 1032, rail: { x: 920, y0: 1020, y1: 1920 } },
+  safe: { top: 240, bottom: 1480, left: 48, right: 1032, rail: { x: 920, y0: 1180, y1: 1920 } },
   layout,
-  themes: Object.keys(THEMES),
   render,
 };

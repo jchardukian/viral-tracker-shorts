@@ -4,7 +4,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/youtube-sample-3.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-sample-3.png",
-  "sha256": "471f5727876abf2e0550af7214c277a0f8b63132e1bb41dafc677776451a9c1f",
+  "sha256": "8054e2c817c5a853f3afc8fadea720dd8aa7c327ce26a3b870db32c94eac27f1",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -12,8 +12,8 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 9.233333,
-    "sizeBytes": 1431120,
+    "durationSec": 11.533333,
+    "sizeBytes": 1448783,
     "meanVolumeDb": -13.7
   },
   "audio": {
@@ -25,21 +25,16 @@
     "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-c.wav",
     "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
   },
-  "title": "How close are we to the goal? #shorts",
-  "text": "Animated goal tracker. The counter in this video is a simulated animation, not live analytics.",
+  "title": "Try this sound #shorts",
+  "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
   "dueAt": null,
   "counter": {
-    "start": 61840,
-    "end": 64340,
-    "goal": 100000,
-    "trackFrom": 50000
+    "start": 0,
+    "end": 251940
   },
-  "captions": [
-    "Can we hit the goal today?",
-    "One tap moves the bar",
-    "Thank you for subscribing"
-  ],
-  "theme": "ember",
+  "caption": "Try this sound to get more subscribers",
+  "cuts": 118,
+  "dataSource": "simulated",
   "seed": 3723231963,
-  "durationSec": 9.233333333333333
+  "durationSec": 11.533333333333333
 }

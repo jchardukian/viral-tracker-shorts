@@ -1,11 +1,34 @@
 # viral-tracker-shorts
 
-Automated YouTube Shorts and TikTok growth-tracker videos: an animated
-subscriber/follower counter, a progress tracker, short captions, a
-subscribe/follow CTA and beat-synced motion — rendered as 1080x1920 H.264/AAC
-MP4s from config, with a gated publishing queue.
+Automated YouTube Shorts and TikTok growth time-lapse videos, modelled on the
+reference recording in this repo: a rapid hard-cut run through a creator
+dashboard, day by day from 0 to the current count, under one static caption
+— rendered as 1080x1920 H.264/AAC MP4s from config, with a gated publishing queue.
 
 See `PROJECT_BRIEF.md` for the product spec.
+
+## What the reference does (measured from the MP4)
+
+`ScreenRecording_11-20-2026 19-17-28_1.mp4`, sampled every 0.25 s and with
+per-frame change detection on the subscriber number:
+
+| Aspect | Reference | This renderer |
+| --- | --- | --- |
+| Length | 18.4 s | 12–18 s, snapped to whole bars of the sound |
+| Structure | time-lapse of daily dashboard screenshots, hard cuts, no transitions | same |
+| Cut rate | ~260 changes; about every 2 frames (~15/s), slowing over the last ~3 s | 2-frame cuts, 16-step slowing tail |
+| Ending / loop | final dashboard held ~2 s, then restarts at 0 | 2 s hold starting on a beat, loops to 0 |
+| Subscribers | 0 → 110,266; long flat stretches and sudden spikes | generated curve with the same shape, or your real history CSV |
+| Views / watch time | 28-day figures that rise *and* fall (874 → 17.2M → 3.6M) | rolling 28-day window over daily views |
+| Latest content card | changes every cut; sometimes expanded with ranking / views / average % viewed / likes / comments, sometimes a notice, sometimes collapsed with older videos below | same states, re-rolled every cut |
+| Caption | one caption for the whole video, two lines, white with black outline, over the content card | same position and style |
+| Other motion | none: no CTA button, no progress bar, no captions changing | none |
+
+The YouTube template reproduces that dashboard layout with an original mark
+and icons (no platform logos). The TikTok template is the same time-lapse as a
+follower-analytics screen: tabs, total followers with a 7-day delta, key
+metrics, a follower growth chart that draws itself as days cut past, and the
+most recent post.
 
 ## Preview the samples
 
@@ -45,36 +68,53 @@ same slot twice.
 | --- | --- |
 | `src/engine/` | canvas drawing helpers, odometer counter, ffmpeg encoder, ffprobe QA |
 | `src/templates/youtube.ts`, `tiktok.ts` | the two platform-native layouts, each with declared safe areas |
-| `src/spec.ts` | deterministic video spec: beat grid, counter steps, captions, CTA tap |
+| `src/spec.ts` | deterministic video spec: cut schedule, daily snapshots, caption |
+| `src/history.ts` | simulated growth curve, or real history from CSV |
 | `src/audio/` | per-platform sound library, licence gate, rotation, test-beat synth |
 | `src/pipeline.ts` | sample + batch planning, manifests, queueing |
 | `src/publish/` | queue (idempotency, approval, retries), Buffer adapter, scheduling |
 | `config/` | channel names/numbers, captions, schedule, audio libraries, sample defs |
 
 Rendering is plain `@napi-rs/canvas` → raw frames → `ffmpeg`. No browser, no
-paid services, no AI video generation; a video takes ~5 s to render.
+paid services, no AI video generation; a video takes 5–8 s to render.
 
 ### Configuration
 
-- `config/channels.json` — channel/profile name, handle, avatar colours, goal,
-  starting count, growth per video, Buffer channel ids, on-screen disclosure.
-- `config/captions.json` — caption sets, post titles and description per platform.
+- `config/channels.json` — channel/profile name, handle, avatar colours, and the
+  growth story: `startDate` (count is 0), `asOf` + `currentCount` (where the
+  count stands today), `dailyGrowth` (after `asOf`), optional `history` CSV,
+  Buffer channel ids, on-screen disclosure.
+- `config/captions.json` — on-screen captions, content-card titles, post titles
+  and description per platform.
 - `config/schedule.json` — timezone and the two daily slots per platform.
 - `config/audio/youtube.json`, `config/audio/tiktok.json` — the sound rotation.
 
-The names in `channels.json` (`Road to 100K`, `@roadto10k`) are placeholders.
+The names in `channels.json` are placeholders.
 
-The counter is a simulated animation. A small on-screen note
-(`disclosure` in `channels.json`) and the post description say so; set
-`disclosure` to `null` to hide the on-screen note.
+### Simulated versus real numbers
+
+By default the curve is generated, and a small "simulated numbers" pill is
+shown beside the count (and the post description says so). The reference
+works because its numbers are the channel's own; to do the same, export your
+daily figures to a CSV and point `history` at it:
+
+```
+date,count,views28,watch_hours28
+2026-01-12,0,0,0
+2026-01-13,6,874,0.4
+```
+
+With a history file the headline numbers are real. The content-card detail
+rows are still generated, so only set `disclosure` to `null` if you are
+comfortable with that.
 
 ## Music workflow
 
 Once or twice a month, replace the `sounds` array in each platform's audio
 file with 2–3 entries and set `activeFrom` / `expiresAt` to the rotation
-window. Batches rotate through whatever is active on each video's date, and
-animation is synced to each sound's `bpm` + `beatOffsetSec` (or an explicit
-`beats` timestamp list).
+window. Batches rotate through whatever is active on each video's date. Each
+video's length is a whole number of bars of its sound and the final hold lands
+on a beat (`bpm` + `beatOffsetSec`, or an explicit `beats` timestamp list).
 
 ```jsonc
 {
@@ -145,7 +185,8 @@ Until then, `queue export` produces an upload-ready folder plus `schedule.csv`.
 
 ## Tests
 
-`npm test` covers spec determinism, monotonic counters, beat alignment, safe
+`npm test` covers spec determinism, the 0-to-current time-lapse, cut pacing
+against the reference, simulated and CSV history, safe
 areas for both layouts, frame and MP4 output (resolution, codecs, fps, audio
 present/silent), audio licence gating, rotation and expiry, missing files,
 batch planning, DST-aware scheduling, duplicate prevention, the approval gate,
