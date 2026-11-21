@@ -6,21 +6,21 @@ Status on 2026-11-21. Nothing has been scheduled or published.
 
 | Area | Ready? | Notes |
 | --- | --- | --- |
-| Videos (56) | **Yes** | rendered, 112/112 technical checks pass (56 + silent twins), all with embedded audio |
+| Videos (56) | **Yes** | rendered, 112/112 technical checks pass (56 + silent twins), all with one of six original music tracks embedded |
 | Experiment design | **Yes** | fixed in this revision, see below |
 | R2 media hosting | **Yes** | verified live; both validation videos already hosted and publicly retrievable |
-| Buffer publishing | **No** | code is ready and unit-tested; blocked on channels + API key; never run live |
+| Buffer publishing | **Not yet** | channels connected and configured; needs the API key (or the connector route) and approval; never run live |
 | TikTok automatic publishing | **Supported** | by Buffer's docs and schema; unproven for this project until the validation post |
 
 ## Completed checks
 
 - **Queue:** 56 experiment posts, all `pending_approval`; 2 validation posts, `pending_approval`. A dry-run publish sends nothing.
-- **Balance bug found and fixed.** The previous queue put every TikTok `analytics` video at 12:11 and every `profile` video at 19:37, so variant and time of day could not be separated. Now each variant gets each time slot 7 times and each week 7 times, with 4–6 posts per caption and 4–5 per sound. A test enforces this.
-- **Captions and sounds vs time:** every caption and every sound appears 4–5 times in each slot, on both platforms.
+- **Balanced design.** Six sounds, five captions and two TikTok variants are arranged by a seeded search so nothing is tied to a time of day or a week: every option appears in both time slots and both weeks, and TikTok variants are 7/7 per slot. Tests enforce this.
 - **No silent posts:** publishing refuses any video without embedded audio (`publishSilent: false`).
 - **R2:** upload through `npm run media -- upload`, then anonymous download: HTTP 200, `video/mp4`, byte-identical, H.264 + AAC intact.
 - **Buffer schema:** `createPost`, `post`, `channels` field names and enums checked against the live schema.
-- **Tests:** 28 pass. Typecheck clean.
+- **Tests:** 32 pass. Typecheck clean.
+- **Channels:** Oh My Trillion (YouTube) and @oh.my.trillion (TikTok) are connected in Buffer and their ids are in config. The TikTok channel is set to automatic posting.
 
 ## Buffer channels: decision
 

@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { activeSounds, loadLibrary, pickSound, resolveAudio } from "./audio/library.ts";
 import { fileSha256, probe, type Probe, renderStill, renderVideo, silenceCopy } from "./engine/encode.ts";
 import { hashSeed, rng } from "./engine/util.ts";
+import { apportion, design, type ExperimentConfig } from "./experiment.ts";
 import { Queue, slotKey } from "./publish/queue.ts";
 import { addDays, zonedIso } from "./publish/schedule.ts";
 import { buildSpec, loadCaptions, loadChannels, readJson, TEMPLATES } from "./spec.ts";
@@ -116,7 +117,7 @@ export function planSamples(date: string): Planned[] {
  * from day one up to its own date, so the final count grows day by day.
  * Captions and sounds rotate and length varies, so consecutive videos differ.
  */
-export function planBatch(start: string, days: number, platforms: Platform[] = PLATFORMS): Planned[] {
+export function planBatch(start: string, days: number, platforms: Platform[] = PLATFORMS, experiment: ExperimentConfig = loadExperiment()): Planned[] {
   const channels = loadChannels();
   const captions = loadCaptions();
   const schedule = readJson<{ timezone: string; slots: Record<Platform, string[]> }>("config/schedule.json");
@@ -126,12 +127,24 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
     const cap = captions[platform];
     const perDay = schedule.slots[platform].length;
     const variants = channels[platform].variants?.length ? channels[platform].variants! : [Object.keys(TEMPLATES[platform])[0]];
-    const dayOffset = Math.round((Date.parse(start) - Date.parse("2026-01-01")) / 86400000);
+    // How many posts each caption / sound / variant gets: even by default,
+    // tilted towards better performers once config/experiment.json has weights.
+    // The order is then arranged so no two factors (or time slot, or week) move together.
+    const w = experiment.weights[platform] ?? {};
+    const n = days * perDay;
+    const sounds = activeSounds(lib, start);
+    const soundIds = sounds.length ? sounds.map((x) => x.id) : ["(none)"];
+    const plan = design(
+      n,
+      perDay,
+      [apportion(cap.captions, w.caption, n), apportion(soundIds, w.audio_id, n), apportion(variants, w.template_variant, n)],
+      rng(hashSeed(`design|${platform}|${start}|${days}`)),
+    );
     for (let d = 0; d < days; d++) {
       const date = addDays(start, d);
       schedule.slots[platform].forEach((hhmm, slot) => {
-        const idx = (dayOffset + d) * perDay + slot;
-        const r = rotation(idx, cap.captions.length, Math.max(1, activeSounds(lib, date).length), variants.length, perDay);
+        const k = d * perDay + slot;
+        const r = { caption: plan[0][k], sound: plan[1][k], variant: plan[2][k] };
         const id = `${platform}-${date}-${String.fromCharCode(97 + slot)}`;
         out.push({
           spec: buildSpec({
@@ -141,7 +154,7 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
             channel: channels[platform],
             caption: cap.captions[r.caption],
             contentTitles: cap.contentTitles,
-            audio: resolveAudio(pickSound(lib, date, r.sound), platform),
+            audio: resolveAudio(sounds.length ? (activeSounds(lib, date).find((x) => x.id === soundIds[r.sound]) ?? pickSound(lib, date, r.sound)) : null, platform),
             date,
             targetSec: 13 + rng(hashSeed(id))() * 5,
             disclosure: channels.disclosure,
@@ -156,18 +169,8 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
   return out;
 }
 
-/**
- * Which caption / sound / template variant post number `idx` gets.
- * Caption changes every post and sound every `nCaptions` posts, so every
- * caption meets every sound. The variant is tied to the time slot but shifts
- * by one each day, so each variant gets every posting time equally often and
- * is not confounded with caption, sound or week.
- */
-export function rotation(idx: number, nCaptions: number, nSounds: number, nVariants: number, perDay = 2) {
-  const caption = idx % nCaptions;
-  const sound = Math.floor(idx / nCaptions) % nSounds;
-  const variant = ((idx % perDay) + Math.floor(idx / perDay)) % nVariants;
-  return { caption, sound, variant };
+export function loadExperiment(): ExperimentConfig {
+  return readJson<ExperimentConfig>("config/experiment.json");
 }
 
 /** The experiment plan as a CSV: one row per planned post, before anything is rendered. */

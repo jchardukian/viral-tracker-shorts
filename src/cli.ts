@@ -3,11 +3,15 @@ import { basename, join } from "node:path";
 import { contactSheet, probe, renderStill } from "./engine/encode.ts";
 import { ROOT } from "./engine/draw.ts";
 import { applyBufferMetrics, importMetrics, parseCsv, readLedger, summarize, syncFromQueue, writeLedger } from "./analytics.ts";
-import { enqueueBatch, type Manifest, planBatch, planCsv, planSamples, renderOne } from "./pipeline.ts";
+import { detectBeat } from "./audio/beat.ts";
+import { generateTrack, HOOK_FIRST, variationPrompt } from "./audio/generate.ts";
+import { type AudioLibrary, loadLibrary } from "./audio/library.ts";
+import { DIMENSIONS, type ExperimentConfig, recommend } from "./experiment.ts";
+import { enqueueBatch, loadExperiment, type Manifest, planBatch, planCsv, planSamples, renderOne } from "./pipeline.ts";
 import { type BufferConfig, BufferPublisher, fetchPost, listChannels } from "./publish/buffer.ts";
 import { mediaConfigFromEnv, uploadVideo, verifyPublicUrl } from "./publish/media.ts";
 import { DryRunPublisher, publishQueue, Queue, slotKey } from "./publish/queue.ts";
-import { loadChannels } from "./spec.ts";
+import { loadCaptions, loadChannels, TEMPLATES } from "./spec.ts";
 import { type Platform, PLATFORMS } from "./templates/types.ts";
 
 const argv = process.argv.slice(2);
@@ -253,6 +257,48 @@ async function main() {
       console.log(`${i.videoId} -> ${r.url}`);
     }
     console.log(`uploaded and verified ${todo.length} approved video(s)`);
+  } else if (cmd === "audio") {
+    const sub = argv[1];
+    if (sub === "detect") {
+      console.log(detectBeat(argv[2]));
+    } else if (sub === "generate") {
+      // new original track, optionally in the style of an existing (well-performing) one
+      const id = flag("id");
+      if (!id) throw new Error("audio generate --id <new-id> (--prompt \"...\" | --like <existing-id>) [--title ...]");
+      const libs = PLATFORMS.map((pf) => [pf, loadLibrary(pf)] as const);
+      let prompt = flag("prompt");
+      const like = flag("like");
+      if (like) {
+        const src = libs.flatMap(([, l]) => l.sounds).find((x) => x.id === like);
+        if (src?.generator?.type !== "elevenlabs-music") throw new Error(`${like} has no stored prompt to build on`);
+        const n = libs[0][1].sounds.filter((x) => x.generator?.type === "elevenlabs-music" && x.generator.basedOn === like).length;
+        prompt = variationPrompt(src.generator.prompt, n);
+      }
+      if (!prompt) throw new Error("give --prompt or --like");
+      if (libs.some(([, l]) => l.sounds.some((x) => x.id === id))) throw new Error(`sound id ${id} already exists`);
+      const rel = `assets/audio/tracks/${id}.mp3`;
+      await generateTrack(`${prompt}, ${HOOK_FIRST}`, join(ROOT, rel));
+      const beat = detectBeat(join(ROOT, rel));
+      const start = flag("from", today())!;
+      const until = new Date(Date.parse(start) + 40 * 86400000).toISOString().slice(0, 10);
+      for (const [pf, lib] of libs) {
+        (lib as AudioLibrary).sounds.push({
+          id,
+          title: flag("title", id)!,
+          approvedPlatforms: [...PLATFORMS],
+          link: null,
+          file: rel,
+          generator: { type: "elevenlabs-music", prompt, generatedAt: today(), ...(like ? { basedOn: like } : {}) },
+          license: { status: "licensed", embedAllowed: true, proof: `ElevenLabs Music, generated ${today()}`, notes: "Original instrumental. Owner to confirm plan terms for commercial use." },
+          bpm: beat.bpm,
+          beatOffsetSec: beat.offsetSec,
+          activeFrom: start,
+          expiresAt: until,
+        });
+        writeFileSync(join(ROOT, "config", "audio", `${pf}.json`), JSON.stringify(lib, null, 2) + "\n");
+      }
+      console.log(`${id}: ${rel}, ${beat.bpm} BPM, active ${start} to ${until}, added to both libraries`);
+    } else throw new Error("audio <generate|detect>");
   } else if (cmd === "analytics") {
     const sub = argv[1];
     const queue = new Queue(QUEUE_PATH);
@@ -279,7 +325,30 @@ async function main() {
         console.log(`\nby ${by}`);
         console.table(summarize(rows, by));
       }
-    } else throw new Error("analytics <export|import|pull|report>");
+    } else if (sub === "recommend") {
+      // turn results into weights for the next batch; --write saves them
+      const exp = loadExperiment();
+      const caps = loadCaptions();
+      const ch = loadChannels();
+      const next: ExperimentConfig = { ...exp, weights: { youtube: {}, tiktok: {} } };
+      for (const pf of PLATFORMS) {
+        const options = {
+          caption: caps[pf].captions,
+          audio_id: loadLibrary(pf).sounds.map((x) => x.id),
+          template_variant: ch[pf].variants?.length ? ch[pf].variants! : [Object.keys(TEMPLATES[pf])[0]],
+        };
+        for (const by of DIMENSIONS) {
+          const ranked = recommend(rows, pf, by, options[by], exp);
+          console.log(`\n${pf} · ${by}  (score 1.00 = platform average; blank = fewer than ${exp.minPosts} posts with data)`);
+          console.table(ranked.map((r) => ({ option: r.option, posts: r.posts, score: r.score ?? "", "share of next batch": `${(r.weight * 100).toFixed(0)}%` })));
+          if (ranked.some((r) => r.score !== null) && ranked.length > 1) next.weights[pf][by] = Object.fromEntries(ranked.map((r) => [r.option, r.weight]));
+        }
+      }
+      if (flag("write") === "true") {
+        writeFileSync(join(ROOT, "config", "experiment.json"), JSON.stringify(next, null, 2) + "\n");
+        console.log("\nsaved to config/experiment.json; the next `batch` will follow these shares");
+      } else console.log("\n(preview only; add --write to apply to the next batch)");
+    } else throw new Error("analytics <export|import|pull|report|recommend>");
   } else {
     console.log(`usage:
   npm run samples                          render the 6 approval samples into samples/
@@ -293,7 +362,8 @@ async function main() {
   npm run queue -- sync                    fetch what happened to scheduled posts
   npm run queue -- export                  upload-ready package of approved items
   npm run media -- upload [--id <videoId>] upload approved MP4s to R2, verify public URLs
-  npm run analytics -- export|import <csv>|pull|report`);
+  npm run analytics -- export|import <csv>|pull|report|recommend [--write]
+  npm run audio -- generate --id <id> (--prompt "..." | --like <id>) | detect <file>`);
   }
 }
 

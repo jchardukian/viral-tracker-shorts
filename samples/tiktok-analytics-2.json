@@ -5,7 +5,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-2.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-2.png",
-  "sha256": "e85ba5bf2cf95c562d8580378b2d6e31732f51201e46425f8adeefa130683a94",
+  "sha256": "e16f41b6b4acb0009c803de49269d2be85cec4c66ab4692b29b502f02ddb2bf5",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,18 +13,18 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 15,
-    "sizeBytes": 1479049,
-    "meanVolumeDb": -13.4
+    "durationSec": 15.466667,
+    "sizeBytes": 1544945,
+    "meanVolumeDb": -13.6
   },
   "audio": {
-    "soundId": "tt-test-beat-b",
-    "bpm": 112,
-    "beatOffsetSec": 0,
+    "soundId": "trk-jersey-club",
+    "bpm": 140,
+    "beatOffsetSec": 0.035,
     "link": null,
     "mode": "embedded",
-    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-b.wav",
-    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+    "file": "/home/user/viral-tracker-shorts/assets/audio/tracks/trk-jersey-club.mp3",
+    "note": "embedded (licensed, ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan)"
   },
   "title": "imagine opening TikTok to this #fyp",
   "text": "growth time-lapse animation · simulated numbers",
@@ -34,8 +34,8 @@
     "end": 9820
   },
   "caption": "Imagine opening TikTok to this",
-  "cuts": 164,
+  "cuts": 171,
   "dataSource": "simulated",
   "seed": 3893291891,
-  "durationSec": 15
+  "durationSec": 15.466666666666667
 }

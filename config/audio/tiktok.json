@@ -2,43 +2,154 @@
   "platform": "tiktok",
   "sounds": [
     {
-      "id": "tt-test-beat-a",
-      "title": "Generated test beat A (124 BPM)",
-      "approvedPlatforms": ["tiktok"],
+      "id": "trk-phonk-cowbell",
+      "title": "Phonk cowbell",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
       "link": null,
-      "file": "assets/audio/generated/tt-test-beat-a.wav",
-      "generator": { "type": "synth", "seed": 1241, "seconds": 24 },
-      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts", "notes": "Placeholder until licensed tracks are supplied." },
+      "file": "assets/audio/tracks/trk-phonk-cowbell.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Instrumental hype phonk beat, 130 BPM, hard cowbell melody that is instantly catchy, punchy 808 bass, crisp claps",
+        "generatedAt": "2026-11-21"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 130,
+      "beatOffsetSec": 0.023,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-31"
+    },
+    {
+      "id": "trk-jersey-club",
+      "title": "Jersey club",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-jersey-club.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Instrumental Jersey club beat, 140 BPM, bouncy triplet kick pattern, bright catchy synth lead melody, chopped wordless vocal stabs",
+        "generatedAt": "2026-11-21"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 140,
+      "beatOffsetSec": 0.035,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-31"
+    },
+    {
+      "id": "trk-feelgood-pop",
+      "title": "Feel-good dance pop",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-feelgood-pop.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Instrumental feel-good dance pop, 124 BPM, four-on-the-floor kick, plucky earworm synth riff, hand claps, uplifting and triumphant",
+        "generatedAt": "2026-11-21"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
       "bpm": 124,
-      "beatOffsetSec": 0,
+      "beatOffsetSec": 0.023,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-19"
+      "expiresAt": "2026-12-31"
     },
     {
-      "id": "tt-test-beat-b",
-      "title": "Generated test beat B (112 BPM)",
-      "approvedPlatforms": ["tiktok"],
+      "id": "trk-hype-trap",
+      "title": "Hype trap brass",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
       "link": null,
-      "file": "assets/audio/generated/tt-test-beat-b.wav",
-      "generator": { "type": "synth", "seed": 1122, "seconds": 24 },
-      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts" },
-      "bpm": 112,
-      "beatOffsetSec": 0,
+      "file": "assets/audio/tracks/trk-hype-trap.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Instrumental hype trap anthem, 150 BPM half-time, huge brass stabs playing a simple memorable riff, rolling hi-hats, booming 808, victorious mood",
+        "generatedAt": "2026-11-21"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 150,
+      "beatOffsetSec": 0.023,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-19"
+      "expiresAt": "2026-12-31"
     },
     {
-      "id": "tt-test-beat-c",
-      "title": "Generated test beat C (132 BPM)",
-      "approvedPlatforms": ["tiktok"],
+      "id": "trk-hyperpop",
+      "title": "Hyperpop sparkle",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
       "link": null,
-      "file": "assets/audio/generated/tt-test-beat-c.wav",
-      "generator": { "type": "synth", "seed": 1323, "seconds": 24 },
-      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts" },
-      "bpm": 132,
-      "beatOffsetSec": 0,
+      "file": "assets/audio/tracks/trk-hyperpop.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Instrumental sped-up hyperpop dance track, 160 BPM, sparkling arpeggio melody that sticks in your head, punchy drums, bright and euphoric",
+        "generatedAt": "2026-11-21"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 160,
+      "beatOffsetSec": 0.209,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-19"
+      "expiresAt": "2026-12-31"
+    },
+    {
+      "id": "trk-funk-house",
+      "title": "Funk house",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-funk-house.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Instrumental funk house groove, 122 BPM, slap bass riff, catchy disco guitar chops, cowbell, confident and playful",
+        "generatedAt": "2026-11-21"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 122,
+      "beatOffsetSec": 0.012,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-31"
     }
   ]
 }

@@ -79,7 +79,8 @@ npm run queue -- validation [--in 20]              # queue one validation post p
 npm run queue -- preflight [--batch <id>]          # read-only readiness check
 npm run queue -- sync                              # what happened to each scheduled post
 npm run queue -- export                            # upload-ready folder + schedule.csv
-npm run analytics -- export | import <csv> | pull | report
+npm run analytics -- export | import <csv> | pull | report | recommend [--write]
+npm run audio -- generate --id <id> (--prompt "…" | --like <id>) | detect <file>
 npm test && npm run typecheck
 ```
 
@@ -96,7 +97,8 @@ without both an approval and `--live`.
 | `src/templates/` | `youtube.ts`, `tiktok.ts`, `tiktok-profile.ts`, each with declared safe areas |
 | `src/spec.ts` | deterministic video spec: cut schedule, daily snapshots, caption, variant |
 | `src/history.ts` | simulated growth curve, or real history from CSV |
-| `src/audio/` | per-platform sound library, licence gate, rotation, test-beat synth |
+| `src/audio/` | per-platform sound library, licence gate, track generation, beat detection |
+| `src/experiment.ts` | results-based weights and the balanced batch design |
 | `src/pipeline.ts` | sample + batch planning, rotation, manifests, queueing |
 | `src/publish/` | queue (idempotency, approval, retries), R2 media hosting, Buffer adapter, scheduling |
 | `src/analytics.ts` | experiment ledger: CSV export/import, Buffer metrics, comparison report |
@@ -130,22 +132,47 @@ must not present simulated growth as genuine account analytics. `history` in
 `experiments/2026-11-30_14d/plan.csv` is the committed plan: 28 YouTube Shorts
 and 28 TikToks, two per day per platform, 2026-11-30 to 2026-12-13.
 
-- **Captions:** three per platform, changing every post.
-- **Sounds:** three per platform, changing every third post, so every caption
-  runs with every sound (9 combinations, each used at least 3 times).
-- **TikTok variant:** `analytics` and `profile`, 14 posts each. The variant
-  follows the time slot but shifts by one each day, so each variant gets each
-  posting time 7 times and each week 7 times, and is not tied to a caption or sound.
+- **Captions:** five per platform, 5–6 posts each.
+- **Sounds:** six tracks per platform, 4–5 posts each.
+- **TikTok variant:** `analytics` and `profile`, 14 posts each.
+- **Arrangement:** a seeded search orders the batch so no two factors move
+  together. Every caption, sound and variant appears in both time slots and
+  both weeks, captions and sounds are mixed rather than paired, and the same
+  option is not posted back-to-back. Tests enforce this.
 - **Counts:** every video is the full time-lapse up to its own date, so the
   final number rises each day.
+
+With six sounds and five captions, each option gets only 4–6 posts. That is
+enough to spot a clear winner or loser, not to rank close ones.
 
 The start date is a placeholder. To move it, re-run `batch` with a new
 `--start`; nothing has been scheduled. The rendered MP4s live in `out/`
 (git-ignored) and the 56 queue entries are `pending_approval`.
 
-What to read at the end: `npm run analytics -- report` compares captions,
-sounds and variants on views, viewed rate, average watch %, and followers and
-shares per 1,000 views.
+## Improving over time
+
+The loop is: post → collect numbers → shift the next batch towards what worked
+→ add new ideas → repeat.
+
+1. **Collect.** `analytics export`, fill in the platform numbers, `analytics import`.
+2. **Read.** `analytics report` compares captions, sounds and variants.
+3. **Decide.** `analytics recommend` scores each option against the platform
+   average (views, viewed rate, watch %, followers per 1,000 views — whichever
+   exist) and proposes each one's share of the next batch. `--write` saves
+   those shares to `config/experiment.json`.
+4. **Plan.** The next `batch` gives winners more posts. 30% of posts (`explore`)
+   are always spread evenly, so weak options keep a small share and an early
+   fluke cannot take over. Options with fewer than `minPosts` results count as
+   average.
+5. **Add new ideas.**
+   - Captions: add lines to `config/captions.json`. A new caption is treated
+     as average until it has results, so it gets tried immediately.
+   - Sounds like a winner: `npm run audio -- generate --id trk-phonk-2 --like trk-phonk-cowbell`
+     makes a new original track from the winner's stored prompt, detects its
+     tempo and adds it to both libraries. `--prompt "..."` starts a new style.
+
+Captions must stay consistent with the simulated-numbers disclosure: describe
+the scenario ("POV: …", "Imagine …") rather than claim the growth is real.
 
 ## Music workflow
 
@@ -181,8 +208,10 @@ attaching a platform-native sound on either platform (`metadata.tiktok` is
 `title` + `isAiGenerated` only). A native sound can only be attached by hand
 in the app. Nothing here tries to work around that.
 
-The three sounds shipped per platform are original test beats generated by
-`src/audio/synth.ts`. They are placeholders for the experiment's audio slots.
+The six tracks in `assets/audio/tracks/` are original instrumentals generated
+with ElevenLabs Music for this project (prompts stored in the audio config).
+The owner should confirm the plan's terms for commercial use. Tempo comes from
+local beat detection (`npm run audio -- detect <file>`).
 
 ## Media hosting (Cloudflare R2)
 
@@ -270,7 +299,7 @@ through `analytics import`.
 
 ## Tests
 
-`npm test` (28 tests) covers spec determinism, the 0-to-current time-lapse,
+`npm test` (32 tests) covers spec determinism, the 0-to-current time-lapse,
 cut pacing against the reference, simulated and CSV history, safe areas for
 all three templates, frame and MP4 output, audio licence gating, rotation and
 expiry, batch planning, the experiment's crossed design, DST-aware scheduling,

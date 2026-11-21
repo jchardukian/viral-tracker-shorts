@@ -5,7 +5,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-3.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-3.png",
-  "sha256": "556ca211e3a82a22c875a894299c477535c70831f2328238363f74678d8d02b7",
+  "sha256": "5b97cfcfb5330e18dd3a2c813da6e9299bc437f617e0a18175a40f8b7472a463",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,18 +13,18 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 11.533333,
-    "sizeBytes": 1526049,
-    "meanVolumeDb": -13.7
+    "durationSec": 11.633333,
+    "sizeBytes": 1471251,
+    "meanVolumeDb": -12.1
   },
   "audio": {
-    "soundId": "yt-test-beat-c",
-    "bpm": 104,
-    "beatOffsetSec": 0,
+    "soundId": "trk-feelgood-pop",
+    "bpm": 124,
+    "beatOffsetSec": 0.023,
     "link": null,
     "mode": "embedded",
-    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-c.wav",
-    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+    "file": "/home/user/viral-tracker-shorts/assets/audio/tracks/trk-feelgood-pop.mp3",
+    "note": "embedded (licensed, ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan)"
   },
   "title": "One viral video changes everything #shorts",
   "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
@@ -34,8 +34,8 @@
     "end": 251940
   },
   "caption": "One viral video changes everything",
-  "cuts": 118,
+  "cuts": 116,
   "dataSource": "simulated",
   "seed": 4020225342,
-  "durationSec": 11.533333333333333
+  "durationSec": 11.633333333333333
 }

@@ -5,7 +5,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-3.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-3.png",
-  "sha256": "5ff6a81c2a02e0ac083680772c3d7b275854c812d861177de507e6d32d1274c2",
+  "sha256": "5175cb37aab36080b25dd57152135ef6d4a2306f6717a680b58e964af733e60a",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,18 +13,18 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 12.733333,
-    "sizeBytes": 1397964,
-    "meanVolumeDb": -12.7
+    "durationSec": 11.633333,
+    "sizeBytes": 1262926,
+    "meanVolumeDb": -12.1
   },
   "audio": {
-    "soundId": "tt-test-beat-c",
-    "bpm": 132,
-    "beatOffsetSec": 0,
+    "soundId": "trk-feelgood-pop",
+    "bpm": 124,
+    "beatOffsetSec": 0.023,
     "link": null,
     "mode": "embedded",
-    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-c.wav",
-    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+    "file": "/home/user/viral-tracker-shorts/assets/audio/tracks/trk-feelgood-pop.mp3",
+    "note": "embedded (licensed, ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan)"
   },
   "title": "the follower growth everyone wants #fyp",
   "text": "growth time-lapse animation · simulated numbers",
@@ -34,8 +34,8 @@
     "end": 127400
   },
   "caption": "The follower growth everyone wants",
-  "cuts": 134,
+  "cuts": 116,
   "dataSource": "simulated",
   "seed": 2598103499,
-  "durationSec": 12.733333333333333
+  "durationSec": 11.633333333333333
 }

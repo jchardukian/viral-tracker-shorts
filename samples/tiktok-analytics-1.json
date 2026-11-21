@@ -5,7 +5,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-1.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-1.png",
-  "sha256": "1dc6e8a20456868c3797db7e10287806be66b719c9e8c20fa29c22573b03205a",
+  "sha256": "1ab2f5085867fe867723074dd5f0318d38ff84d2c61153c28be4eb5680a56ef2",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,18 +13,18 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 17.433333,
-    "sizeBytes": 1923333,
-    "meanVolumeDb": -13
+    "durationSec": 18.5,
+    "sizeBytes": 2042759,
+    "meanVolumeDb": -10.9
   },
   "audio": {
-    "soundId": "tt-test-beat-a",
-    "bpm": 124,
-    "beatOffsetSec": 0,
+    "soundId": "trk-phonk-cowbell",
+    "bpm": 130,
+    "beatOffsetSec": 0.023,
     "link": null,
     "mode": "embedded",
-    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-a.wav",
-    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+    "file": "/home/user/viral-tracker-shorts/assets/audio/tracks/trk-phonk-cowbell.mp3",
+    "note": "embedded (licensed, ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan)"
   },
   "title": "POV: your TikTok finally blows up #fyp",
   "text": "growth time-lapse animation · simulated numbers",
@@ -34,8 +34,8 @@
     "end": 48350
   },
   "caption": "POV: Your TikTok finally blows up",
-  "cuts": 203,
+  "cuts": 220,
   "dataSource": "simulated",
   "seed": 869337284,
-  "durationSec": 17.433333333333334
+  "durationSec": 18.5
 }

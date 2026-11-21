@@ -6,12 +6,17 @@ import { test } from "node:test";
 import { activeSounds, AudioError, type AudioLibrary, loadLibrary, pickSound, resolveAudio, type Sound } from "../src/audio/library.ts";
 import { probe, renderFrame, renderVideo } from "../src/engine/encode.ts";
 import { applyBufferMetrics, COLUMNS, importMetrics, parseCsv, readLedger, summarize, syncFromQueue, writeLedger } from "../src/analytics.ts";
-import { enqueueBatch, type Manifest, planBatch, planCsv, planSamples, rotation } from "../src/pipeline.ts";
+import { detectBeat } from "../src/audio/beat.ts";
+import { generateTrack, variationPrompt } from "../src/audio/generate.ts";
+import { synthBeat } from "../src/audio/synth.ts";
+import { rng } from "../src/engine/util.ts";
+import { apportion, design, recommend } from "../src/experiment.ts";
+import { enqueueBatch, type Manifest, planBatch, planCsv, planSamples } from "../src/pipeline.ts";
 import { BufferPublisher, buildCreatePostInput, fetchPost } from "../src/publish/buffer.ts";
 import { mediaConfigFromEnv, mediaKey, publicUrl, uploadVideo, verifyPublicUrl } from "../src/publish/media.ts";
 import { DryRunPublisher, PermanentError, type Publisher, publishQueue, Queue, type QueueItem, slotKey } from "../src/publish/queue.ts";
 import { zonedIso } from "../src/publish/schedule.ts";
-import { buildSpec, loadChannels, TEMPLATES } from "../src/spec.ts";
+import { buildSpec, loadCaptions, loadChannels, TEMPLATES } from "../src/spec.ts";
 import { simulateHistory } from "../src/history.ts";
 import { PLATFORMS, rectInSafe, snapshotIndex } from "../src/templates/types.ts";
 
@@ -320,34 +325,91 @@ test("publishQueue filter sends only the selected item", async () => {
 
 // ---------- experiment design ---------------------------------------------------
 
-test("14-day experiment: 28 posts per platform; captions, sounds and variants are crossed, not confounded", () => {
+test("14-day experiment: 28 posts per platform, every pair of factors balanced, nothing confounded", () => {
   const plan = planBatch("2026-11-30", 14);
   for (const platform of PLATFORMS) {
     const ps = plan.filter((p) => p.spec.platform === platform);
     assert.equal(ps.length, 28);
     const count = (f: (p: (typeof ps)[number]) => string) => ps.reduce((m, p) => m.set(f(p), (m.get(f(p)) ?? 0) + 1), new Map<string, number>());
+    const spread = (m: Map<string, number>) => Math.max(...m.values()) - Math.min(...m.values());
+    const slot = (p: (typeof ps)[number]) => p.dueAt!.slice(11, 16);
+    const week = (p: (typeof ps)[number]) => (p.dueAt! < "2026-12-07" ? "1" : "2");
+    const nCap = loadCaptions()[platform].captions.length;
+    const nSnd = loadLibrary(platform).sounds.length;
     const caps = count((p) => p.spec.caption);
-    assert.equal(caps.size, 3);
-    assert.ok([...caps.values()].every((n) => n >= 9 && n <= 10));
-    const combos = count((p) => `${p.spec.caption}|${p.spec.audio.soundId}`);
-    assert.equal(combos.size, 9, "every caption meets every sound");
-    assert.ok([...combos.values()].every((n) => n >= 3));
-    if (platform === "tiktok") {
-      const vc = count((p) => `${p.spec.variant}|${p.spec.caption}`);
-      assert.equal(vc.size, 6);
-      assert.ok([...vc.values()].every((n) => n >= 4), JSON.stringify([...vc]));
-      assert.ok([...count((p) => p.spec.variant).values()].every((n) => n === 14));
-      // each variant gets each posting time and each week equally often
-      const vt = count((p) => `${p.spec.variant}|${p.dueAt!.slice(11, 16)}`);
-      assert.equal(vt.size, 4);
-      assert.ok([...vt.values()].every((n) => n === 7), JSON.stringify([...vt]));
-      assert.ok([...count((p) => `${p.spec.variant}|${p.dueAt! < "2026-12-07" ? 1 : 2}`).values()].every((n) => n === 7));
-      assert.ok([...count((p) => `${p.spec.variant}|${p.spec.audio.soundId}`).values()].every((n) => n >= 4));
+    const snds = count((p) => p.spec.audio.soundId!);
+    assert.deepEqual([caps.size, snds.size], [nCap, nSnd], "every caption and every sound is used");
+    assert.ok(spread(caps) <= 1 && spread(snds) <= 1, "even shares");
+    assert.ok(count((p) => `${p.spec.caption}|${p.spec.audio.soundId}`).size >= 24, "captions and sounds are mixed, not paired");
+    // nothing is tied to a time of day or a week
+    for (const f of [(p: (typeof ps)[number]) => p.spec.caption, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.variant]) {
+      const byTime = count((p) => `${f(p)}|${slot(p)}`);
+      const byWeek = count((p) => `${f(p)}|${week(p)}`);
+      assert.equal(byTime.size, count(f).size * 2, "every option appears in both time slots");
+      assert.equal(byWeek.size, count(f).size * 2, "every option appears in both weeks");
+      assert.ok(spread(byTime) <= 2 && spread(byWeek) <= 2);
     }
+    if (platform === "tiktok") {
+      assert.ok([...count((p) => `${p.spec.variant}|${slot(p)}`).values()].every((n) => n === 7));
+      assert.equal(count((p) => `${p.spec.variant}|${p.spec.audio.soundId}`).size, nSnd * 2, "each variant runs with every sound");
+      assert.equal(count((p) => `${p.spec.variant}|${p.spec.caption}`).size, nCap * 2, "each variant runs with every caption");
+    }
+    assert.ok(ps.every((p) => p.spec.audio.mode === "embedded"));
   }
   const csv = planCsv(plan).trim().split("\n");
   assert.equal(csv.length, 57);
   assert.ok(csv[0].startsWith("platform,video_id,due_at,caption,audio_id"));
+});
+
+test("results tilt the next batch towards winners but keep exploring", () => {
+  const caps = loadCaptions().youtube.captions;
+  const mk = (caption: string, views: number, followers: number, i: number) =>
+    ({ platform: "youtube", post_id: "", video_id: `${caption}-${i}`, publish_date: "2026-12-01", caption, audio_id: "a", template_variant: "dashboard", views: String(views), viewed_rate: "", avg_watch_pct: "", followers_gained: String(followers), shares: "", post_url: "", source: "manual" }) as const;
+  const rows = [0, 1, 2].flatMap((i) => [mk(caps[0], 9000, 30, i), mk(caps[1], 1000, 1, i)]);
+  const ranked = recommend([...rows], "youtube", "caption", caps, { explore: 0.3, minPosts: 3 });
+  const w = Object.fromEntries(ranked.map((r) => [r.option, r.weight]));
+  assert.equal(ranked[0].option, caps[0]);
+  assert.ok(w[caps[0]] > w[caps[2]] && w[caps[2]] > w[caps[1]], "winner > untested > loser");
+  assert.ok(w[caps[1]] >= 0.3 / caps.length, "even the weakest option keeps its exploration share");
+  assert.ok(Math.abs(ranked.reduce((a, r) => a + r.weight, 0) - 1) < 0.01);
+  assert.equal(ranked.find((r) => r.option === caps[2])!.score, null, "no data yet");
+
+  const counts = apportion(caps, w, 28);
+  assert.equal(counts.reduce((a, b) => a + b, 0), 28);
+  assert.ok(counts[0] > counts[2] && counts[2] > counts[1] && counts[1] >= 1);
+  assert.deepEqual(apportion(["a", "b", "c"], undefined, 28).sort((x, y) => x - y), [9, 9, 10]);
+
+  const exp = { explore: 0.3, minPosts: 3, weights: { youtube: { caption: w }, tiktok: {} } };
+  const plan = planBatch("2026-12-14", 14, ["youtube"], exp);
+  const used = plan.reduce((m, p) => m.set(p.spec.caption, (m.get(p.spec.caption) ?? 0) + 1), new Map<string, number>());
+  assert.deepEqual(caps.map((c) => used.get(c)), counts);
+  assert.deepEqual(plan, planBatch("2026-12-14", 14, ["youtube"], exp), "deterministic");
+});
+
+test("design keeps weighted factors independent of time slot", () => {
+  const a = design(28, 2, [[14, 7, 7], [10, 9, 9]], rng(7));
+  const slot0 = a[0].filter((v, k) => v === 0 && k % 2 === 0).length;
+  assert.ok(slot0 >= 6 && slot0 <= 8, `option with 14 posts has ${slot0} in the first slot`);
+  assert.deepEqual([0, 1, 2].map((i) => a[0].filter((v) => v === i).length), [14, 7, 7]);
+});
+
+test("beat detection finds the tempo of a known beat", () => {
+  const dir = tmp();
+  for (const bpm of [104, 128]) {
+    writeFileSync(join(dir, `${bpm}.wav`), synthBeat({ bpm, seconds: 12, seed: bpm }));
+    assert.ok(Math.abs(detectBeat(join(dir, `${bpm}.wav`)).bpm - bpm) <= 1);
+  }
+});
+
+test("track generation stores audio and builds variations from a stored prompt", async () => {
+  const dir = tmp();
+  let body: any;
+  const fake = (async (_u: string, init: RequestInit) => ((body = JSON.parse(init.body as string)), new Response(new Uint8Array([1, 2, 3]), { status: 200 }))) as unknown as typeof fetch;
+  assert.equal(await generateTrack("funk groove", join(dir, "a", "t.mp3"), { apiKey: "k", fetchImpl: fake, seconds: 20 }), 3);
+  assert.deepEqual([body.prompt, body.music_length_ms], ["funk groove", 20000]);
+  assert.notEqual(variationPrompt("x", 0), variationPrompt("x", 1));
+  assert.ok(variationPrompt("x", 0).startsWith("x. Variation:"));
+  await assert.rejects(generateTrack("p", join(dir, "b.mp3"), { apiKey: "k", fetchImpl: (async () => new Response("no", { status: 429 })) as unknown as typeof fetch }), /429/);
 });
 
 test("publish guards: silent videos refused, scheduler backlog capped per platform", async () => {

@@ -5,7 +5,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-2.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-2.png",
-  "sha256": "6de5e36542e4f1a2ca65d32d1f4a3d9dba8dc682dd4f7c8b46ec5321554082dd",
+  "sha256": "f6c206581e94fa33025ced23a8a900be2bb8e9ffbcd1b163dd6a91e63025d60b",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,18 +13,18 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 15,
-    "sizeBytes": 1856372,
-    "meanVolumeDb": -12.9
+    "durationSec": 15.466667,
+    "sizeBytes": 1895902,
+    "meanVolumeDb": -13.6
   },
   "audio": {
-    "soundId": "yt-test-beat-b",
-    "bpm": 128,
-    "beatOffsetSec": 0,
+    "soundId": "trk-jersey-club",
+    "bpm": 140,
+    "beatOffsetSec": 0.035,
     "link": null,
     "mode": "embedded",
-    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-b.wav",
-    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+    "file": "/home/user/viral-tracker-shorts/assets/audio/tracks/trk-jersey-club.mp3",
+    "note": "embedded (licensed, ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan)"
   },
   "title": "Imagine waking up to this #shorts",
   "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
@@ -34,8 +34,8 @@
     "end": 43871
   },
   "caption": "Imagine waking up to this",
-  "cuts": 168,
+  "cuts": 171,
   "dataSource": "simulated",
   "seed": 4012235032,
-  "durationSec": 15
+  "durationSec": 15.466666666666667
 }

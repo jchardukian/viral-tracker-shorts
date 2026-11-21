@@ -16,7 +16,10 @@ export interface Sound {
   /** path to an audio file we are allowed to embed, relative to repo root */
   file: string | null;
   /** procedurally generate `file` if it does not exist (original audio, test use) */
-  generator?: { type: "synth"; seed: number; seconds: number };
+  generator?:
+    | { type: "synth"; seed: number; seconds: number }
+    /** prompt kept so well-performing tracks can seed the next ones */
+    | { type: "elevenlabs-music"; prompt: string; generatedAt: string; basedOn?: string };
   license: {
     status: LicenseStatus;
     /** true only when the file may be mixed into the MP4 and uploaded by a third-party tool */
@@ -89,7 +92,8 @@ export function resolveAudio(sound: Sound | null, platform: Platform): AudioAssi
   if (!existsSync(file)) {
     if (sound.generator?.type === "synth") {
       mkdirSync(dirname(file), { recursive: true });
-      writeFileSync(file, synthBeat({ bpm: sound.bpm, seconds: sound.generator.seconds, seed: sound.generator.seed, offsetSec: sound.beatOffsetSec }));
+      const g = sound.generator;
+      writeFileSync(file, synthBeat({ bpm: sound.bpm, seconds: g.seconds, seed: g.seed, offsetSec: sound.beatOffsetSec }));
     } else throw new AudioError(`${sound.id}: audio file missing: ${sound.file}`);
   }
   return { ...base, mode: "embedded", file, note: `embedded (${sound.license.status}${sound.license.proof ? `, ${sound.license.proof}` : ""})` };

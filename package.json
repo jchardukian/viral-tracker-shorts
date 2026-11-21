@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "media": "tsx src/cli.ts media",
-    "analytics": "tsx src/cli.ts analytics"
+    "analytics": "tsx src/cli.ts analytics",
+    "audio": "tsx src/cli.ts audio"
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.68"

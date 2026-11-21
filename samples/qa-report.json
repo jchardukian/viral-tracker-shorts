@@ -4,9 +4,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -13 dB",
-    "sec": 17.43,
-    "MB": 1.92,
+    "audio": "aac -10.9 dB",
+    "sec": 18.5,
+    "MB": 2.04,
     "result": "pass"
   },
   {
@@ -14,9 +14,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -13.4 dB",
-    "sec": 15,
-    "MB": 1.48,
+    "audio": "aac -13.6 dB",
+    "sec": 15.47,
+    "MB": 1.54,
     "result": "pass"
   },
   {
@@ -24,9 +24,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -12.7 dB",
-    "sec": 12.73,
-    "MB": 1.4,
+    "audio": "aac -12.1 dB",
+    "sec": 11.63,
+    "MB": 1.26,
     "result": "pass"
   },
   {
@@ -34,9 +34,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -13 dB",
-    "sec": 17.43,
-    "MB": 1.32,
+    "audio": "aac -10.9 dB",
+    "sec": 18.5,
+    "MB": 1.4,
     "result": "pass"
   },
   {
@@ -44,9 +44,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -13.4 dB",
-    "sec": 15,
-    "MB": 0.99,
+    "audio": "aac -13.6 dB",
+    "sec": 15.47,
+    "MB": 1.04,
     "result": "pass"
   },
   {
@@ -54,9 +54,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -12.7 dB",
-    "sec": 12.73,
-    "MB": 0.98,
+    "audio": "aac -12.1 dB",
+    "sec": 11.63,
+    "MB": 0.89,
     "result": "pass"
   },
   {
@@ -64,9 +64,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -13.1 dB",
-    "sec": 18,
-    "MB": 2.5,
+    "audio": "aac -10.9 dB",
+    "sec": 18.5,
+    "MB": 2.56,
     "result": "pass"
   },
   {
@@ -74,9 +74,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -12.9 dB",
-    "sec": 15,
-    "MB": 1.86,
+    "audio": "aac -13.6 dB",
+    "sec": 15.47,
+    "MB": 1.9,
     "result": "pass"
   },
   {
@@ -84,9 +84,9 @@
     "res": "1080x1920",
     "video": "h264/yuv420p",
     "fps": 30,
-    "audio": "aac -13.7 dB",
-    "sec": 11.53,
-    "MB": 1.53,
+    "audio": "aac -12.1 dB",
+    "sec": 11.63,
+    "MB": 1.47,
     "result": "pass"
   }
 ]

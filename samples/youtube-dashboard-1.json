@@ -5,7 +5,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-1.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-1.png",
-  "sha256": "7e5e71245e30ff2078392ca1257e6e0a942ad8df4f2f3dfd6283d689f2f84b06",
+  "sha256": "f38955d79e8fa33e708394714b74465034222f2e395f7c9e62fd4ca5cc5bb676",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -13,18 +13,18 @@
     "pixFmt": "yuv420p",
     "fps": 30,
     "acodec": "aac",
-    "durationSec": 18,
-    "sizeBytes": 2495966,
-    "meanVolumeDb": -13.1
+    "durationSec": 18.5,
+    "sizeBytes": 2557226,
+    "meanVolumeDb": -10.9
   },
   "audio": {
-    "soundId": "yt-test-beat-a",
-    "bpm": 120,
-    "beatOffsetSec": 0,
+    "soundId": "trk-phonk-cowbell",
+    "bpm": 130,
+    "beatOffsetSec": 0.023,
     "link": null,
     "mode": "embedded",
-    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-a.wav",
-    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+    "file": "/home/user/viral-tracker-shorts/assets/audio/tracks/trk-phonk-cowbell.mp3",
+    "note": "embedded (licensed, ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan)"
   },
   "title": "POV: Your channel finally takes off #shorts",
   "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
@@ -34,8 +34,8 @@
     "end": 110266
   },
   "caption": "POV: Your channel finally takes off",
-  "cuts": 211,
+  "cuts": 220,
   "dataSource": "simulated",
   "seed": 1670033675,
-  "durationSec": 18
+  "durationSec": 18.5
 }

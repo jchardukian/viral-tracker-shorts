@@ -1,0 +1,9 @@
+{
+  "_comment": "Empty weights = balanced rotation. `npm run analytics -- recommend --write` fills them from results.",
+  "explore": 0.3,
+  "minPosts": 3,
+  "weights": {
+    "youtube": {},
+    "tiktok": {}
+  }
+}
