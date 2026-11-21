@@ -1,0 +1,62 @@
+[
+  {
+    "file": "tiktok-sample-1.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13 dB",
+    "sec": 7.73,
+    "MB": 1.47,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-sample-2.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13.4 dB",
+    "sec": 8.57,
+    "MB": 1.54,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-sample-3.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -12.7 dB",
+    "sec": 9.1,
+    "MB": 1.71,
+    "result": "pass"
+  },
+  {
+    "file": "youtube-sample-1.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13.1 dB",
+    "sec": 8,
+    "MB": 1.34,
+    "result": "pass"
+  },
+  {
+    "file": "youtube-sample-2.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -12.9 dB",
+    "sec": 7.5,
+    "MB": 1.3,
+    "result": "pass"
+  },
+  {
+    "file": "youtube-sample-3.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13.7 dB",
+    "sec": 9.23,
+    "MB": 1.43,
+    "result": "pass"
+  }
+]

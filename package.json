@@ -1,0 +1,23 @@
+{
+  "name": "viral-tracker-shorts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Automated YouTube Shorts and TikTok growth-tracker videos",
+  "scripts": {
+    "samples": "tsx src/cli.ts samples",
+    "batch": "tsx src/cli.ts batch",
+    "qa": "tsx src/cli.ts qa",
+    "queue": "tsx src/cli.ts queue",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.68"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

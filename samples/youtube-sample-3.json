@@ -1,0 +1,45 @@
+{
+  "id": "youtube-sample-3",
+  "platform": "youtube",
+  "file": "/home/user/viral-tracker-shorts/samples/youtube-sample-3.mp4",
+  "silentFile": null,
+  "still": "/home/user/viral-tracker-shorts/samples/youtube-sample-3.png",
+  "sha256": "471f5727876abf2e0550af7214c277a0f8b63132e1bb41dafc677776451a9c1f",
+  "probe": {
+    "width": 1080,
+    "height": 1920,
+    "vcodec": "h264",
+    "pixFmt": "yuv420p",
+    "fps": 30,
+    "acodec": "aac",
+    "durationSec": 9.233333,
+    "sizeBytes": 1431120,
+    "meanVolumeDb": -13.7
+  },
+  "audio": {
+    "soundId": "yt-test-beat-c",
+    "bpm": 104,
+    "beatOffsetSec": 0,
+    "link": null,
+    "mode": "embedded",
+    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-c.wav",
+    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+  },
+  "title": "How close are we to the goal? #shorts",
+  "text": "Animated goal tracker. The counter in this video is a simulated animation, not live analytics.",
+  "dueAt": null,
+  "counter": {
+    "start": 61840,
+    "end": 64340,
+    "goal": 100000,
+    "trackFrom": 50000
+  },
+  "captions": [
+    "Can we hit the goal today?",
+    "One tap moves the bar",
+    "Thank you for subscribing"
+  ],
+  "theme": "ember",
+  "seed": 3723231963,
+  "durationSec": 9.233333333333333
+}

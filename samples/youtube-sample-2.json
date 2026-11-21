@@ -1,0 +1,45 @@
+{
+  "id": "youtube-sample-2",
+  "platform": "youtube",
+  "file": "/home/user/viral-tracker-shorts/samples/youtube-sample-2.mp4",
+  "silentFile": null,
+  "still": "/home/user/viral-tracker-shorts/samples/youtube-sample-2.png",
+  "sha256": "999b9158c0acd22cb14ad0fc53d77f6f5fa2baade07afe577d749e3ad6790bfd",
+  "probe": {
+    "width": 1080,
+    "height": 1920,
+    "vcodec": "h264",
+    "pixFmt": "yuv420p",
+    "fps": 30,
+    "acodec": "aac",
+    "durationSec": 7.5,
+    "sizeBytes": 1303064,
+    "meanVolumeDb": -12.9
+  },
+  "audio": {
+    "soundId": "yt-test-beat-b",
+    "bpm": 128,
+    "beatOffsetSec": 0,
+    "link": null,
+    "mode": "embedded",
+    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/yt-test-beat-b.wav",
+    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+  },
+  "title": "Every subscriber moves this bar #shorts",
+  "text": "Animated goal tracker. The counter in this video is a simulated animation, not live analytics.",
+  "dueAt": null,
+  "counter": {
+    "start": 98310,
+    "end": 99209,
+    "goal": 100000,
+    "trackFrom": 90000
+  },
+  "captions": [
+    "The bar is almost full",
+    "Be the one who fills it",
+    "Subscribe and watch it jump"
+  ],
+  "theme": "crimson",
+  "seed": 3651390141,
+  "durationSec": 7.5
+}

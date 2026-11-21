@@ -1,0 +1,44 @@
+{
+  "platform": "tiktok",
+  "sounds": [
+    {
+      "id": "tt-test-beat-a",
+      "title": "Generated test beat A (124 BPM)",
+      "approvedPlatforms": ["tiktok"],
+      "link": null,
+      "file": "assets/audio/generated/tt-test-beat-a.wav",
+      "generator": { "type": "synth", "seed": 1241, "seconds": 16 },
+      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts", "notes": "Placeholder until licensed tracks are supplied." },
+      "bpm": 124,
+      "beatOffsetSec": 0,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-19"
+    },
+    {
+      "id": "tt-test-beat-b",
+      "title": "Generated test beat B (112 BPM)",
+      "approvedPlatforms": ["tiktok"],
+      "link": null,
+      "file": "assets/audio/generated/tt-test-beat-b.wav",
+      "generator": { "type": "synth", "seed": 1122, "seconds": 16 },
+      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts" },
+      "bpm": 112,
+      "beatOffsetSec": 0,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-19"
+    },
+    {
+      "id": "tt-test-beat-c",
+      "title": "Generated test beat C (132 BPM)",
+      "approvedPlatforms": ["tiktok"],
+      "link": null,
+      "file": "assets/audio/generated/tt-test-beat-c.wav",
+      "generator": { "type": "synth", "seed": 1323, "seconds": 16 },
+      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts" },
+      "bpm": 132,
+      "beatOffsetSec": 0,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-19"
+    }
+  ]
+}

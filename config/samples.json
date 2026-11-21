@@ -1,0 +1,8 @@
+[
+  { "id": "youtube-sample-1", "platform": "youtube", "soundIndex": 0, "captionSet": 0, "theme": "crimson", "startCount": 87412, "trackFrom": 0, "gainFrac": 0.004 },
+  { "id": "youtube-sample-2", "platform": "youtube", "soundIndex": 1, "captionSet": 2, "theme": "crimson", "startCount": 98310, "trackFrom": 90000, "gainFrac": 0.09 },
+  { "id": "youtube-sample-3", "platform": "youtube", "soundIndex": 2, "captionSet": 1, "theme": "ember", "startCount": 61840, "trackFrom": 50000, "gainFrac": 0.05 },
+  { "id": "tiktok-sample-1", "platform": "tiktok", "soundIndex": 0, "captionSet": 0, "theme": "neon", "startCount": 8120, "trackFrom": 0, "gainFrac": 0.012 },
+  { "id": "tiktok-sample-2", "platform": "tiktok", "soundIndex": 1, "captionSet": 2, "theme": "blush", "startCount": 9655, "trackFrom": 9000, "gainFrac": 0.12 },
+  { "id": "tiktok-sample-3", "platform": "tiktok", "soundIndex": 2, "captionSet": 3, "theme": "aqua", "startCount": 6480, "trackFrom": 5000, "gainFrac": 0.06 }
+]

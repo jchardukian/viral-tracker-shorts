@@ -1,0 +1,7 @@
+{
+  "timezone": "America/Chicago",
+  "slots": {
+    "youtube": ["11:07", "18:23"],
+    "tiktok": ["12:11", "19:37"]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "disclosure": "simulated counter · animation",
+  "youtube": {
+    "name": "Road to 100K",
+    "handle": "@roadto100k",
+    "initial": "R",
+    "avatar": ["#ff5a36", "#c21f0a"],
+    "goal": 100000,
+    "trackFrom": 0,
+    "startCount": 87412,
+    "gainFrac": 0.004,
+    "bufferChannelId": null,
+    "youtubeCategoryId": "24"
+  },
+  "tiktok": {
+    "name": "road to 10k",
+    "handle": "@roadto10k",
+    "initial": "R",
+    "avatar": ["#7b6bff", "#fe2c55"],
+    "goal": 10000,
+    "trackFrom": 0,
+    "startCount": 8120,
+    "gainFrac": 0.012,
+    "following": 48,
+    "likes": 212400,
+    "bufferChannelId": null
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "platform": "youtube",
+  "sounds": [
+    {
+      "id": "yt-test-beat-a",
+      "title": "Generated test beat A (120 BPM)",
+      "approvedPlatforms": ["youtube"],
+      "link": null,
+      "file": "assets/audio/generated/yt-test-beat-a.wav",
+      "generator": { "type": "synth", "seed": 1201, "seconds": 16 },
+      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts", "notes": "Placeholder until licensed tracks are supplied." },
+      "bpm": 120,
+      "beatOffsetSec": 0,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-19"
+    },
+    {
+      "id": "yt-test-beat-b",
+      "title": "Generated test beat B (128 BPM)",
+      "approvedPlatforms": ["youtube"],
+      "link": null,
+      "file": "assets/audio/generated/yt-test-beat-b.wav",
+      "generator": { "type": "synth", "seed": 1282, "seconds": 16 },
+      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts" },
+      "bpm": 128,
+      "beatOffsetSec": 0,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-19"
+    },
+    {
+      "id": "yt-test-beat-c",
+      "title": "Generated test beat C (104 BPM)",
+      "approvedPlatforms": ["youtube"],
+      "link": null,
+      "file": "assets/audio/generated/yt-test-beat-c.wav",
+      "generator": { "type": "synth", "seed": 1043, "seconds": 16 },
+      "license": { "status": "owned", "embedAllowed": true, "proof": "generated in-repo by src/audio/synth.ts" },
+      "bpm": 104,
+      "beatOffsetSec": 0,
+      "activeFrom": "2026-11-21",
+      "expiresAt": "2026-12-19"
+    }
+  ]
+}

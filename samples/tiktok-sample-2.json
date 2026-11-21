@@ -1,0 +1,44 @@
+{
+  "id": "tiktok-sample-2",
+  "platform": "tiktok",
+  "file": "/home/user/viral-tracker-shorts/samples/tiktok-sample-2.mp4",
+  "silentFile": null,
+  "still": "/home/user/viral-tracker-shorts/samples/tiktok-sample-2.png",
+  "sha256": "d2f617d99771da10a0226d86d6799fd7bd09f378353f34ef95a5dc9b5360f62c",
+  "probe": {
+    "width": 1080,
+    "height": 1920,
+    "vcodec": "h264",
+    "pixFmt": "yuv420p",
+    "fps": 30,
+    "acodec": "aac",
+    "durationSec": 8.566667,
+    "sizeBytes": 1537135,
+    "meanVolumeDb": -13.4
+  },
+  "audio": {
+    "soundId": "tt-test-beat-b",
+    "bpm": 112,
+    "beatOffsetSec": 0,
+    "link": null,
+    "mode": "embedded",
+    "file": "/home/user/viral-tracker-shorts/assets/audio/generated/tt-test-beat-b.wav",
+    "note": "embedded (owned, generated in-repo by src/audio/synth.ts)"
+  },
+  "title": "one follow at a time #fyp #smallcreator",
+  "text": "animated goal tracker · simulated counter",
+  "dueAt": null,
+  "counter": {
+    "start": 9655,
+    "end": 9778,
+    "goal": 10000,
+    "trackFrom": 9000
+  },
+  "captions": [
+    "we're so close to the goal",
+    "tap follow and watch it go"
+  ],
+  "theme": "blush",
+  "seed": 1243091918,
+  "durationSec": 8.566666666666666
+}
