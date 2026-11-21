@@ -108,7 +108,7 @@ paid services, no AI video generation; a video takes 5–8 s to render.
 
 ### Configuration
 
-- `config/channels.json` — brand name (`Road to Viral`), handle (unconfirmed,
+- `config/channels.json` — brand name (`Oh My Trillion`), handle (unconfirmed,
   change freely), avatar colours, template `variants`, the growth story
   (`startDate`, `asOf` + `currentCount`, `dailyGrowth`, optional `history` CSV),
   Buffer channel ids, on-screen disclosure.
