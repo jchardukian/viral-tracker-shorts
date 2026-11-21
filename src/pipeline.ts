@@ -1,7 +1,7 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { activeSounds, loadLibrary, pickSound, resolveAudio } from "./audio/library.ts";
-import { fileSha256, probe, type Probe, renderStill, renderVideo } from "./engine/encode.ts";
+import { fileSha256, probe, type Probe, renderStill, renderVideo, silenceCopy } from "./engine/encode.ts";
 import { hashSeed, rng } from "./engine/util.ts";
 import { Queue, slotKey } from "./publish/queue.ts";
 import { addDays, zonedIso } from "./publish/schedule.ts";
@@ -45,7 +45,7 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
   let silentFile: string | null = null;
   if (opts.silentTwin && spec.audio.mode === "embedded") {
     silentFile = join(dir, `${spec.id}.silent.mp4`);
-    await renderVideo(spec, silentFile, { forceSilent: true });
+    silenceCopy(file, silentFile);
   }
   renderStill(spec, spec.durationSec - 0.1, still); // the final held dashboard
   const m: Manifest = {
@@ -131,7 +131,7 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
       const date = addDays(start, d);
       schedule.slots[platform].forEach((hhmm, slot) => {
         const idx = (dayOffset + d) * perDay + slot;
-        const r = rotation(idx, cap.captions.length, Math.max(1, activeSounds(lib, date).length), variants.length);
+        const r = rotation(idx, cap.captions.length, Math.max(1, activeSounds(lib, date).length), variants.length, perDay);
         const id = `${platform}-${date}-${String.fromCharCode(97 + slot)}`;
         out.push({
           spec: buildSpec({
@@ -158,15 +158,15 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
 
 /**
  * Which caption / sound / template variant post number `idx` gets.
- * Caption changes every post, sound every `nCaptions` posts, and the variant
- * is offset by both, so the three dimensions are crossed rather than moving
- * together: every caption meets every sound, and each variant meets both.
+ * Caption changes every post and sound every `nCaptions` posts, so every
+ * caption meets every sound. The variant is tied to the time slot but shifts
+ * by one each day, so each variant gets every posting time equally often and
+ * is not confounded with caption, sound or week.
  */
-export function rotation(idx: number, nCaptions: number, nSounds: number, nVariants: number) {
+export function rotation(idx: number, nCaptions: number, nSounds: number, nVariants: number, perDay = 2) {
   const caption = idx % nCaptions;
-  const block = Math.floor(idx / nCaptions);
-  const sound = block % nSounds;
-  const variant = (caption + sound + Math.floor(block / nSounds)) % nVariants;
+  const sound = Math.floor(idx / nCaptions) % nSounds;
+  const variant = ((idx % perDay) + Math.floor(idx / perDay)) % nVariants;
   return { caption, sound, variant };
 }
 

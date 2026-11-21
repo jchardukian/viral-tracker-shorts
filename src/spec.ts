@@ -43,7 +43,7 @@ export interface CaptionConfig {
 export const readJson = <T>(rel: string): T => JSON.parse(readFileSync(join(ROOT, rel), "utf8")) as T;
 
 export function loadChannels() {
-  return readJson<{ disclosure: string | null } & Record<Platform, ChannelConfig>>("config/channels.json");
+  return readJson<{ disclosure: string | null; publishSilent?: boolean } & Record<Platform, ChannelConfig>>("config/channels.json");
 }
 export function loadCaptions() {
   return readJson<Record<Platform, CaptionConfig>>("config/captions.json");

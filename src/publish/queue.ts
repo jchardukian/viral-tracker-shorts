@@ -100,6 +100,10 @@ export interface PublishOptions {
   log?: (line: string) => void;
   /** restrict this run to matching items (e.g. a single validation post) */
   filter?: (item: QueueItem) => boolean;
+  /** refuse to publish videos without embedded audio */
+  requireAudio?: boolean;
+  /** at most this many posts waiting in the scheduler per platform (plan limits) */
+  maxScheduled?: number;
 }
 
 /**
@@ -126,6 +130,14 @@ export async function publishQueue(queue: Queue, publisher: Publisher, opts: Pub
       summary.skipped++;
       continue;
     }
+    if (opts.maxScheduled !== undefined) {
+      const waiting = queue.items.filter((i) => i.platform === item.platform && i.status === "scheduled" && new Date(i.dueAt) > now()).length;
+      if (waiting >= opts.maxScheduled) {
+        log(`hold ${item.videoId}: ${waiting} ${item.platform} post(s) already waiting (limit ${opts.maxScheduled})`);
+        summary.skipped++;
+        continue;
+      }
+    }
     if (new Date(item.dueAt) <= now()) {
       log(`skip ${item.videoId}: slot ${item.dueAt} is in the past`);
       summary.skipped++;
@@ -138,6 +150,7 @@ export async function publishQueue(queue: Queue, publisher: Publisher, opts: Pub
           item.history.push({ at: now().toISOString(), event: `attempt ${item.attempts} via ${publisher.name}` });
           queue.save();
         }
+        if (opts.requireAudio && item.audioMode !== "embedded") throw new PermanentError("silent video: publishing without audio is disabled");
         const res = await publisher.publish(item);
         if (publisher.live) {
           item.status = "scheduled";

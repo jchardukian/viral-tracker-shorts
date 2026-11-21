@@ -337,6 +337,12 @@ test("14-day experiment: 28 posts per platform; captions, sounds and variants ar
       assert.equal(vc.size, 6);
       assert.ok([...vc.values()].every((n) => n >= 4), JSON.stringify([...vc]));
       assert.ok([...count((p) => p.spec.variant).values()].every((n) => n === 14));
+      // each variant gets each posting time and each week equally often
+      const vt = count((p) => `${p.spec.variant}|${p.dueAt!.slice(11, 16)}`);
+      assert.equal(vt.size, 4);
+      assert.ok([...vt.values()].every((n) => n === 7), JSON.stringify([...vt]));
+      assert.ok([...count((p) => `${p.spec.variant}|${p.dueAt! < "2026-12-07" ? 1 : 2}`).values()].every((n) => n === 7));
+      assert.ok([...count((p) => `${p.spec.variant}|${p.spec.audio.soundId}`).values()].every((n) => n >= 4));
     }
   }
   const csv = planCsv(plan).trim().split("\n");
@@ -344,9 +350,18 @@ test("14-day experiment: 28 posts per platform; captions, sounds and variants ar
   assert.ok(csv[0].startsWith("platform,video_id,due_at,caption,audio_id"));
 });
 
-test("rotation crosses all three dimensions", () => {
-  const seen = new Set(Array.from({ length: 18 }, (_, i) => Object.values(rotation(i, 3, 3, 2)).join("")));
-  assert.equal(seen.size, 18);
+test("publish guards: silent videos refused, scheduler backlog capped per platform", async () => {
+  const dir = tmp();
+  const q = new Queue(join(dir, "q.json"));
+  for (let d = 1; d <= 4; d++) q.enqueue({ ...item(dir, `v${d}`, `2099-01-0${d}T12:00:00-06:00`), audioMode: d === 4 ? "silent" : "embedded" });
+  q.approve(() => true);
+  const pub = livePublisher(async (i) => ({ remoteId: `r-${i.videoId}` }));
+  await publishQueue(q, pub, { ...fast, requireAudio: true, maxScheduled: 2 });
+  assert.deepEqual(q.items.map((i) => i.status), ["scheduled", "scheduled", "approved", "approved"]);
+  // once earlier posts have gone out, the next ones are released
+  await publishQueue(q, pub, { ...fast, requireAudio: true, maxScheduled: 2, now: () => new Date("2099-01-02T20:00:00Z") });
+  assert.deepEqual(q.items.map((i) => i.status), ["scheduled", "scheduled", "scheduled", "failed"]);
+  assert.match(q.items[3].lastError!, /silent/);
 });
 
 // ---------- media hosting ---------------------------------------------------------

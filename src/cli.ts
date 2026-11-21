@@ -4,9 +4,9 @@ import { contactSheet, probe, renderStill } from "./engine/encode.ts";
 import { ROOT } from "./engine/draw.ts";
 import { applyBufferMetrics, importMetrics, parseCsv, readLedger, summarize, syncFromQueue, writeLedger } from "./analytics.ts";
 import { enqueueBatch, type Manifest, planBatch, planCsv, planSamples, renderOne } from "./pipeline.ts";
-import { type BufferConfig, BufferPublisher, fetchPost } from "./publish/buffer.ts";
-import { mediaConfigFromEnv, uploadVideo } from "./publish/media.ts";
-import { DryRunPublisher, publishQueue, Queue } from "./publish/queue.ts";
+import { type BufferConfig, BufferPublisher, fetchPost, listChannels } from "./publish/buffer.ts";
+import { mediaConfigFromEnv, uploadVideo, verifyPublicUrl } from "./publish/media.ts";
+import { DryRunPublisher, publishQueue, Queue, slotKey } from "./publish/queue.ts";
 import { loadChannels } from "./spec.ts";
 import { type Platform, PLATFORMS } from "./templates/types.ts";
 
@@ -144,7 +144,75 @@ async function main() {
       const only = flag("id");
       if (only && !queue.items.some((i) => i.videoId === only)) throw new Error(`no queued video with id ${only}`);
       const publisher = new BufferPublisher(bufferConfig());
-      console.log(await publishQueue(queue, publisher, { log, filter: only ? (i) => i.videoId === only : undefined }));
+      console.log(
+        await publishQueue(queue, publisher, {
+          log,
+          filter: only ? (i) => i.videoId === only : undefined,
+          requireAudio: loadChannels().publishSilent !== true,
+          maxScheduled: flag("max-scheduled") ? Number(flag("max-scheduled")) : undefined,
+        }),
+      );
+    } else if (sub === "validation") {
+      // one post per platform from the approval samples, due a few minutes from now
+      const mins = Number(flag("in", "20"));
+      const dueAt = new Date(Math.ceil((Date.now() + mins * 60000) / 60000) * 60000).toISOString();
+      const ch = loadChannels();
+      for (const [platform, sample] of [["youtube", flag("youtube", "youtube-dashboard-1")!], ["tiktok", flag("tiktok", "tiktok-analytics-1")!]] as const) {
+        const m = JSON.parse(readFileSync(join(ROOT, "samples", `${sample}.json`), "utf8")) as Manifest;
+        const file = join(ROOT, "samples", `${sample}.mp4`);
+        const videoId = `validation-${platform}`;
+        const key = slotKey(platform, ch[platform].bufferChannelId ?? ch[platform].handle, dueAt);
+        const prev = queue.items.find((i) => i.videoId === videoId);
+        if (prev?.status === "scheduled") {
+          console.log(`${videoId}: already sent to Buffer as ${prev.remoteId}; not touching it`);
+          continue;
+        }
+        if (prev) {
+          // refresh the time slot; approval and uploaded media are kept
+          Object.assign(prev, { key, dueAt, file });
+          prev.history.push({ at: new Date().toISOString(), event: `validation slot moved to ${dueAt}` });
+        } else {
+          queue.enqueue({ key, videoId, batchId: "validation", platform, file, audioMode: m.audio.mode, caption: m.caption, audioId: m.audio.soundId, variant: m.variant, title: m.title, text: m.text, dueAt });
+        }
+        console.log(`${videoId}: ${sample}.mp4 due ${dueAt} (${prev?.status ?? "pending_approval"})`);
+      }
+      queue.save();
+    } else if (sub === "preflight") {
+      // read-only readiness check; exits non-zero while anything blocks a live publish
+      const batch = flag("batch", "validation")!;
+      const items = queue.items.filter((i) => i.batchId === batch);
+      const ch = loadChannels();
+      const rows: { check: string; ok: boolean; detail: string }[] = [];
+      const add = (check: string, ok: boolean, detail: string) => rows.push({ check, ok, detail });
+      add(`queue has "${batch}" items`, items.length > 0, items.length ? `${items.length} item(s)` : `run: npm run queue -- ${batch === "validation" ? "validation" : "list"}`);
+      add("items approved", items.length > 0 && items.every((i) => i.status !== "pending_approval"), `${items.filter((i) => i.status === "pending_approval").length} awaiting approval`);
+      add("slots in the future", items.filter((i) => i.status !== "scheduled").every((i) => new Date(i.dueAt) > new Date()), "re-run `queue validation` if a slot has passed");
+      add("audio embedded", ch.publishSilent === true || items.every((i) => i.audioMode === "embedded"), `${items.filter((i) => i.audioMode !== "embedded").length} silent`);
+      let mediaOk = items.length > 0;
+      for (const i of items) {
+        const v = i.mediaUrl && existsSync(i.file) ? await verifyPublicUrl(i.mediaUrl, readFileSync(i.file).length).catch(() => null) : null;
+        if (!v?.ok) mediaOk = false;
+      }
+      add("media hosted and publicly retrievable", mediaOk, mediaOk ? "verified just now" : "run: npm run media -- upload (after approval)");
+      for (const pf of PLATFORMS) add(`${pf} channel id configured`, !!ch[pf].bufferChannelId, ch[pf].bufferChannelId ?? "set bufferChannelId in config/channels.json");
+      if (!process.env.BUFFER_API_KEY) add("Buffer API key", false, "set BUFFER_API_KEY");
+      else {
+        try {
+          const remote = await listChannels(bufferConfig());
+          add("Buffer API key", true, `${remote.length} channel(s) visible`);
+          for (const pf of PLATFORMS) {
+            const c = remote.find((r) => r.id === ch[pf].bufferChannelId);
+            add(`${pf} channel usable in Buffer`, !!c && c.service === pf && !c.isDisconnected && !c.isLocked, c ? `${c.name} (${c.service}, org "${c.organization}")${c.isDisconnected ? " DISCONNECTED" : ""}${c.isLocked ? " LOCKED" : ""}` : "configured id not found for this key");
+          }
+          if (flag("channels") === "true") console.table(remote);
+        } catch (e) {
+          add("Buffer API key", false, e instanceof Error ? e.message : String(e));
+        }
+      }
+      console.table(rows.map((r) => ({ check: r.check, status: r.ok ? "ok" : "BLOCKED", detail: r.detail })));
+      const blocked = rows.filter((r) => !r.ok).length;
+      console.log(blocked ? `${blocked} check(s) blocking a live publish` : "READY: every check passed");
+      if (blocked) process.exit(2);
     } else if (sub === "sync") {
       // what actually happened to each scheduled post: sent? link? error?
       const cfg = bufferConfig();
@@ -220,6 +288,8 @@ async function main() {
   npm run queue -- list
   npm run queue -- approve --batch <id> | --id <videoId>
   npm run queue -- publish [--live] [--id <videoId>]   dry run unless --live
+  npm run queue -- validation [--in 20]    queue one validation post per platform
+  npm run queue -- preflight [--batch id]  read-only readiness check
   npm run queue -- sync                    fetch what happened to scheduled posts
   npm run queue -- export                  upload-ready package of approved items
   npm run media -- upload [--id <videoId>] upload approved MP4s to R2, verify public URLs

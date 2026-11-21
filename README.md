@@ -19,7 +19,7 @@ See `PROJECT_BRIEF.md` for the product spec.
 | Buffer scheduling | built against Buffer's live schema, unit-tested; **not yet run live** |
 | Analytics ledger (export / import / Buffer pull / report) | done, tested; Buffer pull not yet run live |
 
-What still needs the owner is listed under [Remaining blockers](#remaining-blockers).
+What still needs the owner is in [`LAUNCH_READINESS.md`](LAUNCH_READINESS.md), with the exact commands for the validation posts.
 
 ## What the reference does (measured from the MP4)
 
@@ -75,6 +75,8 @@ npm run queue -- approve --batch 2026-11-30_14d    # or --id <videoId>
 npm run media -- upload [--id <videoId>]           # host approved MP4s on R2, verify public URLs
 npm run queue -- publish                           # DRY RUN (default)
 npm run queue -- publish --live [--id <videoId>]   # schedule approved items in Buffer
+npm run queue -- validation [--in 20]              # queue one validation post per platform
+npm run queue -- preflight [--batch <id>]          # read-only readiness check
 npm run queue -- sync                              # what happened to each scheduled post
 npm run queue -- export                            # upload-ready folder + schedule.csv
 npm run analytics -- export | import <csv> | pull | report
@@ -131,8 +133,9 @@ and 28 TikToks, two per day per platform, 2026-11-30 to 2026-12-13.
 - **Captions:** three per platform, changing every post.
 - **Sounds:** three per platform, changing every third post, so every caption
   runs with every sound (9 combinations, each used at least 3 times).
-- **TikTok variant:** `analytics` and `profile`, 14 posts each, crossed with
-  caption and sound so the comparison is not confounded.
+- **TikTok variant:** `analytics` and `profile`, 14 posts each. The variant
+  follows the time slot but shifts by one each day, so each variant gets each
+  posting time 7 times and each week 7 times, and is not tied to a caption or sound.
 - **Counts:** every video is the full time-lapse up to its own date, so the
   final number rises each day.
 
@@ -221,6 +224,8 @@ Safety rules enforced in code and tests:
 - nothing is sent unless the item was explicitly approved (`queue approve`)
 - `queue publish` is a dry run unless `--live` is passed
 - an item cannot be published without a verified public media URL
+- silent videos are refused while `publishSilent` is false
+- `--max-scheduled N` caps how many posts wait in Buffer per platform (plan limits)
 - one post per platform/channel/time slot (idempotency key), state saved
   atomically before and after every attempt, scheduled items never re-sent
 - transient errors (429/5xx) retry with exponential backoff; invalid input,
@@ -252,19 +257,16 @@ through `analytics import`.
 
 ## Remaining blockers
 
-1. **Destination channels.** The Buffer account has nine channels connected
-   and none is "Road to Viral". The YouTube and TikTok accounts need to exist,
-   be connected in Buffer, and their ids put in `config/channels.json`
-   (`bufferChannelId`). The Buffer plan allows nine channels and all nine are
-   in use, so two must be freed or the plan raised.
+1. **Destination channels.** No Road to Viral channel is connected to Buffer,
+   and the current account has 9 of 9 paid channels in use. See
+   `LAUNCH_READINESS.md` for the no-upgrade route and its limits.
 2. **Buffer API key** for this repo's automation (`BUFFER_API_KEY`).
 3. **Live validation, one post per platform.** Needs 1 and 2 plus explicit
-   approval to publish. Until it has run, these are unknown: whether Buffer
-   accepts the R2 URL, whether audio survives each platform's upload, and
-   whether TikTok posts publish automatically or fall back to a reminder.
-4. **Licensed audio files**, if posts should carry real music.
-5. **Handle** `@roadtoviral` is unconfirmed on both platforms.
-6. **Experiment start date** to be confirmed once 1–3 are done.
+   approval. Until it has run, these are unknown: whether Buffer accepts the R2
+   URL, whether audio survives each platform's upload, and whether the posts
+   publish automatically.
+4. **Handle** `@roadtoviral` is unconfirmed on both platforms.
+5. **Experiment start date** to be confirmed once 1–3 are done.
 
 ## Tests
 

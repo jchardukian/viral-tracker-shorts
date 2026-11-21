@@ -91,6 +91,26 @@ export async function fetchPost(cfg: BufferConfig, id: string): Promise<RemotePo
   return { id: p.id, status: p.status, sentAt: p.sentAt ?? null, externalLink: p.externalLink ?? null, error: p.error?.message ?? null, metrics: p.metrics ?? [] };
 }
 
+export interface RemoteChannel {
+  id: string;
+  name: string;
+  service: string;
+  organization: string;
+  isDisconnected: boolean;
+  isLocked: boolean;
+}
+
+/** Every channel the API key can see, across all of the account's organizations. */
+export async function listChannels(cfg: BufferConfig): Promise<RemoteChannel[]> {
+  const orgs = (await gql(cfg, "query { account { organizations { id name } } }", {})).account.organizations as { id: string; name: string }[];
+  const out: RemoteChannel[] = [];
+  for (const o of orgs) {
+    const d = await gql(cfg, "query Channels($org: OrganizationId!) { channels(input: { organizationId: $org }) { id name displayName service isDisconnected isLocked } }", { org: o.id });
+    for (const c of d.channels) out.push({ id: c.id, name: c.displayName ?? c.name, service: c.service, organization: o.name, isDisconnected: !!c.isDisconnected, isLocked: !!c.isLocked });
+  }
+  return out;
+}
+
 export class BufferPublisher implements Publisher {
   name = "buffer";
   live = true;

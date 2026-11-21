@@ -68,6 +68,14 @@ export async function renderVideo(spec: VideoSpec, out: string, opts: { forceSil
   if (code !== 0) throw new Error(`ffmpeg failed (${code}): ${err}`);
 }
 
+/** Same picture, silent AAC track: the video stream is copied, not re-encoded. */
+export function silenceCopy(src: string, out: string) {
+  execFileSync("ffmpeg", [
+    "-y", "-loglevel", "error", "-i", src, "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
+    "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", out,
+  ]);
+}
+
 export interface Probe {
   width: number;
   height: number;

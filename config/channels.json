@@ -1,5 +1,6 @@
 {
   "disclosure": "simulated numbers",
+  "publishSilent": false,
   "youtube": {
     "name": "Road to Viral",
     "handle": "@roadtoviral",
