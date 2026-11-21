@@ -257,9 +257,9 @@ through `analytics import`.
 
 ## Remaining blockers
 
-1. **Destination channels.** No Road to Viral channel is connected to Buffer,
-   and the current account has 9 of 9 paid channels in use. See
-   `LAUNCH_READINESS.md` for the no-upgrade route and its limits.
+1. **Destination channels.** The owner will add two paid channel slots to the
+   current Buffer account and connect the new Road to Viral YouTube and TikTok
+   accounts; their ids then go in `config/channels.json`.
 2. **Buffer API key** for this repo's automation (`BUFFER_API_KEY`).
 3. **Live validation, one post per platform.** Needs 1 and 2 plus explicit
    approval. Until it has run, these are unknown: whether Buffer accepts the R2

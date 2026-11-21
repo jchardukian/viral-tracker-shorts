@@ -22,25 +22,14 @@ Status on 2026-11-21. Nothing has been scheduled or published.
 - **Buffer schema:** `createPost`, `post`, `channels` field names and enums checked against the live schema.
 - **Tests:** 28 pass. Typecheck clean.
 
-## Buffer channel limit (task D)
+## Buffer channels: decision
 
-The current Buffer account pays per channel and has 9 of 9 in use. Findings from Buffer's own documentation:
+**Owner decision (2026-11-21): add two paid channel slots to the current Buffer account.**
 
-- A Buffer account has exactly one organization; a second (free) organization cannot be added to the same login.
-- Adding channels to the current account always raises the bill (about $6 per channel per month on Essentials monthly).
-- A channel can be connected to only one Buffer account at a time.
-
-**The only route that neither raises the plan nor disconnects a channel is a second Buffer account on the Free plan, under a different email.** It fits this test, with constraints:
-
-| Free plan limit | Effect here |
-| --- | --- |
-| 3 channels | 2 needed |
-| 10 scheduled posts per channel at a time | cannot load all 28 at once; schedule in rolling windows with `--max-scheduled 10` (about 5 days ahead), re-run every few days |
-| YouTube Shorts: 2 per channel per day | exactly the test's rate; no headroom for a re-post the same day |
-| TikTok: 25 per day | fine |
-| API included: 150 requests / 15 min, 600 / day, 1,000 per channel / month | fine |
-
-Buffer's docs do not say whether one person may hold two accounts, so that is the owner's call. The API key is per account, so a key from the second account is what this repo would use.
+- Cost per Buffer's pricing page: about $6 per channel per month on Essentials monthly for channels up to 10, about $4 for the 11th. Going from 9 to 11 channels is roughly $10 a month.
+- On a paid plan all 28 posts per platform can be scheduled at once (queue limit 5,000), so `--max-scheduled` is not needed.
+- YouTube Shorts through Buffer: 100 per channel per day with a verified Buffer email, 5 without. Either covers 2 a day.
+- The rejected alternative was a second Buffer account on the Free plan (no cost, but 10 queued posts per channel and exactly 2 Shorts a day).
 
 ## TikTok automatic publishing
 
@@ -52,11 +41,12 @@ Buffer's docs do not say whether one person may hold two accounts, so that is th
 ## Owner-only actions
 
 1. Create the Road to Viral YouTube channel and TikTok account.
-2. Decide how they reach Buffer: second Buffer account on Free (no cost, limits above) or two paid channel slots on the current account.
-3. Connect both in Buffer; put the two channel ids in `config/channels.json` (`bufferChannelId`).
-4. Create a Buffer API key in that account (publish.buffer.com/settings/api) and provide it as `BUFFER_API_KEY`.
-5. Approve the two validation posts.
-6. After validation: confirm the experiment start date (the plan's 2026-11-30 is a placeholder) and approve the batch.
+2. In Buffer, raise the channel count from 9 to 11 and connect both new accounts.
+3. Create a Buffer API key (publish.buffer.com/settings/api) and provide it as `BUFFER_API_KEY`.
+4. Approve the two validation posts.
+5. After validation: confirm the experiment start date (the plan's 2026-11-30 is a placeholder) and approve the batch.
+
+The two channel ids can be read from Buffer once the channels are connected (`npm run queue -- preflight --channels` lists them) and go in `config/channels.json` as `bufferChannelId`.
 
 ## Commands for the validation posts
 
@@ -87,5 +77,5 @@ npm run batch -- --start <date> --days 14            # only if the start date ch
 npm run queue -- approve --batch <date>_14d
 npm run media -- upload
 npm run queue -- preflight --batch <date>_14d
-npm run queue -- publish --live --max-scheduled 10   # omit the cap on a paid plan
+npm run queue -- publish --live
 ```
