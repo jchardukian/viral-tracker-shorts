@@ -7,10 +7,12 @@ import { detectBeat } from "./audio/beat.ts";
 import { generateTrack, HOOK_FIRST, variationPrompt } from "./audio/generate.ts";
 import { type AudioLibrary, loadLibrary } from "./audio/library.ts";
 import { DIMENSIONS, type ExperimentConfig, recommend } from "./experiment.ts";
-import { enqueueBatch, loadExperiment, type Manifest, planBatch, planCsv, planSamples, renderOne } from "./pipeline.ts";
-import { type BufferConfig, BufferPublisher, fetchPost, listChannels } from "./publish/buffer.ts";
+import { enqueueBatch, loadExperiment, loadSchedule, type Manifest, planBatch, planCsv, planSamples, renderOne } from "./pipeline.ts";
+import { type BufferConfig, BufferPublisher, fetchPost, listChannels, reschedulePost } from "./publish/buffer.ts";
 import { discoverAccountId, type MediaConfig, mediaConfigFromEnv, uploadVideo, verifyPublicUrl } from "./publish/media.ts";
-import { addDays } from "./publish/schedule.ts";
+import { addDays, zonedIso } from "./publish/schedule.ts";
+import { apportion, design } from "./experiment.ts";
+import { hashSeed, rng } from "./engine/util.ts";
 import { readJson } from "./spec.ts";
 import { DryRunPublisher, publishQueue, Queue, slotKey } from "./publish/queue.ts";
 import { loadCaptions, loadChannels, TEMPLATES } from "./spec.ts";
@@ -55,6 +57,8 @@ function computeWeights(rows: ReturnType<typeof readLedger>, print = true): { ne
       audio_id: loadLibrary(pf).sounds.map((x) => x.id),
       template_variant: ch[pf].variants?.length ? ch[pf].variants! : [Object.keys(TEMPLATES[pf])[0]],
       count_tier: (ch.countTiers ?? []).map((t) => t.id),
+      length_tier: (ch.lengthTiers ?? []).map((t) => t.id),
+      post_time: loadSchedule().slots[pf].flat(),
     };
     for (const by of DIMENSIONS) {
       const ranked = recommend(rows, pf, by, options[by], exp);
@@ -227,7 +231,7 @@ async function main() {
           Object.assign(prev, { key, dueAt, file });
           prev.history.push({ at: new Date().toISOString(), event: `validation slot moved to ${dueAt}` });
         } else {
-          queue.enqueue({ key, videoId, batchId: "validation", platform, file, audioMode: m.audio.mode, caption: m.caption, audioId: m.audio.soundId, variant: m.variant, countTier: m.countTier ?? null, title: m.title, text: m.text, dueAt });
+          queue.enqueue({ key, videoId, batchId: "validation", platform, file, audioMode: m.audio.mode, caption: m.caption, audioId: m.audio.soundId, variant: m.variant, countTier: m.countTier ?? null, lengthTier: m.lengthTier ?? null, title: m.title, text: m.text, dueAt });
         }
         console.log(`${videoId}: ${sample}.mp4 due ${dueAt} (${prev?.status ?? "pending_approval"})`);
       }
@@ -268,6 +272,47 @@ async function main() {
       const blocked = rows.filter((r) => !r.ok).length;
       console.log(blocked ? `${blocked} check(s) blocking a live publish` : "READY: every check passed");
       if (blocked) process.exit(2);
+    } else if (sub === "retime") {
+      // Spread already-scheduled posts over the configured posting-time pools, balanced
+      // against what each video already is (caption, sound, variant, count size). Videos are untouched.
+      const batch = flag("batch");
+      const from = flag("from", today())!;
+      if (!batch) throw new Error("queue retime --batch <id> [--from YYYY-MM-DD] [--live]");
+      const live = flag("live") === "true";
+      const schedule = loadSchedule();
+      const cfg = live ? bufferConfig() : null;
+      for (const pf of PLATFORMS) {
+        const pools = schedule.slots[pf];
+        const items = queue.items.filter((i) => i.batchId === batch && i.platform === pf && i.status === "scheduled" && i.dueAt.slice(0, 10) >= from).sort((a, b) => a.dueAt.localeCompare(b.dueAt));
+        if (!items.length) continue;
+        if (items.length % pools.length) throw new Error(`${pf}: ${items.length} posts is not a whole number of days`);
+        const days = items.length / pools.length;
+        const index = (f: (i: (typeof items)[number]) => string) => {
+          const keys = [...new Set(items.map(f))];
+          return items.map((i) => keys.indexOf(f(i)));
+        };
+        const [plan] = design(items.length, pools.length, [{ bySlot: pools.map((pool) => apportion(pool, undefined, days)) }], rng(hashSeed(`retime|${pf}|${batch}|${from}`)), [
+          index((i) => i.caption),
+          index((i) => i.audioId ?? ""),
+          index((i) => i.variant),
+          index((i) => i.countTier ?? ""),
+        ]);
+        const times = pools.flat();
+        for (const [k, i] of items.entries()) {
+          const dueAt = zonedIso(i.dueAt.slice(0, 10), times[plan[k]], schedule.timezone);
+          if (dueAt === i.dueAt) continue;
+          if (live) {
+            const r = await reschedulePost(cfg!, i.remoteId!, dueAt);
+            if (r.assets < 1) throw new Error(`${i.videoId}: Buffer returned the post without its video after the edit; stopping`);
+            i.history.push({ at: new Date().toISOString(), event: `moved from ${i.dueAt} to ${dueAt}` });
+            i.key = slotKey(pf, loadChannels()[pf].bufferChannelId ?? loadChannels()[pf].handle, dueAt);
+            i.dueAt = dueAt;
+            queue.save();
+          }
+          console.log(`${live ? "moved" : "would move"} ${i.videoId} -> ${dueAt.slice(11, 16)}`);
+        }
+      }
+      if (!live) console.log("preview only; add --live to change the times in Buffer");
     } else if (sub === "sync") {
       // what actually happened to each scheduled post: sent? link? error?
       const cfg = bufferConfig();
@@ -429,7 +474,7 @@ async function main() {
       writeLedger(LEDGER_PATH, rows);
       console.log(`updated ${n} row(s) from Buffer`);
     } else if (sub === "report") {
-      for (const by of ["platform", "caption", "audio_id", "template_variant", "count_tier"] as const) {
+      for (const by of ["platform", "caption", "audio_id", "template_variant", "count_tier", "length_tier", "post_time"] as const) {
         console.log(`\nby ${by}`);
         console.table(summarize(rows, by));
       }
@@ -451,6 +496,7 @@ async function main() {
   npm run queue -- publish [--live] [--id <videoId>]   dry run unless --live
   npm run queue -- validation [--in 20]    queue one validation post per platform
   npm run queue -- preflight [--batch id]  read-only readiness check
+  npm run queue -- retime --batch <id> [--from date] [--live]   spread scheduled posts over the time pools
   npm run queue -- sync                    fetch what happened to scheduled posts
   npm run queue -- export                  upload-ready package of approved items
   npm run media -- upload [--id <videoId>] upload approved MP4s to R2, verify public URLs

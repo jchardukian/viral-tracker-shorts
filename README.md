@@ -138,6 +138,10 @@ and 28 TikToks, two per day per platform, 2026-11-30 to 2026-12-13.
 - **Final count:** five sizes (`countTiers` in `config/channels.json`): about
   300, 10K, 100K, 1M and 1B, 5–6 posts each. Every video has its own growth
   curve and ends on its own non-round number.
+- **Posting time:** each platform posts once in the morning and once in the
+  afternoon/evening, each drawn from a pool of three times
+  (`config/schedule.json`), so six times of day are compared per platform.
+- **Video length:** three buckets, about 9, 13 and 18 seconds (`lengthTiers`).
 - **Arrangement:** a seeded search orders the batch so no two factors move
   together. Every caption, sound and variant appears in both time slots and
   both weeks, captions and sounds are mixed rather than paired, and the same

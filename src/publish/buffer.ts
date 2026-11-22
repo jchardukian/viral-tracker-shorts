@@ -92,6 +92,21 @@ export async function fetchPost(cfg: BufferConfig, id: string): Promise<RemotePo
   return { id: p.id, status: p.status, sentAt: p.sentAt ?? null, externalLink: p.externalLink ?? null, error: p.error?.message ?? null, metrics: p.metrics ?? [] };
 }
 
+export const EDIT_DUE = `mutation Retime($input: EditPostInput!) {
+  editPost(input: $input) {
+    __typename
+    ... on PostActionSuccess { post { id status dueAt assets { source } } }
+    ... on MutationError { message }
+  }
+}`;
+
+/** Move a scheduled post to a new time. Nothing else about the post is sent, so nothing else changes. */
+export async function reschedulePost(cfg: BufferConfig, id: string, dueAt: string): Promise<{ dueAt: string; status: string; assets: number }> {
+  const out = (await gql(cfg, EDIT_DUE, { input: { id, dueAt: new Date(dueAt).toISOString(), mode: "customScheduled" } })).editPost;
+  if (out?.__typename !== "PostActionSuccess" || !out.post) throw new PermanentError(`Buffer ${out?.__typename ?? "unknown response"}: ${out?.message ?? "no message"}`);
+  return { dueAt: out.post.dueAt, status: out.post.status, assets: (out.post.assets ?? []).length };
+}
+
 export interface RemoteChannel {
   id: string;
   name: string;

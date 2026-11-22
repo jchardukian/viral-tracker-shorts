@@ -7,8 +7,8 @@ import type { Platform } from "./templates/types.ts";
  * performers more posts while always keeping a share for exploration, so new
  * ideas still get tried and an early fluke cannot take over.
  */
-export type Dimension = "caption" | "audio_id" | "template_variant" | "count_tier";
-export const DIMENSIONS: Dimension[] = ["caption", "audio_id", "template_variant", "count_tier"];
+export type Dimension = "caption" | "audio_id" | "template_variant" | "count_tier" | "length_tier" | "post_time";
+export const DIMENSIONS: Dimension[] = ["caption", "audio_id", "template_variant", "count_tier", "length_tier", "post_time"];
 export type Weights = Partial<Record<Dimension, Record<string, number>>>;
 
 export interface ExperimentConfig {
@@ -88,30 +88,58 @@ export function apportion(options: string[], weights: Record<string, number> | u
   return counts;
 }
 
+/** Counts per option, or separate counts for each daily slot (posting times: each slot has its own pool). */
+export type DimCounts = number[] | { bySlot: number[][] };
+
 /**
  * Arrange a batch so no two factors move together.
  *
- * `counts[d][i]` is how many posts get option i of dimension d (caption,
- * sound, variant...). The search shuffles each dimension and keeps swaps that
- * make every pair of factors — including time slot and week — closer to
- * independent, and that avoid repeating the same option back-to-back.
- * Seeded, so the same inputs always give the same plan.
+ * Each entry of `dims` says how many posts get each option of one dimension
+ * (caption, sound, variant, count size, length, posting time...). The search
+ * shuffles every dimension and keeps swaps that make every pair of factors —
+ * including position in the day and week — closer to independent, and that
+ * avoid repeating the same option back-to-back. `locked` are dimensions that
+ * are already decided (e.g. videos that are rendered): they are balanced
+ * against but never changed. Seeded, so the same inputs give the same plan.
  * Returns assignment[d][k] = option index of dimension d for post k.
  */
-export function design(n: number, perDay: number, counts: number[][], random: () => number): number[][] {
+export function design(n: number, perDay: number, dims: DimCounts[], random: () => number, locked: number[][] = []): number[][] {
   const weeks = Math.max(1, Math.ceil(n / perDay / 7));
-  const fixed = [
-    { levels: perDay, of: (k: number) => k % perDay },
-    { levels: weeks, of: (k: number) => Math.floor(k / perDay / 7) },
-  ];
-  const assign = counts.map((c) => {
-    const a = c.flatMap((m, i) => Array<number>(m).fill(i));
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+  const slotOf = (k: number) => k % perDay;
+  const bySlot = dims.map((d) => !Array.isArray(d));
+  const counts = dims.map((d) => (Array.isArray(d) ? d : d.bySlot.flat()));
+  const assign = dims.map((d) => {
+    const shuffle = (a: number[]) => {
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
+    if (Array.isArray(d)) return shuffle(d.flatMap((m, i) => Array<number>(m).fill(i)));
+    // per-slot pools: option ids run on across slots; each slot only draws from its own pool
+    const out = Array<number>(n).fill(0);
+    let offset = 0;
+    d.bySlot.forEach((pool, s) => {
+      const items = shuffle(pool.flatMap((m, i) => Array<number>(m).fill(offset + i)));
+      let q = 0;
+      for (let k = 0; k < n; k++) if (slotOf(k) === s) out[k] = items[q++ % items.length];
+      offset += pool.length;
+    });
+    return out;
   });
+  const lockedLevels = locked.map((l) => Math.max(...l) + 1);
+  const marg = (levels: number, of: (k: number) => number) => {
+    const m = Array<number>(levels).fill(0);
+    for (let k = 0; k < n; k++) m[of(k)]++;
+    return m;
+  };
+  const fixed = [
+    { levels: perDay, of: slotOf, slot: true },
+    { levels: weeks, of: (k: number) => Math.floor(k / perDay / 7), slot: false },
+    ...locked.map((l, i) => ({ levels: lockedLevels[i], of: (k: number) => l[k], slot: false })),
+  ];
+  const fixedMarg = fixed.map((f) => marg(f.levels, f.of));
   const table = (la: number, a: (k: number) => number, lb: number, b: (k: number) => number, ca: number[], cb: number[]) => {
     const t = new Float64Array(la * lb);
     for (let k = 0; k < n; k++) t[a(k) * lb + b(k)]++;
@@ -119,28 +147,25 @@ export function design(n: number, perDay: number, counts: number[][], random: ()
     for (let i = 0; i < la; i++) for (let j = 0; j < lb; j++) cost += Math.pow(t[i * lb + j] - (ca[i] * cb[j]) / n, 2);
     return cost;
   };
-  const marg = (levels: number, of: (k: number) => number) => {
-    const m = Array<number>(levels).fill(0);
-    for (let k = 0; k < n; k++) m[of(k)]++;
-    return m;
-  };
-  const fixedMarg = fixed.map((f) => marg(f.levels, f.of));
   const cost = () => {
     let c = 0;
     for (let d = 0; d < assign.length; d++) {
       const get = (k: number) => assign[d][k];
-      fixed.forEach((f, i) => (c += table(counts[d].length, get, f.levels, f.of, counts[d], fixedMarg[i])));
-      for (let e = d + 1; e < assign.length; e++) c += table(counts[d].length, get, counts[e].length, (k) => assign[e][k], counts[d], counts[e]);
-      for (let k = 1; k < n; k++) if (assign[d][k] === assign[d][k - 1] && counts[d].length > 2) c += 0.75;
+      const m = marg(counts[d].length, get);
+      fixed.forEach((f, i) => {
+        if (!(f.slot && bySlot[d])) c += table(counts[d].length, get, f.levels, f.of, m, fixedMarg[i]);
+      });
+      for (let e = d + 1; e < assign.length; e++) c += table(counts[d].length, get, counts[e].length, (k) => assign[e][k], m, marg(counts[e].length, (k) => assign[e][k]));
+      for (let k = 1; k < n; k++) if (assign[d][k] === assign[d][k - 1] && counts[d].length > 2 && !bySlot[d]) c += 0.75;
     }
     return c;
   };
   let best = cost();
-  for (let it = 0; it < 12000; it++) {
+  for (let it = 0; it < 14000; it++) {
     const d = Math.floor(random() * assign.length);
     const i = Math.floor(random() * n);
     const j = Math.floor(random() * n);
-    if (assign[d][i] === assign[d][j]) continue;
+    if (assign[d][i] === assign[d][j] || (bySlot[d] && slotOf(i) !== slotOf(j))) continue;
     [assign[d][i], assign[d][j]] = [assign[d][j], assign[d][i]];
     const c = cost();
     if (c <= best) best = c;
@@ -148,4 +173,3 @@ export function design(n: number, perDay: number, counts: number[][], random: ()
   }
   return assign;
 }
-

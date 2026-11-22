@@ -19,6 +19,8 @@ export const COLUMNS = [
   "template_variant",
   "count_tier",
   "final_count",
+  "length_tier",
+  "post_time",
   "views",
   "viewed_rate",
   "avg_watch_pct",
@@ -101,6 +103,9 @@ export function syncFromQueue(rows: Row[], items: QueueItem[], opts: { includeUn
       template_variant: i.variant,
       count_tier: i.countTier ?? "",
       final_count: prev?.final_count ?? "",
+      length_tier: i.lengthTier ?? prev?.length_tier ?? "",
+      // local posting time as scheduled (HH:MM), for comparing times of day
+      post_time: i.dueAt.slice(11, 16),
       views: prev?.views ?? "",
       viewed_rate: prev?.viewed_rate ?? "",
       avg_watch_pct: prev?.avg_watch_pct ?? "",
@@ -189,7 +194,7 @@ const mean = (xs: (number | null)[]) => {
 };
 
 /** Compare captions, sounds or template variants. Rates are per 1,000 views. */
-export function summarize(rows: Row[], by: "platform" | "caption" | "audio_id" | "template_variant" | "count_tier"): Group[] {
+export function summarize(rows: Row[], by: "platform" | "caption" | "audio_id" | "template_variant" | "count_tier" | "length_tier" | "post_time"): Group[] {
   const groups = new Map<string, Row[]>();
   for (const r of rows) {
     const k = by === "platform" ? r.platform : `${r.platform} · ${r[by] || "(none)"}`;

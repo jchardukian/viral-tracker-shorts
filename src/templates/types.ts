@@ -72,6 +72,8 @@ export interface VideoSpec {
   noThumbs?: boolean;
   /** which final-count size this video shows (e.g. 300, 1M, 1B); null when not tiered */
   countTier: string | null;
+  /** which length bucket this video belongs to (e.g. 9s, 13s, 18s); null when not tiered */
+  lengthTier: string | null;
   /** one static caption for the whole video, like the reference */
   caption: string;
   /** the caption as configured (before {count} is filled in); used to compare results */

@@ -51,7 +51,7 @@ export interface CaptionConfig {
 export const readJson = <T>(rel: string): T => JSON.parse(readFileSync(join(ROOT, rel), "utf8")) as T;
 
 export function loadChannels() {
-  return readJson<{ disclosure: string | null; publishSilent?: boolean; countTiers?: CountTier[] } & Record<Platform, ChannelConfig>>("config/channels.json");
+  return readJson<{ disclosure: string | null; publishSilent?: boolean; countTiers?: CountTier[]; lengthTiers?: { id: string; seconds: number }[] } & Record<Platform, ChannelConfig>>("config/channels.json");
 }
 export function loadCaptions() {
   return readJson<Record<Platform, CaptionConfig>>("config/captions.json");
@@ -68,6 +68,8 @@ export interface SpecInput {
   audio: AudioAssignment;
   /** label of the final-count size being tested */
   countTier?: string | null;
+  /** label of the video-length bucket being tested */
+  lengthTier?: string | null;
   /** the time-lapse ends on this date (YYYY-MM-DD) */
   date: string;
   disclosure?: string | null;
@@ -186,6 +188,7 @@ export function buildSpec(input: SpecInput): VideoSpec {
     frames,
     profile: { name: channel.name, handle: channel.handle, initial: channel.initial, avatar: channel.avatar, avatarImage: channel.avatarImage ?? null },
     countTier: input.countTier ?? null,
+    lengthTier: input.lengthTier ?? null,
     // {count} in a caption becomes this video's own final number, e.g. "1.3M"
     caption: input.caption.replace(/\{count\}/g, shortCount(snapshots[n - 1].count)),
     captionKey: input.caption,

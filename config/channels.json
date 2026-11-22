@@ -23,6 +23,20 @@
       "base": 1010000000
     }
   ],
+  "lengthTiers": [
+    {
+      "id": "9s",
+      "seconds": 9
+    },
+    {
+      "id": "13s",
+      "seconds": 13
+    },
+    {
+      "id": "18s",
+      "seconds": 18
+    }
+  ],
   "youtube": {
     "name": "Oh My Trillion",
     "handle": "@ohmytrillion",

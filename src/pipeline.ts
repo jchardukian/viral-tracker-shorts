@@ -14,6 +14,7 @@ export interface Manifest {
   platform: Platform;
   variant: string;
   countTier: string | null;
+  lengthTier: string | null;
   file: string;
   silentFile: string | null;
   still: string;
@@ -55,6 +56,7 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
     platform: spec.platform,
     variant: spec.variant,
     countTier: spec.countTier,
+    lengthTier: spec.lengthTier,
     file,
     silentFile,
     still,
@@ -124,12 +126,14 @@ export function planSamples(date: string): Planned[] {
 export function planBatch(start: string, days: number, platforms: Platform[] = PLATFORMS, experiment: ExperimentConfig = loadExperiment()): Planned[] {
   const channels = loadChannels();
   const captions = loadCaptions();
-  const schedule = readJson<{ timezone: string; slots: Record<Platform, string[]> }>("config/schedule.json");
+  const schedule = loadSchedule();
   const out: Planned[] = [];
   for (const platform of platforms) {
     const lib = loadLibrary(platform);
     const cap = captions[platform];
-    const perDay = schedule.slots[platform].length;
+    const pools = schedule.slots[platform];
+    const perDay = pools.length;
+    const times = pools.flat();
     const variants = channels[platform].variants?.length ? channels[platform].variants! : [Object.keys(TEMPLATES[platform])[0]];
     // How many posts each caption / sound / variant gets: even by default,
     // tilted towards better performers once config/experiment.json has weights.
@@ -141,16 +145,28 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
     // final-count sizes to test (300 ... 1B); not used when real history is configured
     const tiers = channels[platform].history ? [] : (channels.countTiers ?? []);
     const tierIds = tiers.length ? tiers.map((t) => t.id) : ["(configured)"];
+    const lengths = channels.lengthTiers ?? [];
+    const lengthIds = lengths.length ? lengths.map((t) => t.id) : ["(varied)"];
     const plan = design(
       n,
       perDay,
-      [apportion(cap.captions, w.caption, n), apportion(soundIds, w.audio_id, n), apportion(variants, w.template_variant, n), apportion(tierIds, w.count_tier, n)],
+      [
+        apportion(cap.captions, w.caption, n),
+        apportion(soundIds, w.audio_id, n),
+        apportion(variants, w.template_variant, n),
+        apportion(tierIds, w.count_tier, n),
+        apportion(lengthIds, w.length_tier, n),
+        // posting time: each daily slot draws from its own pool of times
+        { bySlot: pools.map((pool) => apportion(pool, w.post_time, days)) },
+      ],
       rng(hashSeed(`design|${platform}|${start}|${days}`)),
     );
     for (let d = 0; d < days; d++) {
       const date = addDays(start, d);
-      schedule.slots[platform].forEach((hhmm, slot) => {
+      pools.forEach((_, slot) => {
         const k = d * perDay + slot;
+        const hhmm = times[plan[5][k]];
+        const length = lengths[plan[4][k]];
         const r = { caption: plan[0][k], sound: plan[1][k], variant: plan[2][k] };
         const id = `${platform}-${date}-${String.fromCharCode(97 + slot)}`;
         const tier = tiers[plan[3][k]];
@@ -169,7 +185,8 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
             contentTitles: cap.contentTitles,
             audio: resolveAudio(sounds.length ? (activeSounds(lib, date).find((x) => x.id === soundIds[r.sound]) ?? pickSound(lib, date, r.sound)) : null, platform),
             date,
-            targetSec: 13 + rng(hashSeed(id))() * 5,
+            lengthTier: length?.id ?? null,
+            targetSec: length ? length.seconds : 13 + rng(hashSeed(id))() * 5,
             disclosure: channels.disclosure,
           }),
           title: cap.titles[r.caption % cap.titles.length],
@@ -182,6 +199,13 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
   return out;
 }
 
+/** Posting-time pools per platform: one pool per daily slot. A plain list of times is read as one fixed time per slot. */
+export function loadSchedule(): { timezone: string; slots: Record<Platform, string[][]> } {
+  const raw = readJson<{ timezone: string; slots: Record<Platform, (string | string[])[]> }>("config/schedule.json");
+  const slots = Object.fromEntries(PLATFORMS.map((pf) => [pf, raw.slots[pf].map((x) => (Array.isArray(x) ? x : [x]))])) as Record<Platform, string[][]>;
+  return { timezone: raw.timezone, slots };
+}
+
 export function loadExperiment(): ExperimentConfig {
   return readJson<ExperimentConfig>("config/experiment.json");
 }
@@ -189,9 +213,9 @@ export function loadExperiment(): ExperimentConfig {
 /** The experiment plan as a CSV: one row per planned post, before anything is rendered. */
 export function planCsv(plans: Planned[]): string {
   const q = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const head = "platform,video_id,due_at,caption,audio_id,audio_mode,native_sound_link,template_variant,count_tier,duration_sec,final_count,title";
+  const head = "platform,video_id,due_at,caption,audio_id,audio_mode,native_sound_link,template_variant,count_tier,length_tier,duration_sec,final_count,title";
   return (
-    [head, ...plans.map((p) => [p.spec.platform, p.spec.id, p.dueAt, p.spec.captionKey, p.spec.audio.soundId, p.spec.audio.mode, p.spec.audio.link, p.spec.variant, p.spec.countTier, p.spec.durationSec.toFixed(2), p.spec.endCount, p.title].map(q).join(","))].join("\n") + "\n"
+    [head, ...plans.map((p) => [p.spec.platform, p.spec.id, p.dueAt, p.spec.captionKey, p.spec.audio.soundId, p.spec.audio.mode, p.spec.audio.link, p.spec.variant, p.spec.countTier, p.spec.lengthTier, p.spec.durationSec.toFixed(2), p.spec.endCount, p.title].map(q).join(","))].join("\n") + "\n"
   );
 }
 
@@ -212,6 +236,7 @@ export function enqueueBatch(queue: Queue, batchId: string, manifests: Manifest[
       audioId: m.audio.soundId,
       variant: m.variant,
       countTier: m.countTier,
+      lengthTier: m.lengthTier,
       title: m.title,
       text: m.text,
       dueAt: m.dueAt,

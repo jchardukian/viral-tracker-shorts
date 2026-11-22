@@ -1,7 +1,30 @@
 {
   "timezone": "America/Chicago",
   "slots": {
-    "youtube": ["11:07", "18:23"],
-    "tiktok": ["12:11", "19:37"]
-  }
+    "youtube": [
+      [
+        "07:13",
+        "09:41",
+        "11:07"
+      ],
+      [
+        "15:26",
+        "18:23",
+        "21:52"
+      ]
+    ],
+    "tiktok": [
+      [
+        "07:47",
+        "10:19",
+        "12:11"
+      ],
+      [
+        "16:08",
+        "19:37",
+        "22:14"
+      ]
+    ]
+  },
+  "_slots": "Each platform posts once from each pool per day. Times are local to `timezone`; which time each post gets is varied so times of day can be compared."
 }

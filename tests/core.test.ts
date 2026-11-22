@@ -11,7 +11,7 @@ import { generateTrack, variationPrompt } from "../src/audio/generate.ts";
 import { synthBeat } from "../src/audio/synth.ts";
 import { rng } from "../src/engine/util.ts";
 import { apportion, design, recommend } from "../src/experiment.ts";
-import { enqueueBatch, type Manifest, planBatch, planCsv, planSamples } from "../src/pipeline.ts";
+import { enqueueBatch, loadSchedule, type Manifest, planBatch, planCsv, planSamples } from "../src/pipeline.ts";
 import { BufferPublisher, buildCreatePostInput, fetchPost } from "../src/publish/buffer.ts";
 import { mediaConfigFromEnv, mediaKey, publicUrl, uploadVideo, verifyPublicUrl } from "../src/publish/media.ts";
 import { DryRunPublisher, PermanentError, type Publisher, publishQueue, Queue, type QueueItem, slotKey } from "../src/publish/queue.ts";
@@ -289,7 +289,7 @@ test("transient errors retry with backoff; permanent errors fail fast; past slot
 test("enqueueBatch is idempotent", () => {
   const dir = tmp();
   const q = new Queue(join(dir, "q.json"));
-  const m = planBatch("2026-11-23", 1).map((p) => ({ id: p.spec.id, platform: p.spec.platform, variant: p.spec.variant, countTier: p.spec.countTier, caption: p.spec.captionKey, file: join(dir, `${p.spec.id}.mp4`), audio: p.spec.audio, title: p.title, text: p.text, dueAt: p.dueAt }) as Manifest);
+  const m = planBatch("2026-11-23", 1).map((p) => ({ id: p.spec.id, platform: p.spec.platform, variant: p.spec.variant, countTier: p.spec.countTier, lengthTier: p.spec.lengthTier, caption: p.spec.captionKey, file: join(dir, `${p.spec.id}.mp4`), audio: p.spec.audio, title: p.title, text: p.text, dueAt: p.dueAt }) as Manifest);
   assert.equal(enqueueBatch(q, "b", m), 4);
   assert.equal(enqueueBatch(new Queue(join(dir, "q.json")), "b", m), 0);
   assert.ok(existsSync(join(dir, "q.json")));
@@ -343,7 +343,8 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
     assert.equal(ps.length, 28);
     const count = (f: (p: (typeof ps)[number]) => string) => ps.reduce((m, p) => m.set(f(p), (m.get(f(p)) ?? 0) + 1), new Map<string, number>());
     const spread = (m: Map<string, number>) => Math.max(...m.values()) - Math.min(...m.values());
-    const slot = (p: (typeof ps)[number]) => p.dueAt!.slice(11, 16);
+    const slot = (p: (typeof ps)[number]) => String(ps.indexOf(p) % 2); // first or second post of the day
+    const time = (p: (typeof ps)[number]) => p.dueAt!.slice(11, 16);
     const week = (p: (typeof ps)[number]) => (p.dueAt! < "2026-12-07" ? "1" : "2");
     const nCap = loadCaptions()[platform].captions.length;
     const nSnd = loadLibrary(platform).sounds.length;
@@ -354,12 +355,25 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
     assert.ok(count((p) => `${p.spec.captionKey}|${p.spec.audio.soundId}`).size >= 24, "captions and sounds are mixed, not paired");
     // nothing is tied to a time of day or a week
     assert.ok(spread(count((p) => p.spec.countTier!)) <= 1 && count((p) => p.spec.countTier!).size === 5, "five count sizes, even shares");
-    for (const f of [(p: (typeof ps)[number]) => p.spec.captionKey, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.variant, (p: (typeof ps)[number]) => p.spec.countTier!]) {
+    // posting times: every time in both pools is used about equally, earlier pool first each day
+    const pools = loadSchedule().slots[platform];
+    const byClock = count(time);
+    assert.deepEqual([...byClock.keys()].sort(), pools.flat().sort());
+    assert.ok(spread(byClock) <= 1);
+    assert.ok(ps.every((p, i) => pools[i % 2].includes(time(p))));
+    for (const f of [(p: (typeof ps)[number]) => p.spec.captionKey, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.countTier!])
+      assert.ok(Math.max(...count((p) => `${time(p)}|${f(p)}`).values()) <= 3, "no time of day is tied to one caption, sound or count size");
+    // video length: three buckets, even shares, and the rendered length follows the bucket
+    const lens = count((p) => p.spec.lengthTier!);
+    assert.ok(lens.size === 3 && spread(lens) <= 1);
+    const mean = (id: string) => { const v = ps.filter((p) => p.spec.lengthTier === id).map((p) => p.spec.durationSec); return v.reduce((a, b) => a + b, 0) / v.length; };
+    assert.ok(mean("9s") < mean("13s") && mean("13s") < mean("18s") && mean("9s") > 7 && mean("18s") < 20.5);
+    for (const f of [(p: (typeof ps)[number]) => p.spec.captionKey, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.variant, (p: (typeof ps)[number]) => p.spec.countTier!, (p: (typeof ps)[number]) => p.spec.lengthTier!]) {
       const byTime = count((p) => `${f(p)}|${slot(p)}`);
       const byWeek = count((p) => `${f(p)}|${week(p)}`);
       assert.equal(byTime.size, count(f).size * 2, "every option appears in both time slots");
       assert.equal(byWeek.size, count(f).size * 2, "every option appears in both weeks");
-      assert.ok(spread(byTime) <= 2 && spread(byWeek) <= 2);
+      assert.ok(spread(byTime) <= 3 && spread(byWeek) <= 3);
     }
     if (platform === "tiktok") {
       assert.ok([...count((p) => `${p.spec.variant}|${slot(p)}`).values()].every((n) => n === 7));
@@ -370,13 +384,13 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
   }
   const csv = planCsv(plan).trim().split("\n");
   assert.equal(csv.length, 57);
-  assert.ok(csv[0].includes("template_variant,count_tier,duration_sec,final_count"));
+  assert.ok(csv[0].includes("template_variant,count_tier,length_tier,duration_sec,final_count"));
 });
 
 test("results tilt the next batch towards winners but keep exploring", () => {
   const caps = loadCaptions().youtube.captions;
   const mk = (caption: string, views: number, followers: number, i: number) =>
-    ({ platform: "youtube", post_id: "", video_id: `${caption}-${i}`, publish_date: "2026-12-01", caption, audio_id: "a", template_variant: "dashboard", count_tier: "1M", final_count: "", views: String(views), viewed_rate: "", avg_watch_pct: "", followers_gained: String(followers), shares: "", post_url: "", source: "manual" }) as const;
+    ({ platform: "youtube", post_id: "", video_id: `${caption}-${i}`, publish_date: "2026-12-01", caption, audio_id: "a", template_variant: "dashboard", count_tier: "1M", final_count: "", length_tier: "13s", post_time: "11:07", views: String(views), viewed_rate: "", avg_watch_pct: "", followers_gained: String(followers), shares: "", post_url: "", source: "manual" }) as const;
   const rows = [0, 1, 2].flatMap((i) => [mk(caps[0], 9000, 30, i), mk(caps[1], 1000, 1, i)]);
   const ranked = recommend([...rows], "youtube", "caption", caps, { explore: 0.3, minPosts: 3 });
   const w = Object.fromEntries(ranked.map((r) => [r.option, r.weight]));

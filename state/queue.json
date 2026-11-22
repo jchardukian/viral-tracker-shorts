@@ -36,7 +36,8 @@
           "at": "2026-11-22T00:36:43.751Z",
           "event": "published automatically: https://tiktok.com/@oh.my.trillion/video/7710787833107139854"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
       "key": "validation-youtube",
@@ -73,7 +74,8 @@
           "at": "2026-11-22T00:35:03.676Z",
           "event": "published automatically: https://www.youtube.com/watch?v=N0OGH4KB1kw"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
       "key": "5273bd35885deaab8446c498",
@@ -115,7 +117,8 @@
           "at": "2026-11-22T00:39:23.364Z",
           "event": "scheduled as 6b0239bb846b0ee9074bad5d"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "6bb6d0513a4db886a6c663f3",
@@ -157,7 +160,8 @@
           "at": "2026-11-22T00:39:24.074Z",
           "event": "scheduled as 6b0239bb0247969092120dec"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "722e44b5a901877430a87c4e",
@@ -199,7 +203,8 @@
           "at": "2026-11-22T00:39:24.701Z",
           "event": "scheduled as 6b0239bcd5eabfb8cc703731"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "c2aee23b8a8caefbf98edf10",
@@ -241,10 +246,11 @@
           "at": "2026-11-22T00:39:25.375Z",
           "event": "scheduled as 6b0239bd846b0ee9074badbc"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "65b43e20158365337f2087e4",
+      "key": "b9cc0c77671e02ce389ad87d",
       "videoId": "youtube-2026-11-24-a",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -256,7 +262,7 @@
       "countTier": "100K",
       "title": "One viral video changes everything #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-24T11:07:00-06:00",
+      "dueAt": "2026-11-24T07:13:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-24-a-40da6c8b384f.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -282,11 +288,16 @@
         {
           "at": "2026-11-22T00:39:26.095Z",
           "event": "scheduled as 6b0239bd0247969092120e4c"
+        },
+        {
+          "at": "2026-11-22T01:43:31.596Z",
+          "event": "moved from 2026-11-24T11:07:00-06:00 to 2026-11-24T07:13:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "05e67271d619b8ea1fcb7270",
+      "key": "b9ab5b53e81916aa8bcb3224",
       "videoId": "youtube-2026-11-24-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -298,7 +309,7 @@
       "countTier": "10K",
       "title": "POV: this finally happens to you #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-24T18:23:00-06:00",
+      "dueAt": "2026-11-24T15:26:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-24-b-cee7c0d620b3.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -324,11 +335,16 @@
         {
           "at": "2026-11-22T00:39:26.783Z",
           "event": "scheduled as 6b0239becc364169c117921e"
+        },
+        {
+          "at": "2026-11-22T01:43:31.854Z",
+          "event": "moved from 2026-11-24T18:23:00-06:00 to 2026-11-24T15:26:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "bfcb777062a6f6d4f9318a13",
+      "key": "9610d3984f9106ba253b3938",
       "videoId": "youtube-2026-11-25-a",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -340,7 +356,7 @@
       "countTier": "1M",
       "title": "POV: Your channel finally takes off #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-25T11:07:00-06:00",
+      "dueAt": "2026-11-25T09:41:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-25-a-c85656dde1f8.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -366,11 +382,16 @@
         {
           "at": "2026-11-22T00:39:27.486Z",
           "event": "scheduled as 6b0239bf0247969092120ec1"
+        },
+        {
+          "at": "2026-11-22T01:43:32.104Z",
+          "event": "moved from 2026-11-25T11:07:00-06:00 to 2026-11-25T09:41:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "1d6f3ed82502c7bf381f9407",
+      "key": "de6c9ba0f2f707bb45b7358c",
       "videoId": "youtube-2026-11-25-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -382,7 +403,7 @@
       "countTier": "100K",
       "title": "Imagine waking up to this #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-25T18:23:00-06:00",
+      "dueAt": "2026-11-25T21:52:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-25-b-76f2ad92a34c.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -408,8 +429,13 @@
         {
           "at": "2026-11-22T00:39:28.112Z",
           "event": "scheduled as 6b0239bfd5eabfb8cc70379b"
+        },
+        {
+          "at": "2026-11-22T01:43:32.342Z",
+          "event": "moved from 2026-11-25T18:23:00-06:00 to 2026-11-25T21:52:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "d8728cc2d29643c640a01d12",
@@ -451,7 +477,8 @@
           "at": "2026-11-22T00:39:28.811Z",
           "event": "scheduled as 6b0239c00247969092120f10"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
       "key": "c51d1ccd1ca48490dda6961c",
@@ -493,10 +520,11 @@
           "at": "2026-11-22T00:39:29.387Z",
           "event": "scheduled as 6b0239c1c72676f5e9f0e5de"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "6204ae96f7a239b1d04bbb31",
+      "key": "2ed96b13e3474a40ba8f58ba",
       "videoId": "youtube-2026-11-27-a",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -508,7 +536,7 @@
       "countTier": "1B",
       "title": "Use this song to go viral #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-27T11:07:00-06:00",
+      "dueAt": "2026-11-27T07:13:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-27-a-f763e6820b06.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -534,11 +562,16 @@
         {
           "at": "2026-11-22T00:39:30.242Z",
           "event": "scheduled as 6b0239c2846b0ee9074bae46"
+        },
+        {
+          "at": "2026-11-22T01:43:32.625Z",
+          "event": "moved from 2026-11-27T11:07:00-06:00 to 2026-11-27T07:13:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "32c4c8bc38e72feec01aa5c4",
+      "key": "fdfbc77030239ae87ed59116",
       "videoId": "youtube-2026-11-27-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -550,7 +583,7 @@
       "countTier": "1M",
       "title": "One viral video changes everything #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-27T18:23:00-06:00",
+      "dueAt": "2026-11-27T15:26:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-27-b-3957a18502b3.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -576,11 +609,16 @@
         {
           "at": "2026-11-22T00:39:30.835Z",
           "event": "scheduled as 6b0239c2cc364169c117931e"
+        },
+        {
+          "at": "2026-11-22T01:43:32.850Z",
+          "event": "moved from 2026-11-27T18:23:00-06:00 to 2026-11-27T15:26:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "17ce6cd37ad5fadfe55bb917",
+      "key": "fb84ce154dbf91bac0daee30",
       "videoId": "youtube-2026-11-28-a",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -592,7 +630,7 @@
       "countTier": "100K",
       "title": "POV: this finally happens to you #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-28T11:07:00-06:00",
+      "dueAt": "2026-11-28T09:41:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-28-a-7d2e72c94123.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -618,11 +656,16 @@
         {
           "at": "2026-11-22T00:39:31.482Z",
           "event": "scheduled as 6b0239c3d864a0110586f6f0"
+        },
+        {
+          "at": "2026-11-22T01:43:33.147Z",
+          "event": "moved from 2026-11-28T11:07:00-06:00 to 2026-11-28T09:41:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "29facf3c6861b1275a79d567",
+      "key": "31ebc1d3e3a3ffbb0217ee5e",
       "videoId": "youtube-2026-11-28-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -634,7 +677,7 @@
       "countTier": "300",
       "title": "Imagine waking up to this #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-28T18:23:00-06:00",
+      "dueAt": "2026-11-28T21:52:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-28-b-f17d6e548ce9.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -660,8 +703,13 @@
         {
           "at": "2026-11-22T00:39:32.192Z",
           "event": "scheduled as 6b0239c4cc364169c1179355"
+        },
+        {
+          "at": "2026-11-22T01:43:33.367Z",
+          "event": "moved from 2026-11-28T18:23:00-06:00 to 2026-11-28T21:52:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "f497105e1a4c05cf79f03b52",
@@ -703,10 +751,11 @@
           "at": "2026-11-22T00:39:32.794Z",
           "event": "scheduled as 6b0239c4d864a0110586f72e"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "04b4cf26212367f93515d3c5",
+      "key": "769da8bc43209da87e839e72",
       "videoId": "youtube-2026-11-29-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -718,7 +767,7 @@
       "countTier": "1B",
       "title": "POV: this finally happens to you #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-29T18:23:00-06:00",
+      "dueAt": "2026-11-29T21:52:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-29-b-9114e726ed75.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -744,11 +793,16 @@
         {
           "at": "2026-11-22T00:39:33.453Z",
           "event": "scheduled as 6b0239c5d5eabfb8cc703855"
+        },
+        {
+          "at": "2026-11-22T01:43:33.584Z",
+          "event": "moved from 2026-11-29T18:23:00-06:00 to 2026-11-29T21:52:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "d8fd9b64f36258f295da4b22",
+      "key": "47768623679fcc1424a57cc6",
       "videoId": "youtube-2026-11-30-a",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -760,7 +814,7 @@
       "countTier": "10K",
       "title": "One viral video changes everything #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-30T11:07:00-06:00",
+      "dueAt": "2026-11-30T09:41:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-30-a-176751d4b253.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -786,11 +840,16 @@
         {
           "at": "2026-11-22T00:39:34.025Z",
           "event": "scheduled as 6b0239c5d864a0110586f75e"
+        },
+        {
+          "at": "2026-11-22T01:43:33.976Z",
+          "event": "moved from 2026-11-30T11:07:00-06:00 to 2026-11-30T09:41:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "1bf3074d6c03ab53c8a90411",
+      "key": "d3582ebbd012bd1ced1d449c",
       "videoId": "youtube-2026-11-30-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -802,7 +861,7 @@
       "countTier": "100K",
       "title": "POV: Your channel finally takes off #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-11-30T18:23:00-06:00",
+      "dueAt": "2026-11-30T21:52:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-11-30-b-3af751c6bf30.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -828,11 +887,16 @@
         {
           "at": "2026-11-22T00:39:34.668Z",
           "event": "scheduled as 6b0239c6c72676f5e9f0e65c"
+        },
+        {
+          "at": "2026-11-22T01:43:34.209Z",
+          "event": "moved from 2026-11-30T18:23:00-06:00 to 2026-11-30T21:52:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "7768ed9eb0d72359f34abd6e",
+      "key": "c5ee064fc3b5ac56fae94e1a",
       "videoId": "youtube-2026-12-01-a",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -844,7 +908,7 @@
       "countTier": "1M",
       "title": "Use this song to go viral #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-12-01T11:07:00-06:00",
+      "dueAt": "2026-12-01T09:41:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-12-01-a-88103289694d.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -870,8 +934,13 @@
         {
           "at": "2026-11-22T00:39:35.271Z",
           "event": "scheduled as 6b0239c7d5eabfb8cc70388c"
+        },
+        {
+          "at": "2026-11-22T01:43:34.433Z",
+          "event": "moved from 2026-12-01T11:07:00-06:00 to 2026-12-01T09:41:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "b1b64d30a8aed744f8da6ecd",
@@ -913,10 +982,11 @@
           "at": "2026-11-22T00:39:35.856Z",
           "event": "scheduled as 6b0239c70247969092120fdb"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "e93baad89ea4ee6a43faf9b0",
+      "key": "307ab0c568b3ca25704cbf37",
       "videoId": "youtube-2026-12-02-a",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -928,7 +998,7 @@
       "countTier": "10K",
       "title": "POV: Your channel finally takes off #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-12-02T11:07:00-06:00",
+      "dueAt": "2026-12-02T07:13:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-12-02-a-5d317f3e715b.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -954,11 +1024,16 @@
         {
           "at": "2026-11-22T00:39:36.456Z",
           "event": "scheduled as 6b0239c8846b0ee9074baef7"
+        },
+        {
+          "at": "2026-11-22T01:43:34.669Z",
+          "event": "moved from 2026-12-02T11:07:00-06:00 to 2026-12-02T07:13:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "354177b36a51244740f43a53",
+      "key": "26b0bca2bdeb08c2dabaa638",
       "videoId": "youtube-2026-12-02-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -970,7 +1045,7 @@
       "countTier": "100K",
       "title": "POV: Your channel finally takes off #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-12-02T18:23:00-06:00",
+      "dueAt": "2026-12-02T15:26:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-12-02-b-b0b23338573f.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -996,11 +1071,16 @@
         {
           "at": "2026-11-22T00:39:37.016Z",
           "event": "scheduled as 6b0239c8846b0ee9074baf2e"
+        },
+        {
+          "at": "2026-11-22T01:43:34.898Z",
+          "event": "moved from 2026-12-02T18:23:00-06:00 to 2026-12-02T15:26:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "0c4a5bc289d385f583c968d0",
+      "key": "4e11ddcfe7eacf88ac925cec",
       "videoId": "youtube-2026-12-03-a",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -1012,7 +1092,7 @@
       "countTier": "300",
       "title": "POV: this finally happens to you #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-12-03T11:07:00-06:00",
+      "dueAt": "2026-12-03T07:13:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-12-03-a-7d3aa39c6430.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1038,8 +1118,13 @@
         {
           "at": "2026-11-22T00:39:37.601Z",
           "event": "scheduled as 6b0239c9d864a0110586f7cf"
+        },
+        {
+          "at": "2026-11-22T01:43:35.113Z",
+          "event": "moved from 2026-12-03T11:07:00-06:00 to 2026-12-03T07:13:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "83256e5841ea13e8e9721bf6",
@@ -1081,7 +1166,8 @@
           "at": "2026-11-22T00:39:38.158Z",
           "event": "scheduled as 6b0239cad864a0110586f800"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "0d682c249937c6ac0747739a",
@@ -1123,10 +1209,11 @@
           "at": "2026-11-22T00:39:38.714Z",
           "event": "scheduled as 6b0239cad864a0110586f829"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "37401529b0838bb746180d35",
+      "key": "40127cd1332b1e539b84d8d2",
       "videoId": "youtube-2026-12-04-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -1138,7 +1225,7 @@
       "countTier": "1B",
       "title": "One viral video changes everything #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-12-04T18:23:00-06:00",
+      "dueAt": "2026-12-04T21:52:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-12-04-b-47536664fab4.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1164,8 +1251,13 @@
         {
           "at": "2026-11-22T00:39:39.350Z",
           "event": "scheduled as 6b0239cb0247969092121054"
+        },
+        {
+          "at": "2026-11-22T01:43:35.384Z",
+          "event": "moved from 2026-12-04T18:23:00-06:00 to 2026-12-04T21:52:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "9b86e036df0756e2f1ae477d",
@@ -1207,10 +1299,11 @@
           "at": "2026-11-22T00:39:40.013Z",
           "event": "scheduled as 6b0239cb0247969092121086"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "cb394b853049fb9f1a0f32ce",
+      "key": "84194650d9f820c1ada7dbfa",
       "videoId": "youtube-2026-12-05-b",
       "batchId": "2026-11-22_14d",
       "platform": "youtube",
@@ -1222,7 +1315,7 @@
       "countTier": "300",
       "title": "Use this song to go viral #shorts",
       "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
-      "dueAt": "2026-12-05T18:23:00-06:00",
+      "dueAt": "2026-12-05T15:26:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/youtube-2026-12-05-b-8967cc3649c0.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1248,8 +1341,13 @@
         {
           "at": "2026-11-22T00:39:40.578Z",
           "event": "scheduled as 6b0239cc846b0ee9074bafd9"
+        },
+        {
+          "at": "2026-11-22T01:43:35.606Z",
+          "event": "moved from 2026-12-05T18:23:00-06:00 to 2026-12-05T15:26:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
       "key": "6c2fab4888caf9d97efc1f4c",
@@ -1291,7 +1389,8 @@
           "at": "2026-11-22T00:39:18.218Z",
           "event": "scheduled as 6b0239b6cc364169c1179034"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
       "key": "bab8520531b2409b09e49da4",
@@ -1333,10 +1432,11 @@
           "at": "2026-11-22T00:39:41.151Z",
           "event": "scheduled as 6b0239cdd864a0110586f897"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "0a2cdb7cfcc65107fb5bd715",
+      "key": "7ad6eb9e89c4dbb323b50247",
       "videoId": "tiktok-2026-11-23-a",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1348,7 +1448,7 @@
       "countTier": "10K",
       "title": "POV: your TikTok finally blows up #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-23T12:11:00-06:00",
+      "dueAt": "2026-11-23T10:19:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-23-a-2e2d6ae6e639.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1374,11 +1474,16 @@
         {
           "at": "2026-11-22T00:39:41.704Z",
           "event": "scheduled as 6b0239cd846b0ee9074bb00a"
+        },
+        {
+          "at": "2026-11-22T01:43:35.910Z",
+          "event": "moved from 2026-11-23T12:11:00-06:00 to 2026-11-23T10:19:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "7b2637c2f7d05262581c4e89",
+      "key": "d336165adde59b83636e0690",
       "videoId": "tiktok-2026-11-23-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1390,7 +1495,7 @@
       "countTier": "1M",
       "title": "POV: your TikTok finally blows up #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-23T19:37:00-06:00",
+      "dueAt": "2026-11-23T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-23-b-bcf08435f9e0.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1416,8 +1521,13 @@
         {
           "at": "2026-11-22T00:39:42.294Z",
           "event": "scheduled as 6b0239ced5eabfb8cc703974"
+        },
+        {
+          "at": "2026-11-22T01:43:36.112Z",
+          "event": "moved from 2026-11-23T19:37:00-06:00 to 2026-11-23T22:14:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
       "key": "c8cfbb0bb57bc7c1d4c86623",
@@ -1459,7 +1569,8 @@
           "at": "2026-11-22T00:39:42.918Z",
           "event": "scheduled as 6b0239cec72676f5e9f0e8c4"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "e9ca9adba08346b05acb4b9f",
@@ -1501,7 +1612,8 @@
           "at": "2026-11-22T00:39:43.504Z",
           "event": "scheduled as 6b0239cfcc364169c1179568"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "3fc56924be181a8c7baa51cb",
@@ -1543,7 +1655,8 @@
           "at": "2026-11-22T00:39:44.107Z",
           "event": "scheduled as 6b0239cf024796909212116e"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
       "key": "c64977e87e432e8cf3044bae",
@@ -1585,10 +1698,11 @@
           "at": "2026-11-22T00:39:44.655Z",
           "event": "scheduled as 6b0239d0d864a0110586fb38"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "9909fb5d99ce3c38d331f33f",
+      "key": "5d246766d1d5f3ab72d693b0",
       "videoId": "tiktok-2026-11-26-a",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1600,7 +1714,7 @@
       "countTier": "300",
       "title": "the follower growth everyone wants #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-26T12:11:00-06:00",
+      "dueAt": "2026-11-26T07:47:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-26-a-930191bfd25f.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1626,11 +1740,16 @@
         {
           "at": "2026-11-22T00:39:45.236Z",
           "event": "scheduled as 6b0239d1846b0ee9074bb23b"
+        },
+        {
+          "at": "2026-11-22T01:43:36.321Z",
+          "event": "moved from 2026-11-26T12:11:00-06:00 to 2026-11-26T07:47:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "d7f071a82bd91f1bacd9faaa",
+      "key": "5cdfc9e6c4c987ef8167c994",
       "videoId": "tiktok-2026-11-26-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1642,7 +1761,7 @@
       "countTier": "10K",
       "title": "imagine opening TikTok to this #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-26T19:37:00-06:00",
+      "dueAt": "2026-11-26T16:08:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-26-b-12b09362b048.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1668,11 +1787,16 @@
         {
           "at": "2026-11-22T00:39:45.867Z",
           "event": "scheduled as 6b0239d102479690921211d8"
+        },
+        {
+          "at": "2026-11-22T01:43:36.601Z",
+          "event": "moved from 2026-11-26T19:37:00-06:00 to 2026-11-26T16:08:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "655a94fb37a9526d208da994",
+      "key": "6d7054aeb1ef5a940d213b95",
       "videoId": "tiktok-2026-11-27-a",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1684,7 +1808,7 @@
       "countTier": "100K",
       "title": "imagine opening TikTok to this #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-27T12:11:00-06:00",
+      "dueAt": "2026-11-27T07:47:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-27-a-311be9da1137.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1710,11 +1834,16 @@
         {
           "at": "2026-11-22T00:39:46.500Z",
           "event": "scheduled as 6b0239d2cc364169c11795f3"
+        },
+        {
+          "at": "2026-11-22T01:43:36.816Z",
+          "event": "moved from 2026-11-27T12:11:00-06:00 to 2026-11-27T07:47:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "b5601999542f450de5bb2fcb",
+      "key": "40f74ba3cc09526b64ee7a6c",
       "videoId": "tiktok-2026-11-27-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1726,7 +1855,7 @@
       "countTier": "10K",
       "title": "use this sound to go viral #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-27T19:37:00-06:00",
+      "dueAt": "2026-11-27T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-27-b-48fbafb018c1.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1752,11 +1881,16 @@
         {
           "at": "2026-11-22T00:39:47.168Z",
           "event": "scheduled as 6b0239d3c72676f5e9f0e9b8"
+        },
+        {
+          "at": "2026-11-22T01:43:37.016Z",
+          "event": "moved from 2026-11-27T19:37:00-06:00 to 2026-11-27T22:14:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "ae82455a2faed8ab9b1ae4bd",
+      "key": "06415ba81381c94eaa63877c",
       "videoId": "tiktok-2026-11-28-a",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1768,7 +1902,7 @@
       "countTier": "300",
       "title": "POV: this finally happens to you #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-28T12:11:00-06:00",
+      "dueAt": "2026-11-28T10:19:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-28-a-e1129d91ce00.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1794,11 +1928,16 @@
         {
           "at": "2026-11-22T00:39:47.772Z",
           "event": "scheduled as 6b0239d30247969092121213"
+        },
+        {
+          "at": "2026-11-22T01:43:37.245Z",
+          "event": "moved from 2026-11-28T12:11:00-06:00 to 2026-11-28T10:19:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "0c4f2b457e60095334bd77fc",
+      "key": "cdf7bf964ee2b0e645060b79",
       "videoId": "tiktok-2026-11-28-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1810,7 +1949,7 @@
       "countTier": "1B",
       "title": "the follower growth everyone wants #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-28T19:37:00-06:00",
+      "dueAt": "2026-11-28T16:08:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-28-b-0a424a3820c0.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1836,8 +1975,13 @@
         {
           "at": "2026-11-22T00:39:48.460Z",
           "event": "scheduled as 6b0239d4024796909212123c"
+        },
+        {
+          "at": "2026-11-22T01:43:37.458Z",
+          "event": "moved from 2026-11-28T19:37:00-06:00 to 2026-11-28T16:08:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
       "key": "45866da2cae5dfa9f8302a04",
@@ -1879,10 +2023,11 @@
           "at": "2026-11-22T00:39:49.056Z",
           "event": "scheduled as 6b0239d4cc364169c1179639"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "553a1d2ca06d066cd10908d2",
+      "key": "23f2ff3ba9cb2dc834979328",
       "videoId": "tiktok-2026-11-29-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1894,7 +2039,7 @@
       "countTier": "300",
       "title": "the follower growth everyone wants #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-29T19:37:00-06:00",
+      "dueAt": "2026-11-29T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-29-b-b83d6e1b99fc.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -1920,8 +2065,13 @@
         {
           "at": "2026-11-22T00:39:49.607Z",
           "event": "scheduled as 6b0239d5c72676f5e9f0ea02"
+        },
+        {
+          "at": "2026-11-22T01:43:37.652Z",
+          "event": "moved from 2026-11-29T19:37:00-06:00 to 2026-11-29T22:14:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "92d921c7b4664da0c9f36268",
@@ -1963,10 +2113,11 @@
           "at": "2026-11-22T00:39:50.227Z",
           "event": "scheduled as 6b0239d6d864a0110586fbb5"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "05e6c13ef36174c3e3ea223d",
+      "key": "0ea15e397868bd6668684b74",
       "videoId": "tiktok-2026-11-30-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -1978,7 +2129,7 @@
       "countTier": "1M",
       "title": "use this sound to go viral #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-11-30T19:37:00-06:00",
+      "dueAt": "2026-11-30T16:08:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-30-b-0bd128fa58fa.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -2004,11 +2155,16 @@
         {
           "at": "2026-11-22T00:39:50.792Z",
           "event": "scheduled as 6b0239d602479690921212a8"
+        },
+        {
+          "at": "2026-11-22T01:43:37.882Z",
+          "event": "moved from 2026-11-30T19:37:00-06:00 to 2026-11-30T16:08:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "da0043f820212e64df4670a8",
+      "key": "6ca99b18bdfb419bd7279de3",
       "videoId": "tiktok-2026-12-01-a",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -2020,7 +2176,7 @@
       "countTier": "1M",
       "title": "the follower growth everyone wants #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-12-01T12:11:00-06:00",
+      "dueAt": "2026-12-01T10:19:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-01-a-8d0a40b90ad2.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -2046,11 +2202,16 @@
         {
           "at": "2026-11-22T00:39:51.400Z",
           "event": "scheduled as 6b0239d702479690921212f1"
+        },
+        {
+          "at": "2026-11-22T01:43:38.099Z",
+          "event": "moved from 2026-12-01T12:11:00-06:00 to 2026-12-01T10:19:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "e5e2aa45587de5ec2a687ebf",
+      "key": "c8a67863e30927d1e810ad80",
       "videoId": "tiktok-2026-12-01-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -2062,7 +2223,7 @@
       "countTier": "100K",
       "title": "POV: this finally happens to you #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-12-01T19:37:00-06:00",
+      "dueAt": "2026-12-01T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-01-b-d3cfcbb23c32.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -2088,11 +2249,16 @@
         {
           "at": "2026-11-22T00:39:51.998Z",
           "event": "scheduled as 6b0239d7cc364169c11796cd"
+        },
+        {
+          "at": "2026-11-22T01:43:38.308Z",
+          "event": "moved from 2026-12-01T19:37:00-06:00 to 2026-12-01T22:14:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "2b6ad7097775985c3f372088",
+      "key": "1a6d61220003b886d943fbe0",
       "videoId": "tiktok-2026-12-02-a",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -2104,7 +2270,7 @@
       "countTier": "1B",
       "title": "use this sound to go viral #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-12-02T12:11:00-06:00",
+      "dueAt": "2026-12-02T07:47:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-02-a-c0aadda4a812.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -2130,11 +2296,16 @@
         {
           "at": "2026-11-22T00:39:52.665Z",
           "event": "scheduled as 6b0239d8cc364169c11796f5"
+        },
+        {
+          "at": "2026-11-22T01:43:38.533Z",
+          "event": "moved from 2026-12-02T12:11:00-06:00 to 2026-12-02T07:47:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "18s"
     },
     {
-      "key": "7d37d1b09ff4df7ff9aece33",
+      "key": "7a1438b5e835a028b05b63e1",
       "videoId": "tiktok-2026-12-02-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -2146,7 +2317,7 @@
       "countTier": "1B",
       "title": "imagine opening TikTok to this #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-12-02T19:37:00-06:00",
+      "dueAt": "2026-12-02T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-02-b-d90527e88e29.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -2172,11 +2343,16 @@
         {
           "at": "2026-11-22T00:39:53.325Z",
           "event": "scheduled as 6b0239d9cc364169c117973b"
+        },
+        {
+          "at": "2026-11-22T01:43:38.741Z",
+          "event": "moved from 2026-12-02T19:37:00-06:00 to 2026-12-02T22:14:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "42d7f389699f974813b5b491",
+      "key": "f325213cc6a0c0a6a77944d0",
       "videoId": "tiktok-2026-12-03-a",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -2188,7 +2364,7 @@
       "countTier": "10K",
       "title": "POV: your TikTok finally blows up #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-12-03T12:11:00-06:00",
+      "dueAt": "2026-12-03T07:47:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-03-a-0371726a7bfe.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -2214,8 +2390,13 @@
         {
           "at": "2026-11-22T00:39:53.936Z",
           "event": "scheduled as 6b0239d9cc364169c117977c"
+        },
+        {
+          "at": "2026-11-22T01:43:38.959Z",
+          "event": "moved from 2026-12-03T12:11:00-06:00 to 2026-12-03T07:47:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "f445949990b3d03392aa935e",
@@ -2257,10 +2438,11 @@
           "at": "2026-11-22T00:39:54.477Z",
           "event": "scheduled as 6b0239dac72676f5e9f0eb8e"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "921c8827048154bba11ceed7",
+      "key": "611557578f95afb25364b54a",
       "videoId": "tiktok-2026-12-04-a",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -2272,7 +2454,7 @@
       "countTier": "100K",
       "title": "use this sound to go viral #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-12-04T12:11:00-06:00",
+      "dueAt": "2026-12-04T10:19:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-04-a-d0baefb8fb3f.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -2298,11 +2480,16 @@
         {
           "at": "2026-11-22T00:39:55.044Z",
           "event": "scheduled as 6b0239dad864a0110586fc8e"
+        },
+        {
+          "at": "2026-11-22T01:43:39.173Z",
+          "event": "moved from 2026-12-04T12:11:00-06:00 to 2026-12-04T10:19:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
-      "key": "8197e120e6839df7ca132a50",
+      "key": "b6ed05ff3605522b0e2e205b",
       "videoId": "tiktok-2026-12-04-b",
       "batchId": "2026-11-22_14d",
       "platform": "tiktok",
@@ -2314,7 +2501,7 @@
       "countTier": "300",
       "title": "POV: your TikTok finally blows up #fyp",
       "text": "growth time-lapse animation \u00b7 simulated numbers",
-      "dueAt": "2026-12-04T19:37:00-06:00",
+      "dueAt": "2026-12-04T16:08:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-04-b-7f6d6a9efeae.mp4",
       "status": "scheduled",
       "attempts": 1,
@@ -2340,8 +2527,13 @@
         {
           "at": "2026-11-22T00:39:55.615Z",
           "event": "scheduled as 6b0239dbd5eabfb8cc703ec7"
+        },
+        {
+          "at": "2026-11-22T01:43:39.393Z",
+          "event": "moved from 2026-12-04T19:37:00-06:00 to 2026-12-04T16:08:00-06:00"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "be18857f1a73329ad126ec88",
@@ -2383,7 +2575,8 @@
           "at": "2026-11-22T00:39:56.208Z",
           "event": "scheduled as 6b0239dcd5eabfb8cc703ef6"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     },
     {
       "key": "c02164deb52da2fecf5062b7",
@@ -2425,7 +2618,8 @@
           "at": "2026-11-22T00:39:56.785Z",
           "event": "scheduled as 6b0239dcc72676f5e9f0ebdf"
         }
-      ]
+      ],
+      "lengthTier": "13s"
     }
   ]
 }
