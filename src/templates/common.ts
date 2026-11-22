@@ -53,58 +53,69 @@ export function avatar(ctx: Ctx, cx: number, cy: number, r: number, spec: VideoS
 }
 
 const THUMB_STAGES = 10;
-const thumbCache = new WeakMap<VideoSpec, Canvas[]>();
+type Render = (ctx: Ctx, spec: VideoSpec, t: number) => void;
+const thumbCache = new WeakMap<VideoSpec, Map<number, Canvas>>();
+let scratch: Canvas | null = null;
 
 /**
- * Thumbnails for the "previous posts" shown inside a video: small renders of
- * this same template at earlier points of the time-lapse, so the post list
- * looks like the channel's own uploads (as in the reference) instead of blank
- * tiles. Built once per video and cached.
+ * Small render of this same template as it looks at snapshot `snap`. Used for
+ * the "previous posts" inside a video, so they look like the channel's own
+ * uploads (as in the reference) instead of blank tiles. Cached per video.
  */
-function thumbs(spec: VideoSpec, render: (ctx: Ctx, spec: VideoSpec, t: number) => void): Canvas[] {
-  let list = thumbCache.get(spec);
-  if (!list) {
-    const full = createCanvas(spec.width, spec.height);
-    const fctx = full.getContext("2d");
-    const inner = { ...spec, noThumbs: true };
-    list = [];
-    for (let k = 0; k < THUMB_STAGES; k++) {
-      const snap = Math.round(((k + 1) / (THUMB_STAGES + 1)) * (spec.snapshots.length - 1));
-      fctx.setTransform(1, 0, 0, 1, 0, 0);
-      render(fctx, inner, (spec.cuts[snap] + 0.5) / spec.fps);
-      const small = createCanvas(360, 640);
-      small.getContext("2d").drawImage(full, 0, 0, 360, 640);
-      list.push(small);
-    }
-    thumbCache.set(spec, list);
+function thumbAt(spec: VideoSpec, render: Render, snap: number): Canvas {
+  let cache = thumbCache.get(spec);
+  if (!cache) thumbCache.set(spec, (cache = new Map()));
+  let small = cache.get(snap);
+  if (!small) {
+    scratch ??= createCanvas(spec.width, spec.height);
+    const fctx = scratch.getContext("2d");
+    fctx.setTransform(1, 0, 0, 1, 0, 0);
+    fctx.globalAlpha = 1;
+    render(fctx, { ...spec, noThumbs: true }, (spec.cuts[snap] + 0.5) / spec.fps);
+    small = createCanvas(360, 640);
+    small.getContext("2d").drawImage(scratch, 0, 0, 360, 640);
+    cache.set(snap, small);
   }
-  return list;
+  return small;
 }
 
-/**
- * Draw post thumbnail number `age` (0 = most recent) for the snapshot on
- * screen: older posts show earlier stages of the growth. Cover-cropped into
- * the rounded rect; plain dark tile while rendering thumbnails themselves.
- */
-export function postThumb(ctx: Ctx, spec: VideoSpec, render: (ctx: Ctx, spec: VideoSpec, t: number) => void, snapIndex: number, age: number, x: number, y: number, w: number, h: number, radius: number) {
+function drawThumb(ctx: Ctx, img: Canvas | null, x: number, y: number, w: number, h: number, radius: number) {
   ctx.save();
   rrect(ctx, x, y, w, h, radius);
   ctx.clip();
   ctx.fillStyle = "#1b1b1b";
   ctx.fillRect(x, y, w, h);
-  if (!spec.noThumbs) {
-    const list = thumbs(spec, render);
-    const stage = Math.floor((snapIndex / Math.max(1, spec.snapshots.length - 1)) * THUMB_STAGES) - 1 - age;
-    const img = list[((stage % THUMB_STAGES) + THUMB_STAGES) % THUMB_STAGES];
-    if (stage >= 0 || snapIndex > 0) {
-      const scale = Math.max(w / img.width, h / img.height);
-      const sw = w / scale;
-      const sh = h / scale;
-      // keep the top of the frame (name + count) in view
-      ctx.drawImage(stage >= 0 ? img : list[0], (img.width - sw) / 2, Math.min(img.height - sh, img.height * 0.08), sw, sh, x, y, w, h);
-    }
+  if (img) {
+    const scale = Math.max(w / img.width, h / img.height);
+    const sw = w / scale;
+    const sh = h / scale;
+    // keep the top of the frame (name + count) in view
+    ctx.drawImage(img, (img.width - sw) / 2, Math.min(img.height - sh, img.height * 0.08), sw, sh, x, y, w, h);
   }
   ctx.restore();
+}
+
+/**
+ * Thumbnail for post number `age` (0 = most recent) in a list that refreshes
+ * with every cut: older posts show earlier stages of the growth.
+ */
+export function postThumb(ctx: Ctx, spec: VideoSpec, render: Render, snapIndex: number, age: number, x: number, y: number, w: number, h: number, radius: number) {
+  if (spec.noThumbs || snapIndex === 0) return drawThumb(ctx, null, x, y, w, h, radius);
+  const last = spec.snapshots.length - 1;
+  const stage = Math.max(0, Math.floor((snapIndex / last) * THUMB_STAGES) - 1 - age);
+  drawThumb(ctx, thumbAt(spec, render, Math.round(((stage + 1) / (THUMB_STAGES + 1)) * last)), x, y, w, h, radius);
+}
+
+/** Thumbnail of the video exactly as it looks at snapshot `snap`; does not change during the video. */
+export function fixedThumb(ctx: Ctx, spec: VideoSpec, render: Render, snap: number, x: number, y: number, w: number, h: number, radius: number) {
+  drawThumb(ctx, spec.noThumbs ? null : thumbAt(spec, render, snap), x, y, w, h, radius);
+}
+
+/** First snapshot whose count has reached `fraction` of the video's final count. */
+export function snapshotAtShare(spec: VideoSpec, fraction: number): number {
+  const target = spec.endCount * fraction;
+  const i = spec.snapshots.findIndex((s) => s.count >= target && s.count > 0);
+  return i < 0 ? spec.snapshots.length - 1 : i;
 }
 
 export function text(ctx: Ctx, s: string, x: number, y: number, weight: number, size: number, color: string, align: "left" | "center" | "right" = "left") {

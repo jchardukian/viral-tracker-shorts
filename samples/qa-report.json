@@ -36,7 +36,7 @@
     "fps": 30,
     "audio": "aac -10.9 dB",
     "sec": 18.5,
-    "MB": 1.75,
+    "MB": 1.33,
     "result": "pass"
   },
   {
@@ -46,7 +46,7 @@
     "fps": 30,
     "audio": "aac -13.6 dB",
     "sec": 15.47,
-    "MB": 1.26,
+    "MB": 0.96,
     "result": "pass"
   },
   {
@@ -56,7 +56,7 @@
     "fps": 30,
     "audio": "aac -12.1 dB",
     "sec": 11.63,
-    "MB": 1.15,
+    "MB": 0.86,
     "result": "pass"
   },
   {

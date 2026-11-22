@@ -1,12 +1,14 @@
 import { type Ctx, fitWrapped, font } from "../engine/draw.ts";
 import { formatCount, shortCount } from "../engine/util.ts";
-import { avatar, chevron, disclosurePill, glyph, postThumb, rrect, statusBar, text } from "./common.ts";
+import { avatar, chevron, disclosurePill, fixedThumb, glyph, rrect, snapshotAtShare, statusBar, text } from "./common.ts";
 import { frameOf, snapshotIndex, type Template, type VideoSpec } from "./types.ts";
 
 // Simplified TikTok variant: a profile screen where the name and the follower
 // count carry the whole video. Same hard-cut time-lapse, far fewer elements.
 
 const DIM = "#8a8a8a";
+/** follower count of each past post as a share of the video's final count */
+const PAST_SHARES = [0.93, 0.62, 0.34, 0.12, 0.03, 0.003];
 
 const layout = {
   name: { x: 190, y: 205, w: 700, h: 80 },
@@ -15,8 +17,7 @@ const layout = {
 };
 
 function render(ctx: Ctx, spec: VideoSpec, t: number) {
-  const snap = snapshotIndex(spec, frameOf(spec, t));
-  const s = spec.snapshots[snap];
+  const s = spec.snapshots[snapshotIndex(spec, frameOf(spec, t))];
   ctx.fillStyle = "#000";
   ctx.fillRect(0, 0, spec.width, spec.height);
   statusBar(ctx, s.clock);
@@ -50,12 +51,13 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   chevron(ctx, 769, 998, "down", "#fff", 13);
   disclosurePill(ctx, spec, 540 + 118, 1104);
 
-  // posts grid
-  const tiles = [s.latest, ...s.older, s.older[1], s.latest, s.older[0]];
-  tiles.forEach((c, k) => {
+  // posts grid: six past uploads, newest top-left, oldest bottom-right.
+  // They are finished posts, so they stay fixed while the big number runs.
+  PAST_SHARES.forEach((share, k) => {
+    const past = snapshotAtShare(spec, share);
     const x = 28 + (k % 3) * 344;
     const y = 1140 + Math.floor(k / 3) * 392;
-    postThumb(ctx, spec, render, snap, k, x, y, 336, 384, 6);
+    fixedThumb(ctx, spec, render, past, x, y, 336, 384, 6);
     // darken the foot of the tile so the view count stays readable
     const g = ctx.createLinearGradient(0, y + 290, 0, y + 384);
     g.addColorStop(0, "rgba(0,0,0,0)");
@@ -63,7 +65,7 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
     ctx.fillStyle = g;
     ctx.fillRect(x, y + 290, 336, 94);
     glyph(ctx, "views", x + 18, y + 362, 22, "#fff");
-    text(ctx, shortCount(Math.round(c.views * (k > 2 ? 0.6 : 1))), x + 50, y + 362, 600, 26, "#fff");
+    text(ctx, shortCount(spec.snapshots[past].latest.views), x + 50, y + 362, 600, 26, "#fff");
   });
 
   // static caption: label-style text blocks
