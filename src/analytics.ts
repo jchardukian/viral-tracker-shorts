@@ -157,13 +157,25 @@ export function importMetrics(rows: Row[], incoming: Record<string, string>[], s
   return { rows, updated, unmatched };
 }
 
-/** Fill what Buffer reports for a post. Viewed/swiped rate and watch % are not in Buffer's metrics. */
-export function applyBufferMetrics(row: Row, post: RemotePost): boolean {
+/**
+ * Fill what Buffer reports for a post. Viewed/swiped rate and watch % are not in Buffer's metrics.
+ *  - only posts Buffer has actually sent count; a post still waiting has no results
+ *  - counts only ever go up, so a number already recorded (e.g. typed in from
+ *    the platform's own dashboard) is never replaced by a smaller one
+ *  - Buffer's metrics refresh about daily, so a zero in the first 48 hours is
+ *    treated as "not reported yet", not as a result
+ */
+export function applyBufferMetrics(row: Row, post: RemotePost, now = new Date()): boolean {
+  if (post.status !== "sent") return false;
+  const fresh = !post.sentAt || now.getTime() - Date.parse(post.sentAt) < 48 * 3600 * 1000;
   const get = (t: string) => post.metrics.find((m) => m.type === t)?.value;
   let changed = false;
   const set = (c: Column, v: number | null | undefined) => {
     if (v === null || v === undefined) return;
-    if (row[c] !== String(v)) (row[c] = String(v)), (changed = true);
+    if (v === 0 && fresh) return;
+    if (row[c] !== "" && Number(row[c]) >= v) return;
+    row[c] = String(v);
+    changed = true;
   };
   set("views", get("views"));
   set("shares", get("shares"));

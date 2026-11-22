@@ -538,6 +538,13 @@ test("analytics: export from queue, import metrics, per-1k-view comparison", () 
 
   const row = rows.find((r) => r.video_id === "v2")!;
   row.source = "";
+  // a post Buffer has not sent yet has no results, whatever numbers come back
+  assert.equal(applyBufferMetrics({ ...row }, { id: "p", status: "scheduled", sentAt: null, externalLink: null, error: null, metrics: [{ type: "views", name: "Views", value: 0, unit: null }] }), false);
+  // an early zero is "not reported yet", and a recorded number is never lowered
+  const kept = { ...row, views: "800" };
+  assert.equal(applyBufferMetrics(kept, { id: "p", status: "sent", sentAt: new Date().toISOString(), externalLink: null, error: null, metrics: [{ type: "views", name: "Views", value: 0, unit: null }] }), false);
+  assert.equal(applyBufferMetrics(kept, { id: "p", status: "sent", sentAt: "2020-01-01T00:00:00Z", externalLink: null, error: null, metrics: [{ type: "views", name: "Views", value: 120, unit: null }] }), false);
+  assert.equal(kept.views, "800");
   assert.ok(applyBufferMetrics(row, { id: "p", status: "sent", sentAt: null, externalLink: "https://x/2", error: null, metrics: [{ type: "views", name: "Views", value: 5000, unit: null }, { type: "shares", name: "Shares", value: 3, unit: null }] }));
   assert.deepEqual([row.views, row.shares, row.post_url, row.source], ["5000", "3", "https://x/2", "buffer"]);
 });
