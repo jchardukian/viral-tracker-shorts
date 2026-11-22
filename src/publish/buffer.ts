@@ -41,7 +41,8 @@ export function buildCreatePostInput(item: QueueItem, cfg: BufferConfig) {
   const url = item.mediaUrl;
   return {
     channelId,
-    text: item.text,
+    // TikTok has no separate title for videos: the caption carries the title line and hashtags
+    text: item.platform === "tiktok" ? `${item.title} · ${item.text}` : item.text,
     schedulingType: "automatic",
     mode: "customScheduled",
     dueAt: new Date(item.dueAt).toISOString(),
@@ -50,7 +51,7 @@ export function buildCreatePostInput(item: QueueItem, cfg: BufferConfig) {
     metadata:
       item.platform === "youtube"
         ? { youtube: { title: item.title.slice(0, 100), categoryId: cfg.youtubeCategoryId, madeForKids: false } }
-        : { tiktok: { title: item.title } },
+        : { tiktok: { isAiGenerated: false } },
   };
 }
 

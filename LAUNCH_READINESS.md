@@ -2,15 +2,41 @@
 
 Status on 2026-11-21. Nothing has been scheduled or published.
 
-## Verdict
+## Status: live
 
-| Area | Ready? | Notes |
+Updated 2026-11-21 (evening, US Central).
+
+| Area | State |
+| --- | --- |
+| Validation posts | **Both published automatically** at the scheduled time |
+| R2 media hosting | **Working**; Buffer fetched the hosted files |
+| Buffer publishing through this repo's code | **Working live**; all 56 batch posts scheduled with it |
+| 14-day batch | **Scheduled**: 28 YouTube + 28 TikTok, 2026-11-22 to 2026-12-05 |
+| Weekly review + top-up | **Scheduled** every Sunday 4:47 PM Central (`npm run autopilot`) |
+
+### Validation results
+
+| | YouTube | TikTok |
 | --- | --- | --- |
-| Videos (56) | **Yes** | rendered, 112/112 technical checks pass (56 + silent twins), all with one of six original music tracks embedded |
-| Experiment design | **Yes** | fixed in this revision, see below |
-| R2 media hosting | **Yes** | verified live; both validation videos already hosted and publicly retrievable |
-| Buffer publishing | **Not yet** | channels connected and configured; needs the API key (or the connector route) and approval; never run live |
-| TikTok automatic publishing | **Supported** | by Buffer's docs and schema; unproven for this project until the validation post |
+| Scheduled for | 2026-11-21 18:35 CT | 2026-11-21 18:35 CT |
+| Published | 18:35:03 CT, automatically | 18:36:43 CT, automatically |
+| Link | https://www.youtube.com/watch?v=N0OGH4KB1kw | https://tiktok.com/@oh.my.trillion/video/7710787833107139854 |
+| Buffer fetched the R2 file | yes | yes |
+| Classified by Buffer as | Short | video post |
+| Audio survived the upload | to be confirmed by the owner in the app | to be confirmed by the owner in the app |
+
+The two validation posts went through the Buffer connector; the 56 batch posts
+went through `src/publish/buffer.ts` with the API key.
+
+### Standing decisions
+
+- Fully automatic: new batches are scheduled without manual approval (`autoPublish` in `config/experiment.json`). Owner's decision, 2026-11-21.
+- Weekly review every Sunday: record results, shift the next batch towards what worked, add at most one similar track and one similar caption when there is a clear winner.
+- Two paid Buffer channel slots were added for these accounts.
+
+### Still manual
+
+- Stayed-vs-swiped rate and average percentage viewed are not available through Buffer. The owner sends screenshots from YouTube Studio / TikTok Studio; they are imported into `data/analytics/posts.csv`.
 
 ## Completed checks
 
@@ -38,44 +64,14 @@ Status on 2026-11-21. Nothing has been scheduled or published.
 - No sound can be attached through Buffer on either platform.
 - Buffer's help page links high-volume posting through the API or automation tools with more zero-view posts on TikTok. Worth watching in the first days.
 
-## Owner-only actions
-
-1. Create the Road to Viral YouTube channel and TikTok account.
-2. In Buffer, raise the channel count from 9 to 11 and connect both new accounts.
-3. Create a Buffer API key (publish.buffer.com/settings/api) and provide it as `BUFFER_API_KEY`.
-4. Approve the two validation posts.
-5. After validation: confirm the experiment start date (the plan's 2026-11-30 is a placeholder) and approve the batch.
-
-The two channel ids can be read from Buffer once the channels are connected (`npm run queue -- preflight --channels` lists them) and go in `config/channels.json` as `bufferChannelId`.
-
-## Commands for the validation posts
+## Useful commands
 
 ```bash
-# environment (never committed)
-export BUFFER_API_KEY=…
-export CLOUDFLARE_ACCOUNT_ID=… CLOUDFLARE_API_TOKEN=…
-export R2_BUCKET=viral-tracker-shorts-media
-export MEDIA_BASE_URL=https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev
-
-npm run queue -- validation --in 20          # one post per platform, due in 20 minutes
-npm run queue -- approve --batch validation  # the explicit approval
-npm run media -- upload                      # host + verify (already hosted: no-op)
-npm run queue -- preflight --channels        # must end with READY
-npm run queue -- publish --live --id validation-youtube
-npm run queue -- publish --live --id validation-tiktok
-npm run queue -- sync                        # after the due time: sent? link? error?
+npm run queue -- list                 # every post and its state
+npm run queue -- sync                 # what happened to each scheduled post
+npm run autopilot                     # the weekly job, on demand
+npm run analytics -- import <csv>     # add numbers from the platform dashboards
+npm run analytics -- report           # compare captions, sounds, variants, count sizes
 ```
 
-`preflight` is read-only and lists every check still blocking. Today it reports five: approval, media recorded on the queue items, two channel ids, API key.
-
-What the validation must answer: does Buffer accept the R2 URL, does audio survive on each platform, and does each post publish automatically.
-
-## Commands for the experiment (after validation succeeds)
-
-```bash
-npm run batch -- --start <date> --days 14            # only if the start date changes
-npm run queue -- approve --batch <date>_14d
-npm run media -- upload
-npm run queue -- preflight --batch <date>_14d
-npm run queue -- publish --live
-```
+To pause automatic scheduling, set `autoPublish` to `false` in `config/experiment.json`.
