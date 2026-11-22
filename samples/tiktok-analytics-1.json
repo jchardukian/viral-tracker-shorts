@@ -2,10 +2,11 @@
   "id": "tiktok-analytics-1",
   "platform": "tiktok",
   "variant": "analytics",
+  "countTier": "300",
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-1.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-1.png",
-  "sha256": "c69efa2c49161e99bf7379d89a1e1adb4fd39c052da542da9611f6975f434eac",
+  "sha256": "e0185561a689c0538c7d81337b71b58dad4ce541e70e75c7a1c5da665ce4f82a",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -14,7 +15,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 18.5,
-    "sizeBytes": 2088580,
+    "sizeBytes": 1150894,
     "meanVolumeDb": -10.9
   },
   "audio": {
@@ -31,7 +32,7 @@
   "dueAt": null,
   "counter": {
     "start": 0,
-    "end": 48350
+    "end": 312
   },
   "caption": "POV: Your TikTok finally blows up",
   "cuts": 220,

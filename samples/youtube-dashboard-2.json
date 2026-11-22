@@ -2,10 +2,11 @@
   "id": "youtube-dashboard-2",
   "platform": "youtube",
   "variant": "dashboard",
+  "countTier": "1M",
   "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-2.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-2.png",
-  "sha256": "87b4a10e16a6289740000528fe6e17bcced0bca23818370c0303945e0278bfcd",
+  "sha256": "05d5417fdd713508409bae240c90c0cc9fc0806c3e9d7175ecd787d67b54708e",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -14,7 +15,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 15.466667,
-    "sizeBytes": 1986434,
+    "sizeBytes": 927867,
     "meanVolumeDb": -13.6
   },
   "audio": {
@@ -31,7 +32,7 @@
   "dueAt": null,
   "counter": {
     "start": 0,
-    "end": 43871
+    "end": 1284930
   },
   "caption": "Imagine waking up to this",
   "cuts": 171,

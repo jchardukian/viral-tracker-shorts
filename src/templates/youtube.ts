@@ -1,6 +1,6 @@
 import { type Ctx, wrap } from "../engine/draw.ts";
 import { formatCount, shortCount, shortHours } from "../engine/util.ts";
-import { avatar, chevron, disclosurePill, glyph, outlinedCaption, postThumb, rrect, statusBar, text, trendIcon } from "./common.ts";
+import { avatar, chevron, disclosurePill, fitSize, fixedThumb, glyph, outlinedCaption, PAST_SHARES, rrect, snapshotAtShare, statusBar, text, trendIcon } from "./common.ts";
 import { type ContentCard, frameOf, type Snapshot, snapshotIndex, type Template, type VideoSpec } from "./types.ts";
 
 // A creator-dashboard screen in the style of the reference recording:
@@ -20,9 +20,9 @@ const layout = {
   caption: { x: 100, y: 940, w: 800, h: 230 },
 };
 
-function contentHead(ctx: Ctx, spec: VideoSpec, snap: number, age: number, c: ContentCard, y: number, open: boolean | null) {
+function contentHead(ctx: Ctx, spec: VideoSpec, age: number, c: ContentCard, y: number, open: boolean | null) {
   // thumbnail: a small render of an earlier upload, like the reference's own posts
-  postThumb(ctx, spec, render, snap, age, L + 30, y + 26, 76, 116, 8);
+  fixedThumb(ctx, spec, render, snapshotAtShare(spec, PAST_SHARES[age]), L + 30, y + 26, 76, 116, 8);
   text(ctx, c.title, L + 150, y + 68, 500, 30, "#fff");
   text(ctx, c.age, L + 150, y + 112, 400, 27, DIM);
   const sy = y + 226;
@@ -42,27 +42,28 @@ function row(ctx: Ctx, y: number, label: string, value: string, trend: number | 
   if (link) chevron(ctx, R - 52, y - 10, "right");
 }
 
-function latest(ctx: Ctx, spec: VideoSpec, snap: number, s: Snapshot) {
+/** Past uploads are finished posts: drawn from the final snapshot, they do not change during the video. */
+function latest(ctx: Ctx, spec: VideoSpec, s: Snapshot) {
   const y = 965;
   const c = s.latest;
   if (!c.expanded) {
     rrect(ctx, L, y, W, 270, 14);
     ctx.fillStyle = CARD;
     ctx.fill();
-    contentHead(ctx, spec, snap, 0, c, y, false);
+    contentHead(ctx, spec, 0, c, y, false);
     s.older.forEach((o, i) => {
       const oy = y + 300 + i * 300;
       rrect(ctx, L, oy, W, 270, 14);
       ctx.fillStyle = CARD;
       ctx.fill();
-      contentHead(ctx, spec, snap, i + 1, o, oy, false);
+      contentHead(ctx, spec, i + 1, o, oy, false);
     });
     return;
   }
   rrect(ctx, L, y, W, 900, 14);
   ctx.fillStyle = CARD;
   ctx.fill();
-  contentHead(ctx, spec, snap, 0, c, y, true);
+  contentHead(ctx, spec, 0, c, y, true);
   let ry = y + 300;
   if (c.note) {
     rrect(ctx, L + 28, ry - 20, W - 56, 124, 12);
@@ -104,8 +105,7 @@ function tabBar(ctx: Ctx) {
 }
 
 function render(ctx: Ctx, spec: VideoSpec, t: number) {
-  const snap = snapshotIndex(spec, frameOf(spec, t));
-  const s = spec.snapshots[snap];
+  const s = spec.snapshots[snapshotIndex(spec, frameOf(spec, t))];
   ctx.fillStyle = BG;
   ctx.fillRect(0, 0, spec.width, spec.height);
   statusBar(ctx, s.clock);
@@ -137,7 +137,7 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   // channel + total subscribers
   avatar(ctx, L + 92, 400, 92, spec);
   text(ctx, spec.profile.name, L + 226, 352, 600, 40, "#fff");
-  text(ctx, formatCount(s.count), L + 226, 426, 700, 58, "#fff");
+  text(ctx, formatCount(s.count), L + 226, 426, 700, fitSize(ctx, formatCount(spec.endCount), 700, 58, R - L - 240), "#fff");
   text(ctx, "Total subscribers", L + 226, 480, 400, 30, DIM);
   disclosurePill(ctx, spec, R, 480);
 
@@ -148,7 +148,7 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   metric(ctx, L + (W + 24) / 2, "Watch time (hours)", shortHours(s.watch28), s.up);
 
   text(ctx, "Latest published content", L, 928, 700, 42, "#fff");
-  latest(ctx, spec, snap, s);
+  latest(ctx, spec, spec.snapshots[spec.snapshots.length - 1]);
   tabBar(ctx);
 
   // static caption over the content card, exactly where the reference keeps it

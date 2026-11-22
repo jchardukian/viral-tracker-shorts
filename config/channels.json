@@ -1,6 +1,28 @@
 {
   "disclosure": "simulated numbers",
   "publishSilent": false,
+  "countTiers": [
+    {
+      "id": "300",
+      "base": 230
+    },
+    {
+      "id": "10K",
+      "base": 9000
+    },
+    {
+      "id": "100K",
+      "base": 85000
+    },
+    {
+      "id": "1M",
+      "base": 1020000
+    },
+    {
+      "id": "1B",
+      "base": 1010000000
+    }
+  ],
   "youtube": {
     "name": "Oh My Trillion",
     "handle": "@ohmytrillion",

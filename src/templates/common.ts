@@ -52,7 +52,6 @@ export function avatar(ctx: Ctx, cx: number, cy: number, r: number, spec: VideoS
   ctx.textBaseline = "alphabetic";
 }
 
-const THUMB_STAGES = 10;
 type Render = (ctx: Ctx, spec: VideoSpec, t: number) => void;
 const thumbCache = new WeakMap<VideoSpec, Map<number, Canvas>>();
 let scratch: Canvas | null = null;
@@ -95,17 +94,6 @@ function drawThumb(ctx: Ctx, img: Canvas | null, x: number, y: number, w: number
   ctx.restore();
 }
 
-/**
- * Thumbnail for post number `age` (0 = most recent) in a list that refreshes
- * with every cut: older posts show earlier stages of the growth.
- */
-export function postThumb(ctx: Ctx, spec: VideoSpec, render: Render, snapIndex: number, age: number, x: number, y: number, w: number, h: number, radius: number) {
-  if (spec.noThumbs || snapIndex === 0) return drawThumb(ctx, null, x, y, w, h, radius);
-  const last = spec.snapshots.length - 1;
-  const stage = Math.max(0, Math.floor((snapIndex / last) * THUMB_STAGES) - 1 - age);
-  drawThumb(ctx, thumbAt(spec, render, Math.round(((stage + 1) / (THUMB_STAGES + 1)) * last)), x, y, w, h, radius);
-}
-
 /** Thumbnail of the video exactly as it looks at snapshot `snap`; does not change during the video. */
 export function fixedThumb(ctx: Ctx, spec: VideoSpec, render: Render, snap: number, x: number, y: number, w: number, h: number, radius: number) {
   drawThumb(ctx, spec.noThumbs ? null : thumbAt(spec, render, snap), x, y, w, h, radius);
@@ -117,6 +105,19 @@ export function snapshotAtShare(spec: VideoSpec, fraction: number): number {
   const i = spec.snapshots.findIndex((s) => s.count >= target && s.count > 0);
   return i < 0 ? spec.snapshots.length - 1 : i;
 }
+
+/** Largest size (<= max) at which `s` fits in maxW; keeps very long counts on one line. */
+export function fitSize(ctx: Ctx, s: string, weight: number, max: number, maxW: number): number {
+  let size = max;
+  for (; size > 24; size -= 2) {
+    ctx.font = font(weight, size);
+    if (ctx.measureText(s).width <= maxW) break;
+  }
+  return size;
+}
+
+/** Follower/subscriber share of each past post shown in a video, newest first. */
+export const PAST_SHARES = [0.93, 0.62, 0.34, 0.12, 0.03, 0.003];
 
 export function text(ctx: Ctx, s: string, x: number, y: number, weight: number, size: number, color: string, align: "left" | "center" | "right" = "left") {
   ctx.font = font(weight, size);

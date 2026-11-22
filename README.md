@@ -135,14 +135,18 @@ and 28 TikToks, two per day per platform, 2026-11-30 to 2026-12-13.
 - **Captions:** five per platform, 5–6 posts each.
 - **Sounds:** six tracks per platform, 4–5 posts each.
 - **TikTok variant:** `analytics` and `profile`, 14 posts each.
+- **Final count:** five sizes (`countTiers` in `config/channels.json`): about
+  300, 10K, 100K, 1M and 1B, 5–6 posts each. Every video has its own growth
+  curve and ends on its own non-round number.
 - **Arrangement:** a seeded search orders the batch so no two factors move
   together. Every caption, sound and variant appears in both time slots and
   both weeks, captions and sounds are mixed rather than paired, and the same
   option is not posted back-to-back. Tests enforce this.
-- **Counts:** every video is the full time-lapse up to its own date, so the
-  final number rises each day.
+- **Past posts:** the earlier uploads shown inside a video are fixed for the
+  whole video, newest first with counts stepping down to the oldest; only the
+  headline numbers run.
 
-With six sounds and five captions, each option gets only 4–6 posts. That is
+With six sounds, five captions and five count sizes, each option gets only 4–6 posts. That is
 enough to spot a clear winner or loser, not to rank close ones.
 
 The start date is a placeholder. To move it, re-run `batch` with a new

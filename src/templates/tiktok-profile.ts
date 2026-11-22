@@ -1,14 +1,12 @@
 import { type Ctx, fitWrapped, font } from "../engine/draw.ts";
 import { formatCount, shortCount } from "../engine/util.ts";
-import { avatar, chevron, disclosurePill, fixedThumb, glyph, rrect, snapshotAtShare, statusBar, text } from "./common.ts";
+import { avatar, chevron, disclosurePill, fitSize, fixedThumb, glyph, PAST_SHARES, rrect, snapshotAtShare, statusBar, text } from "./common.ts";
 import { frameOf, snapshotIndex, type Template, type VideoSpec } from "./types.ts";
 
 // Simplified TikTok variant: a profile screen where the name and the follower
 // count carry the whole video. Same hard-cut time-lapse, far fewer elements.
 
 const DIM = "#8a8a8a";
-/** follower count of each past post as a share of the video's final count */
-const PAST_SHARES = [0.93, 0.62, 0.34, 0.12, 0.03, 0.003];
 
 const layout = {
   name: { x: 190, y: 205, w: 700, h: 80 },
@@ -36,7 +34,7 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   text(ctx, spec.profile.handle, 540, 618, 600, 38, "#fff", "center");
 
   // follower count: the hero
-  text(ctx, formatCount(s.count), 540, 790, 800, 156, "#fff", "center");
+  text(ctx, formatCount(s.count), 540, 790, 800, fitSize(ctx, formatCount(spec.endCount), 800, 156, 980), "#fff", "center");
   text(ctx, "Followers", 540, 850, 500, 38, "#d6d6d6", "center");
   text(ctx, `48 Following   ·   ${shortCount(Math.round(s.count * 4.4))} Likes`, 540, 908, 500, 30, DIM, "center");
 

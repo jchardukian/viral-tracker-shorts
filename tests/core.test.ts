@@ -176,7 +176,7 @@ test("missing licensed file and wrong-platform sound are hard errors", () => {
 
 // ---------- batch planning ----------------------------------------------------
 
-test("batch plan: 2/day/platform, unique ids and slots, final count grows daily, no adjacent look-alikes", () => {
+test("batch plan: 2/day/platform, unique ids and slots, varied final counts, no adjacent look-alikes", () => {
   const plan = planBatch("2026-11-23", 14);
   assert.equal(plan.length, 14 * 2 * 2);
   assert.equal(new Set(plan.map((p) => p.spec.id)).size, plan.length);
@@ -185,10 +185,16 @@ test("batch plan: 2/day/platform, unique ids and slots, final count grows daily,
     const ps = plan.filter((p) => p.spec.platform === platform);
     assert.equal(ps.length, 28);
     for (let i = 1; i < ps.length; i++) {
-      assert.ok(ps[i].spec.endCount >= ps[i - 1].spec.endCount);
-      if (i % 2 === 0) assert.ok(ps[i].spec.endCount > ps[i - 1].spec.endCount, "next day ends higher");
-      const sig = (p: (typeof ps)[number]) => `${p.spec.caption}#${p.spec.audio.soundId}#${p.spec.variant}`;
+      const sig = (p: (typeof ps)[number]) => `${p.spec.caption}#${p.spec.audio.soundId}#${p.spec.variant}#${p.spec.countTier}`;
       assert.notEqual(sig(ps[i]), sig(ps[i - 1]));
+    }
+    // every video ends on its own number, from the hundreds up to over a billion
+    const ends = ps.map((p) => p.spec.endCount);
+    assert.ok(new Set(ends).size >= ends.length - 3, "final counts are almost all different");
+    assert.ok(Math.min(...ends) < 500 && Math.max(...ends) > 1e9);
+    for (const p of ps) {
+      const tier = loadChannels().countTiers!.find((t) => t.id === p.spec.countTier)!;
+      assert.ok(p.spec.endCount >= tier.base && p.spec.endCount <= tier.base * 1.61 && p.spec.snapshots[0].count === 0);
     }
   }
   assert.deepEqual(planBatch("2026-11-23", 2), planBatch("2026-11-23", 2));
@@ -211,7 +217,7 @@ const FUTURE = "2099-01-01T12:00:00-06:00";
 function item(dir: string, id: string, dueAt = FUTURE) {
   const file = join(dir, `${id}.mp4`);
   writeFileSync(file, "x");
-  return { key: slotKey("youtube", "ch", dueAt), videoId: id, batchId: "b1", platform: "youtube" as const, file, audioMode: "silent" as const, caption: "cap", audioId: "s1", variant: "dashboard", title: "t", text: "x", dueAt };
+  return { key: slotKey("youtube", "ch", dueAt), videoId: id, batchId: "b1", platform: "youtube" as const, file, audioMode: "silent" as const, caption: "cap", audioId: "s1", variant: "dashboard", countTier: "1M", title: "t", text: "x", dueAt };
 }
 const livePublisher = (fn: (i: QueueItem) => Promise<{ remoteId: string }>): Publisher => ({ name: "fake", live: true, publish: fn });
 const fast = { sleep: async () => {}, baseDelayMs: 1 };
@@ -278,7 +284,7 @@ test("transient errors retry with backoff; permanent errors fail fast; past slot
 test("enqueueBatch is idempotent", () => {
   const dir = tmp();
   const q = new Queue(join(dir, "q.json"));
-  const m = planBatch("2026-11-23", 1).map((p) => ({ id: p.spec.id, platform: p.spec.platform, variant: p.spec.variant, caption: p.spec.caption, file: join(dir, `${p.spec.id}.mp4`), audio: p.spec.audio, title: p.title, text: p.text, dueAt: p.dueAt }) as Manifest);
+  const m = planBatch("2026-11-23", 1).map((p) => ({ id: p.spec.id, platform: p.spec.platform, variant: p.spec.variant, countTier: p.spec.countTier, caption: p.spec.caption, file: join(dir, `${p.spec.id}.mp4`), audio: p.spec.audio, title: p.title, text: p.text, dueAt: p.dueAt }) as Manifest);
   assert.equal(enqueueBatch(q, "b", m), 4);
   assert.equal(enqueueBatch(new Queue(join(dir, "q.json")), "b", m), 0);
   assert.ok(existsSync(join(dir, "q.json")));
@@ -342,7 +348,8 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
     assert.ok(spread(caps) <= 1 && spread(snds) <= 1, "even shares");
     assert.ok(count((p) => `${p.spec.caption}|${p.spec.audio.soundId}`).size >= 24, "captions and sounds are mixed, not paired");
     // nothing is tied to a time of day or a week
-    for (const f of [(p: (typeof ps)[number]) => p.spec.caption, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.variant]) {
+    assert.ok(spread(count((p) => p.spec.countTier!)) <= 1 && count((p) => p.spec.countTier!).size === 5, "five count sizes, even shares");
+    for (const f of [(p: (typeof ps)[number]) => p.spec.caption, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.variant, (p: (typeof ps)[number]) => p.spec.countTier!]) {
       const byTime = count((p) => `${f(p)}|${slot(p)}`);
       const byWeek = count((p) => `${f(p)}|${week(p)}`);
       assert.equal(byTime.size, count(f).size * 2, "every option appears in both time slots");
@@ -358,13 +365,13 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
   }
   const csv = planCsv(plan).trim().split("\n");
   assert.equal(csv.length, 57);
-  assert.ok(csv[0].startsWith("platform,video_id,due_at,caption,audio_id"));
+  assert.ok(csv[0].includes("template_variant,count_tier,duration_sec,final_count"));
 });
 
 test("results tilt the next batch towards winners but keep exploring", () => {
   const caps = loadCaptions().youtube.captions;
   const mk = (caption: string, views: number, followers: number, i: number) =>
-    ({ platform: "youtube", post_id: "", video_id: `${caption}-${i}`, publish_date: "2026-12-01", caption, audio_id: "a", template_variant: "dashboard", views: String(views), viewed_rate: "", avg_watch_pct: "", followers_gained: String(followers), shares: "", post_url: "", source: "manual" }) as const;
+    ({ platform: "youtube", post_id: "", video_id: `${caption}-${i}`, publish_date: "2026-12-01", caption, audio_id: "a", template_variant: "dashboard", count_tier: "1M", final_count: "", views: String(views), viewed_rate: "", avg_watch_pct: "", followers_gained: String(followers), shares: "", post_url: "", source: "manual" }) as const;
   const rows = [0, 1, 2].flatMap((i) => [mk(caps[0], 9000, 30, i), mk(caps[1], 1000, 1, i)]);
   const ranked = recommend([...rows], "youtube", "caption", caps, { explore: 0.3, minPosts: 3 });
   const w = Object.fromEntries(ranked.map((r) => [r.option, r.weight]));
@@ -472,7 +479,7 @@ test("analytics: export from queue, import metrics, per-1k-view comparison", () 
   assert.equal(syncFromQueue([], q.items).length, 1, "only published posts by default");
   let rows = syncFromQueue([], q.items, { includeUnpublished: true });
   assert.deepEqual(Object.keys(rows[0]), [...COLUMNS]);
-  assert.deepEqual([rows[0].post_id, rows[0].publish_date, rows[0].caption, rows[0].audio_id, rows[0].template_variant], ["post1", "2099-01-01", "Imagine waking up to this", "a1", "dashboard"]);
+  assert.deepEqual([rows[0].post_id, rows[0].publish_date, rows[0].caption, rows[0].audio_id, rows[0].template_variant, rows[0].count_tier], ["post1", "2099-01-01", "Imagine waking up to this", "a1", "dashboard", "1M"]);
 
   const csv = "platform,video_id,views,viewed_rate,avg_watch_pct,followers_gained,shares,caption\nyoutube,v1,\"12,000\",33.8%,92.5,24,6,HACKED\nyoutube,v2,4000,,61,2,1,\nyoutube,nope,1,,,,,\n";
   const res = importMetrics(rows, parseCsv(csv));

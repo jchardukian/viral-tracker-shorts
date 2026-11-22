@@ -2,10 +2,11 @@
   "id": "youtube-dashboard-1",
   "platform": "youtube",
   "variant": "dashboard",
+  "countTier": "300",
   "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-1.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-1.png",
-  "sha256": "516290990c7d6d220c9b6e5e67e0b68f41eca25a22363444a516897be213515e",
+  "sha256": "c39f5319ea9fe853c3a4801f0a039f25e83bc73719dfb7271ad4aee94c0d0676",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -14,7 +15,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 18.5,
-    "sizeBytes": 2653262,
+    "sizeBytes": 960682,
     "meanVolumeDb": -10.9
   },
   "audio": {
@@ -31,7 +32,7 @@
   "dueAt": null,
   "counter": {
     "start": 0,
-    "end": 110266
+    "end": 312
   },
   "caption": "POV: Your channel finally takes off",
   "cuts": 220,

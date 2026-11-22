@@ -2,10 +2,11 @@
   "id": "tiktok-analytics-3",
   "platform": "tiktok",
   "variant": "analytics",
+  "countTier": "1B",
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-3.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-3.png",
-  "sha256": "982221b1dc7805d94c5d3a480349a36edadd0d0b94135494a25349661d319071",
+  "sha256": "655ae7cf86a5434c650fb53c56220b80a5a18ec2769cd4f1b5228e59976ad86f",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -14,7 +15,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 11.633333,
-    "sizeBytes": 1300597,
+    "sizeBytes": 1197772,
     "meanVolumeDb": -12.1
   },
   "audio": {
@@ -31,7 +32,7 @@
   "dueAt": null,
   "counter": {
     "start": 0,
-    "end": 127400
+    "end": 1037442118
   },
   "caption": "The follower growth everyone wants",
   "cuts": 116,

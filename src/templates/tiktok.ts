@@ -1,6 +1,6 @@
 import { type Ctx, fitWrapped, font } from "../engine/draw.ts";
 import { formatCount, shortCount } from "../engine/util.ts";
-import { avatar, chevron, disclosurePill, glyph, postThumb, rrect, statusBar, text } from "./common.ts";
+import { avatar, chevron, disclosurePill, fitSize, fixedThumb, glyph, PAST_SHARES, rrect, snapshotAtShare, statusBar, text } from "./common.ts";
 import { frameOf, snapshotIndex, type Template, type VideoSpec } from "./types.ts";
 
 // The same time-lapse, as a follower-analytics screen: tabs, total followers
@@ -51,7 +51,7 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
 
   // total followers
   text(ctx, "Total followers", L, 536, 500, 34, DIM);
-  text(ctx, formatCount(s.count), L, 652, 800, 116, "#fff");
+  text(ctx, formatCount(s.count), L, 652, 800, fitSize(ctx, formatCount(spec.endCount), 800, 116, R - L), "#fff");
   const pct = s.count - s.delta7 > 0 ? (s.delta7 / (s.count - s.delta7)) * 100 : 0;
   text(ctx, `+${formatCount(s.delta7)} (${pct >= 1000 ? "999+" : pct.toFixed(1)}%)`, L, 708, 600, 32, CYAN);
   text(ctx, "vs previous 7 days", L + ctx.measureText(`+${formatCount(s.delta7)} (${pct >= 1000 ? "999+" : pct.toFixed(1)}%)`).width + 16, 708, 400, 30, DIM);
@@ -117,20 +117,21 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   text(ctx, spec.snapshots[0].date, px, c.y + c.h - 14, 400, 22, DIM);
   text(ctx, spec.snapshots[n].date, px + pw, c.y + c.h - 14, 400, 22, DIM, "right");
 
-  // most recent post
+  // most recent post + earlier posts: finished uploads, fixed for the whole video
+  const done = spec.snapshots[spec.snapshots.length - 1];
   const y = 1210;
   rrect(ctx, L, y, RR - L, 250, 18);
   ctx.fillStyle = CARD;
   ctx.fill();
   text(ctx, "Most recent post", L + 26, y + 52, 600, 30, "#fff");
-  postThumb(ctx, spec, render, i, 0, L + 26, y + 80, 96, 140, 10);
-  text(ctx, s.latest.title, L + 150, y + 122, 500, 30, "#fff");
-  text(ctx, s.latest.age, L + 150, y + 162, 400, 26, DIM);
+  fixedThumb(ctx, spec, render, snapshotAtShare(spec, PAST_SHARES[0]), L + 26, y + 80, 96, 140, 10);
+  text(ctx, done.latest.title, L + 150, y + 122, 500, 30, "#fff");
+  text(ctx, done.latest.age, L + 150, y + 162, 400, 26, DIM);
   const stats: ["views" | "likes" | "comments" | "shares", number][] = [
-    ["views", s.latest.views],
-    ["likes", s.latest.likes],
-    ["comments", s.latest.comments],
-    ["shares", s.shares],
+    ["views", done.latest.views],
+    ["likes", done.latest.likes],
+    ["comments", done.latest.comments],
+    ["shares", done.shares],
   ];
   stats.forEach(([k, v], j) => {
     glyph(ctx, k, L + 150 + j * 172, y + 216, 24, "#ddd");
@@ -142,9 +143,9 @@ function render(ctx: Ctx, spec: VideoSpec, t: number) {
   ctx.fillStyle = CARD;
   ctx.fill();
   text(ctx, "Earlier posts", L + 26, 1537, 600, 30, "#fff");
-  s.older.forEach((o, j) => {
+  done.older.forEach((o, j) => {
     const oy = 1570 + j * 118;
-    postThumb(ctx, spec, render, i, j + 1, L + 26, oy, 66, 96, 8);
+    fixedThumb(ctx, spec, render, snapshotAtShare(spec, PAST_SHARES[j + 1]), L + 26, oy, 66, 96, 8);
     text(ctx, o.title, L + 116, oy + 38, 500, 28, "#fff");
     glyph(ctx, "views", L + 116, oy + 84, 22, "#bbb");
     text(ctx, shortCount(o.views), L + 150, oy + 84, 500, 25, "#bbb");

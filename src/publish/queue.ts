@@ -18,6 +18,7 @@ export interface QueueItem {
   caption: string;
   audioId: string | null;
   variant: string;
+  countTier: string | null;
   /** public HTTPS URL of the uploaded MP4; set by `media upload`, required to publish */
   mediaUrl: string | null;
   /** filled by `queue sync` once the platform has the post */

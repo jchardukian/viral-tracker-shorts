@@ -37,8 +37,10 @@ export function sha256(s: string): string {
 
 export const formatCount = (n: number) => Math.round(n).toLocaleString("en-US");
 
-/** Dashboard-style compact number: 874, 13.6K, 346.6K, 3.6M */
+/** Dashboard-style compact number: 874, 13.6K, 346.6K, 3.6M, 1.2B */
 export function shortCount(n: number): string {
+  if (n >= 999.95e9) return `${(n / 1e12).toFixed(1)}T`;
+  if (n >= 999.95e6) return `${(n / 1e9).toFixed(1)}B`;
   if (n >= 999950) return `${(n / 1e6).toFixed(1)}M`;
   if (n >= 1000) return `${(n / 1e3).toFixed(1)}K`;
   return String(Math.round(n));

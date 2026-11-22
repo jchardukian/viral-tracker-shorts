@@ -116,7 +116,7 @@ async function main() {
     const manifests: Manifest[] = [];
     for (const p of plans) {
       manifests.push(await renderOne(p, join(dir, p.spec.platform), { silentTwin: true }));
-      console.log(`  ${p.spec.id}  ${p.dueAt}  sound=${p.spec.audio.soundId ?? "none"} (${p.spec.audio.mode})  0 -> ${p.spec.endCount} in ${p.spec.cuts.length} cuts`);
+      console.log(`  ${p.spec.id}  ${p.dueAt}  sound=${p.spec.audio.soundId ?? "none"} (${p.spec.audio.mode})  ${p.spec.variant}  ${p.spec.countTier ?? ""}  0 -> ${p.spec.endCount}`);
     }
     writeFileSync(join(dir, "manifest.json"), JSON.stringify({ batchId, start, days, videos: manifests }, null, 2));
     for (const pf of new Set(manifests.map((m) => m.platform))) if (!qa(join(dir, pf))) process.exit(1);
@@ -176,7 +176,7 @@ async function main() {
           Object.assign(prev, { key, dueAt, file });
           prev.history.push({ at: new Date().toISOString(), event: `validation slot moved to ${dueAt}` });
         } else {
-          queue.enqueue({ key, videoId, batchId: "validation", platform, file, audioMode: m.audio.mode, caption: m.caption, audioId: m.audio.soundId, variant: m.variant, title: m.title, text: m.text, dueAt });
+          queue.enqueue({ key, videoId, batchId: "validation", platform, file, audioMode: m.audio.mode, caption: m.caption, audioId: m.audio.soundId, variant: m.variant, countTier: m.countTier ?? null, title: m.title, text: m.text, dueAt });
         }
         console.log(`${videoId}: ${sample}.mp4 due ${dueAt} (${prev?.status ?? "pending_approval"})`);
       }
@@ -321,7 +321,7 @@ async function main() {
       writeLedger(LEDGER_PATH, rows);
       console.log(`updated ${n} row(s) from Buffer`);
     } else if (sub === "report") {
-      for (const by of ["platform", "caption", "audio_id", "template_variant"] as const) {
+      for (const by of ["platform", "caption", "audio_id", "template_variant", "count_tier"] as const) {
         console.log(`\nby ${by}`);
         console.table(summarize(rows, by));
       }
@@ -336,6 +336,7 @@ async function main() {
           caption: caps[pf].captions,
           audio_id: loadLibrary(pf).sounds.map((x) => x.id),
           template_variant: ch[pf].variants?.length ? ch[pf].variants! : [Object.keys(TEMPLATES[pf])[0]],
+          count_tier: (ch.countTiers ?? []).map((t) => t.id),
         };
         for (const by of DIMENSIONS) {
           const ranked = recommend(rows, pf, by, options[by], exp);

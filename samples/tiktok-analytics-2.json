@@ -2,10 +2,11 @@
   "id": "tiktok-analytics-2",
   "platform": "tiktok",
   "variant": "analytics",
+  "countTier": "1M",
   "file": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-2.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/tiktok-analytics-2.png",
-  "sha256": "8c6938dec3d5ea95b4c22a89231812e19d0c6983ff73be5e54f0abfee4b42b6f",
+  "sha256": "6ef9c544d436e9afa47d5208e56a0d522edd86cf19075a2f5f0618148c25a879",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -14,7 +15,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 15.466667,
-    "sizeBytes": 1581165,
+    "sizeBytes": 1372500,
     "meanVolumeDb": -13.6
   },
   "audio": {
@@ -31,7 +32,7 @@
   "dueAt": null,
   "counter": {
     "start": 0,
-    "end": 9820
+    "end": 1284930
   },
   "caption": "Imagine opening TikTok to this",
   "cuts": 171,

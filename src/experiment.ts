@@ -7,8 +7,8 @@ import type { Platform } from "./templates/types.ts";
  * performers more posts while always keeping a share for exploration, so new
  * ideas still get tried and an early fluke cannot take over.
  */
-export type Dimension = "caption" | "audio_id" | "template_variant";
-export const DIMENSIONS: Dimension[] = ["caption", "audio_id", "template_variant"];
+export type Dimension = "caption" | "audio_id" | "template_variant" | "count_tier";
+export const DIMENSIONS: Dimension[] = ["caption", "audio_id", "template_variant", "count_tier"];
 export type Weights = Partial<Record<Dimension, Record<string, number>>>;
 
 export interface ExperimentConfig {

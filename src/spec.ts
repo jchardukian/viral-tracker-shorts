@@ -33,6 +33,12 @@ export interface ChannelConfig extends HistoryConfig {
   youtubeCategoryId?: string;
 }
 
+/** A final-count size to test: each video ends somewhere between base and base x 1.6. */
+export interface CountTier {
+  id: string;
+  base: number;
+}
+
 export interface CaptionConfig {
   /** on-screen caption; one is used, unchanged, for a whole video */
   captions: string[];
@@ -45,7 +51,7 @@ export interface CaptionConfig {
 export const readJson = <T>(rel: string): T => JSON.parse(readFileSync(join(ROOT, rel), "utf8")) as T;
 
 export function loadChannels() {
-  return readJson<{ disclosure: string | null; publishSilent?: boolean } & Record<Platform, ChannelConfig>>("config/channels.json");
+  return readJson<{ disclosure: string | null; publishSilent?: boolean; countTiers?: CountTier[] } & Record<Platform, ChannelConfig>>("config/channels.json");
 }
 export function loadCaptions() {
   return readJson<Record<Platform, CaptionConfig>>("config/captions.json");
@@ -60,6 +66,8 @@ export interface SpecInput {
   caption: string;
   contentTitles: string[];
   audio: AudioAssignment;
+  /** label of the final-count size being tested */
+  countTier?: string | null;
   /** the time-lapse ends on this date (YYYY-MM-DD) */
   date: string;
   disclosure?: string | null;
@@ -177,6 +185,7 @@ export function buildSpec(input: SpecInput): VideoSpec {
     durationSec,
     frames,
     profile: { name: channel.name, handle: channel.handle, initial: channel.initial, avatar: channel.avatar, avatarImage: channel.avatarImage ?? null },
+    countTier: input.countTier ?? null,
     caption: input.caption,
     snapshots,
     cuts,

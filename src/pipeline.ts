@@ -13,6 +13,7 @@ export interface Manifest {
   id: string;
   platform: Platform;
   variant: string;
+  countTier: string | null;
   file: string;
   silentFile: string | null;
   still: string;
@@ -53,6 +54,7 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
     id: spec.id,
     platform: spec.platform,
     variant: spec.variant,
+    countTier: spec.countTier,
     file,
     silentFile,
     still,
@@ -77,6 +79,7 @@ interface SampleDef {
   id: string;
   platform: Platform;
   variant?: string;
+  countTier?: string;
   soundIndex: number;
   caption: number;
   targetSec: number;
@@ -95,6 +98,7 @@ export function planSamples(date: string): Planned[] {
         id: s.id,
         platform: s.platform,
         variant: s.variant,
+        countTier: s.countTier ?? null,
         // samples show three differently shaped growth curves
         channel: { ...channels[s.platform], history: null, asOf: date, currentCount: s.currentCount, historySeed: s.historySeed },
         caption: cap.captions[s.caption % cap.captions.length],
@@ -113,9 +117,9 @@ export function planSamples(date: string): Planned[] {
 
 /**
  * Deterministic plan for `days` days starting at `start` (YYYY-MM-DD): one
- * video per configured slot per platform. Every video is the full time-lapse
- * from day one up to its own date, so the final count grows day by day.
- * Captions and sounds rotate and length varies, so consecutive videos differ.
+ * video per configured slot per platform. Each video is a full time-lapse
+ * from zero to its own final count; captions, sounds, template variants and
+ * the size of that final count are all varied so results can be compared.
  */
 export function planBatch(start: string, days: number, platforms: Platform[] = PLATFORMS, experiment: ExperimentConfig = loadExperiment()): Planned[] {
   const channels = loadChannels();
@@ -134,10 +138,13 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
     const n = days * perDay;
     const sounds = activeSounds(lib, start);
     const soundIds = sounds.length ? sounds.map((x) => x.id) : ["(none)"];
+    // final-count sizes to test (300 ... 1B); not used when real history is configured
+    const tiers = channels[platform].history ? [] : (channels.countTiers ?? []);
+    const tierIds = tiers.length ? tiers.map((t) => t.id) : ["(configured)"];
     const plan = design(
       n,
       perDay,
-      [apportion(cap.captions, w.caption, n), apportion(soundIds, w.audio_id, n), apportion(variants, w.template_variant, n)],
+      [apportion(cap.captions, w.caption, n), apportion(soundIds, w.audio_id, n), apportion(variants, w.template_variant, n), apportion(tierIds, w.count_tier, n)],
       rng(hashSeed(`design|${platform}|${start}|${days}`)),
     );
     for (let d = 0; d < days; d++) {
@@ -146,12 +153,18 @@ export function planBatch(start: string, days: number, platforms: Platform[] = P
         const k = d * perDay + slot;
         const r = { caption: plan[0][k], sound: plan[1][k], variant: plan[2][k] };
         const id = `${platform}-${date}-${String.fromCharCode(97 + slot)}`;
+        const tier = tiers[plan[3][k]];
+        // each video tells its own growth story: its own curve, ending at a non-round number in the tier
+        const channel = tier
+          ? { ...channels[platform], asOf: date, historySeed: id, currentCount: Math.round(tier.base * (1 + rng(hashSeed(`count|${id}`))() * 0.6)) }
+          : channels[platform];
         out.push({
           spec: buildSpec({
             id,
             platform,
             variant: variants[r.variant],
-            channel: channels[platform],
+            channel,
+            countTier: tier?.id ?? null,
             caption: cap.captions[r.caption],
             contentTitles: cap.contentTitles,
             audio: resolveAudio(sounds.length ? (activeSounds(lib, date).find((x) => x.id === soundIds[r.sound]) ?? pickSound(lib, date, r.sound)) : null, platform),
@@ -176,9 +189,9 @@ export function loadExperiment(): ExperimentConfig {
 /** The experiment plan as a CSV: one row per planned post, before anything is rendered. */
 export function planCsv(plans: Planned[]): string {
   const q = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const head = "platform,video_id,due_at,caption,audio_id,audio_mode,native_sound_link,template_variant,duration_sec,final_count,title";
+  const head = "platform,video_id,due_at,caption,audio_id,audio_mode,native_sound_link,template_variant,count_tier,duration_sec,final_count,title";
   return (
-    [head, ...plans.map((p) => [p.spec.platform, p.spec.id, p.dueAt, p.spec.caption, p.spec.audio.soundId, p.spec.audio.mode, p.spec.audio.link, p.spec.variant, p.spec.durationSec.toFixed(2), p.spec.endCount, p.title].map(q).join(","))].join("\n") + "\n"
+    [head, ...plans.map((p) => [p.spec.platform, p.spec.id, p.dueAt, p.spec.caption, p.spec.audio.soundId, p.spec.audio.mode, p.spec.audio.link, p.spec.variant, p.spec.countTier, p.spec.durationSec.toFixed(2), p.spec.endCount, p.title].map(q).join(","))].join("\n") + "\n"
   );
 }
 
@@ -198,6 +211,7 @@ export function enqueueBatch(queue: Queue, batchId: string, manifests: Manifest[
       caption: m.caption,
       audioId: m.audio.soundId,
       variant: m.variant,
+      countTier: m.countTier,
       title: m.title,
       text: m.text,
       dueAt: m.dueAt,

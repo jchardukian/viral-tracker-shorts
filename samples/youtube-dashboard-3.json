@@ -2,10 +2,11 @@
   "id": "youtube-dashboard-3",
   "platform": "youtube",
   "variant": "dashboard",
+  "countTier": "1B",
   "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-3.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-3.png",
-  "sha256": "19e03379cea4b6b86b7b7ce31e5f4ed1cfb0e0e90ee6e856497c9c731cea358b",
+  "sha256": "bf8c91b56d6219ebdf567c3e33bf0e66d81c27c754fe20410ede2a56ca2361a0",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -14,7 +15,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 11.633333,
-    "sizeBytes": 1543755,
+    "sizeBytes": 825190,
     "meanVolumeDb": -12.1
   },
   "audio": {
@@ -31,7 +32,7 @@
   "dueAt": null,
   "counter": {
     "start": 0,
-    "end": 251940
+    "end": 1037442118
   },
   "caption": "One viral video changes everything",
   "cuts": 116,
