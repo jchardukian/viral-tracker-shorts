@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "./engine/draw.ts";
-import { hashSeed, pick, rng } from "./engine/util.ts";
+import { hashSeed, pick, rng, shortCount } from "./engine/util.ts";
 import { type DayPoint, type HistoryConfig, historyFor } from "./history.ts";
 import { tiktokProfileTemplate } from "./templates/tiktok-profile.ts";
 import { tiktokTemplate } from "./templates/tiktok.ts";
@@ -186,7 +186,9 @@ export function buildSpec(input: SpecInput): VideoSpec {
     frames,
     profile: { name: channel.name, handle: channel.handle, initial: channel.initial, avatar: channel.avatar, avatarImage: channel.avatarImage ?? null },
     countTier: input.countTier ?? null,
-    caption: input.caption,
+    // {count} in a caption becomes this video's own final number, e.g. "1.3M"
+    caption: input.caption.replace(/\{count\}/g, shortCount(snapshots[n - 1].count)),
+    captionKey: input.caption,
     snapshots,
     cuts,
     holdFrame,

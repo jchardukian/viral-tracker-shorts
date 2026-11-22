@@ -93,6 +93,11 @@ test("a real history CSV replaces the simulated curve", () => {
   assert.equal(spec().dataSource, "simulated");
 });
 
+test("{count} in a caption becomes the video's own final number", () => {
+  const s = buildSpec({ id: "c", platform: "youtube", channel: { ...loadChannels().youtube, currentCount: 1284930 }, caption: "POV: You used this sound and got {count} subscribers", contentTitles: ["a"], audio: silent(), date: "2026-11-21" });
+  assert.equal(s.caption, "POV: You used this sound and got 1.3M subscribers");
+});
+
 test("explicit beat timestamps override the bpm grid", () => {
   const beats = Array.from({ length: 24 }, (_, i) => +(0.1 + i * 0.55).toFixed(2));
   const s = buildSpec({ id: "b", platform: "tiktok", channel: loadChannels().tiktok, caption: "c", contentTitles: ["a"], audio: { ...silent(), beats }, date: "2026-11-21" });
@@ -284,7 +289,7 @@ test("transient errors retry with backoff; permanent errors fail fast; past slot
 test("enqueueBatch is idempotent", () => {
   const dir = tmp();
   const q = new Queue(join(dir, "q.json"));
-  const m = planBatch("2026-11-23", 1).map((p) => ({ id: p.spec.id, platform: p.spec.platform, variant: p.spec.variant, countTier: p.spec.countTier, caption: p.spec.caption, file: join(dir, `${p.spec.id}.mp4`), audio: p.spec.audio, title: p.title, text: p.text, dueAt: p.dueAt }) as Manifest);
+  const m = planBatch("2026-11-23", 1).map((p) => ({ id: p.spec.id, platform: p.spec.platform, variant: p.spec.variant, countTier: p.spec.countTier, caption: p.spec.captionKey, file: join(dir, `${p.spec.id}.mp4`), audio: p.spec.audio, title: p.title, text: p.text, dueAt: p.dueAt }) as Manifest);
   assert.equal(enqueueBatch(q, "b", m), 4);
   assert.equal(enqueueBatch(new Queue(join(dir, "q.json")), "b", m), 0);
   assert.ok(existsSync(join(dir, "q.json")));
@@ -342,14 +347,14 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
     const week = (p: (typeof ps)[number]) => (p.dueAt! < "2026-12-07" ? "1" : "2");
     const nCap = loadCaptions()[platform].captions.length;
     const nSnd = loadLibrary(platform).sounds.length;
-    const caps = count((p) => p.spec.caption);
+    const caps = count((p) => p.spec.captionKey);
     const snds = count((p) => p.spec.audio.soundId!);
     assert.deepEqual([caps.size, snds.size], [nCap, nSnd], "every caption and every sound is used");
     assert.ok(spread(caps) <= 1 && spread(snds) <= 1, "even shares");
-    assert.ok(count((p) => `${p.spec.caption}|${p.spec.audio.soundId}`).size >= 24, "captions and sounds are mixed, not paired");
+    assert.ok(count((p) => `${p.spec.captionKey}|${p.spec.audio.soundId}`).size >= 24, "captions and sounds are mixed, not paired");
     // nothing is tied to a time of day or a week
     assert.ok(spread(count((p) => p.spec.countTier!)) <= 1 && count((p) => p.spec.countTier!).size === 5, "five count sizes, even shares");
-    for (const f of [(p: (typeof ps)[number]) => p.spec.caption, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.variant, (p: (typeof ps)[number]) => p.spec.countTier!]) {
+    for (const f of [(p: (typeof ps)[number]) => p.spec.captionKey, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.variant, (p: (typeof ps)[number]) => p.spec.countTier!]) {
       const byTime = count((p) => `${f(p)}|${slot(p)}`);
       const byWeek = count((p) => `${f(p)}|${week(p)}`);
       assert.equal(byTime.size, count(f).size * 2, "every option appears in both time slots");
@@ -359,7 +364,7 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
     if (platform === "tiktok") {
       assert.ok([...count((p) => `${p.spec.variant}|${slot(p)}`).values()].every((n) => n === 7));
       assert.equal(count((p) => `${p.spec.variant}|${p.spec.audio.soundId}`).size, nSnd * 2, "each variant runs with every sound");
-      assert.equal(count((p) => `${p.spec.variant}|${p.spec.caption}`).size, nCap * 2, "each variant runs with every caption");
+      assert.equal(count((p) => `${p.spec.variant}|${p.spec.captionKey}`).size, nCap * 2, "each variant runs with every caption");
     }
     assert.ok(ps.every((p) => p.spec.audio.mode === "embedded"));
   }
@@ -388,7 +393,7 @@ test("results tilt the next batch towards winners but keep exploring", () => {
 
   const exp = { explore: 0.3, minPosts: 3, weights: { youtube: { caption: w }, tiktok: {} } };
   const plan = planBatch("2026-12-14", 14, ["youtube"], exp);
-  const used = plan.reduce((m, p) => m.set(p.spec.caption, (m.get(p.spec.caption) ?? 0) + 1), new Map<string, number>());
+  const used = plan.reduce((m, p) => m.set(p.spec.captionKey, (m.get(p.spec.captionKey) ?? 0) + 1), new Map<string, number>());
   assert.deepEqual(caps.map((c) => used.get(c)), counts);
   assert.deepEqual(plan, planBatch("2026-12-14", 14, ["youtube"], exp), "deterministic");
 });

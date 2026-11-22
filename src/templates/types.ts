@@ -74,6 +74,8 @@ export interface VideoSpec {
   countTier: string | null;
   /** one static caption for the whole video, like the reference */
   caption: string;
+  /** the caption as configured (before {count} is filled in); used to compare results */
+  captionKey: string;
   snapshots: Snapshot[];
   /** first frame of each snapshot (same length as snapshots) */
   cuts: number[];

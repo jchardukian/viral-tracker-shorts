@@ -65,7 +65,7 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
     text: p.text,
     dueAt: p.dueAt,
     counter: { start: spec.startCount, end: spec.endCount },
-    caption: spec.caption,
+    caption: spec.captionKey,
     cuts: spec.cuts.length,
     dataSource: spec.dataSource,
     seed: spec.seed,
@@ -191,7 +191,7 @@ export function planCsv(plans: Planned[]): string {
   const q = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const head = "platform,video_id,due_at,caption,audio_id,audio_mode,native_sound_link,template_variant,count_tier,duration_sec,final_count,title";
   return (
-    [head, ...plans.map((p) => [p.spec.platform, p.spec.id, p.dueAt, p.spec.caption, p.spec.audio.soundId, p.spec.audio.mode, p.spec.audio.link, p.spec.variant, p.spec.countTier, p.spec.durationSec.toFixed(2), p.spec.endCount, p.title].map(q).join(","))].join("\n") + "\n"
+    [head, ...plans.map((p) => [p.spec.platform, p.spec.id, p.dueAt, p.spec.captionKey, p.spec.audio.soundId, p.spec.audio.mode, p.spec.audio.link, p.spec.variant, p.spec.countTier, p.spec.durationSec.toFixed(2), p.spec.endCount, p.title].map(q).join(","))].join("\n") + "\n"
   );
 }
 
