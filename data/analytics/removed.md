@@ -1,0 +1,1 @@
+- 2026-11-22: `manual-2026-11-22-trending-1` (hand-posted stock-footage video with a native trending sound, YouTube + TikTok) set to private by the owner after ~11 views in 10 hours on YouTube. Excluded from rankings.
