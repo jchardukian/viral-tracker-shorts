@@ -13,7 +13,7 @@
       "variant": "analytics",
       "countTier": "300",
       "title": "POV: your TikTok finally blows up #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-21T18:35:00-06:00",
       "mediaUrl": null,
       "status": "scheduled",
@@ -25,7 +25,7 @@
         "sentAt": "2026-11-22T00:36:43.751Z",
         "externalLink": "https://tiktok.com/@oh.my.trillion/video/7710787833107139854",
         "error": null,
-        "checkedAt": "2026-11-22T00:38:00.000Z"
+        "checkedAt": "2026-11-22T18:54:51.332Z"
       },
       "history": [
         {
@@ -61,9 +61,9 @@
       "published": {
         "status": "sent",
         "sentAt": "2026-11-22T00:35:03.676Z",
-        "externalLink": "https://www.youtube.com/watch?v=N0OGH4KB1kw",
+        "externalLink": "https://www.youtube.com/shorts/N0OGH4KB1kw",
         "error": null,
-        "checkedAt": "2026-11-22T00:38:00.000Z"
+        "checkedAt": "2026-11-22T18:54:51.545Z"
       },
       "history": [
         {
@@ -118,7 +118,14 @@
           "event": "scheduled as 6b0239bb846b0ee9074bad5d"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "sent",
+        "sentAt": "2026-11-22T17:07:05.687Z",
+        "externalLink": "https://www.youtube.com/shorts/_pHqMqaPvFE",
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:51.745Z"
+      }
     },
     {
       "key": "6bb6d0513a4db886a6c663f3",
@@ -161,7 +168,14 @@
           "event": "scheduled as 6b0239bb0247969092120dec"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:51.970Z"
+      }
     },
     {
       "key": "722e44b5a901877430a87c4e",
@@ -204,7 +218,14 @@
           "event": "scheduled as 6b0239bcd5eabfb8cc703731"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:52.170Z"
+      }
     },
     {
       "key": "c2aee23b8a8caefbf98edf10",
@@ -247,7 +268,14 @@
           "event": "scheduled as 6b0239bd846b0ee9074badbc"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:52.356Z"
+      }
     },
     {
       "key": "b9cc0c77671e02ce389ad87d",
@@ -294,7 +322,14 @@
           "event": "moved from 2026-11-24T11:07:00-06:00 to 2026-11-24T07:13:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:52.557Z"
+      }
     },
     {
       "key": "b9ab5b53e81916aa8bcb3224",
@@ -341,7 +376,14 @@
           "event": "moved from 2026-11-24T18:23:00-06:00 to 2026-11-24T15:26:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:52.758Z"
+      }
     },
     {
       "key": "9610d3984f9106ba253b3938",
@@ -388,7 +430,14 @@
           "event": "moved from 2026-11-25T11:07:00-06:00 to 2026-11-25T09:41:00-06:00"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:52.948Z"
+      }
     },
     {
       "key": "de6c9ba0f2f707bb45b7358c",
@@ -435,7 +484,14 @@
           "event": "moved from 2026-11-25T18:23:00-06:00 to 2026-11-25T21:52:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:53.133Z"
+      }
     },
     {
       "key": "d8728cc2d29643c640a01d12",
@@ -478,7 +534,14 @@
           "event": "scheduled as 6b0239c00247969092120f10"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:53.326Z"
+      }
     },
     {
       "key": "c51d1ccd1ca48490dda6961c",
@@ -521,7 +584,14 @@
           "event": "scheduled as 6b0239c1c72676f5e9f0e5de"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:53.511Z"
+      }
     },
     {
       "key": "2ed96b13e3474a40ba8f58ba",
@@ -568,7 +638,14 @@
           "event": "moved from 2026-11-27T11:07:00-06:00 to 2026-11-27T07:13:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:53.690Z"
+      }
     },
     {
       "key": "fdfbc77030239ae87ed59116",
@@ -615,7 +692,14 @@
           "event": "moved from 2026-11-27T18:23:00-06:00 to 2026-11-27T15:26:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:53.949Z"
+      }
     },
     {
       "key": "fb84ce154dbf91bac0daee30",
@@ -662,7 +746,14 @@
           "event": "moved from 2026-11-28T11:07:00-06:00 to 2026-11-28T09:41:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:54.135Z"
+      }
     },
     {
       "key": "31ebc1d3e3a3ffbb0217ee5e",
@@ -709,7 +800,14 @@
           "event": "moved from 2026-11-28T18:23:00-06:00 to 2026-11-28T21:52:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:54.310Z"
+      }
     },
     {
       "key": "f497105e1a4c05cf79f03b52",
@@ -752,7 +850,14 @@
           "event": "scheduled as 6b0239c4d864a0110586f72e"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:54.500Z"
+      }
     },
     {
       "key": "769da8bc43209da87e839e72",
@@ -799,7 +904,14 @@
           "event": "moved from 2026-11-29T18:23:00-06:00 to 2026-11-29T21:52:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:54.696Z"
+      }
     },
     {
       "key": "47768623679fcc1424a57cc6",
@@ -846,7 +958,14 @@
           "event": "moved from 2026-11-30T11:07:00-06:00 to 2026-11-30T09:41:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:54.879Z"
+      }
     },
     {
       "key": "d3582ebbd012bd1ced1d449c",
@@ -893,7 +1012,14 @@
           "event": "moved from 2026-11-30T18:23:00-06:00 to 2026-11-30T21:52:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:55.061Z"
+      }
     },
     {
       "key": "c5ee064fc3b5ac56fae94e1a",
@@ -940,7 +1066,14 @@
           "event": "moved from 2026-12-01T11:07:00-06:00 to 2026-12-01T09:41:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:55.257Z"
+      }
     },
     {
       "key": "b1b64d30a8aed744f8da6ecd",
@@ -983,7 +1116,14 @@
           "event": "scheduled as 6b0239c70247969092120fdb"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:55.490Z"
+      }
     },
     {
       "key": "307ab0c568b3ca25704cbf37",
@@ -1030,7 +1170,14 @@
           "event": "moved from 2026-12-02T11:07:00-06:00 to 2026-12-02T07:13:00-06:00"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:55.675Z"
+      }
     },
     {
       "key": "26b0bca2bdeb08c2dabaa638",
@@ -1077,7 +1224,14 @@
           "event": "moved from 2026-12-02T18:23:00-06:00 to 2026-12-02T15:26:00-06:00"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:55.862Z"
+      }
     },
     {
       "key": "4e11ddcfe7eacf88ac925cec",
@@ -1124,7 +1278,14 @@
           "event": "moved from 2026-12-03T11:07:00-06:00 to 2026-12-03T07:13:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:56.043Z"
+      }
     },
     {
       "key": "83256e5841ea13e8e9721bf6",
@@ -1167,7 +1328,14 @@
           "event": "scheduled as 6b0239cad864a0110586f800"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:56.228Z"
+      }
     },
     {
       "key": "0d682c249937c6ac0747739a",
@@ -1210,7 +1378,14 @@
           "event": "scheduled as 6b0239cad864a0110586f829"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:56.685Z"
+      }
     },
     {
       "key": "40127cd1332b1e539b84d8d2",
@@ -1257,7 +1432,14 @@
           "event": "moved from 2026-12-04T18:23:00-06:00 to 2026-12-04T21:52:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:56.841Z"
+      }
     },
     {
       "key": "9b86e036df0756e2f1ae477d",
@@ -1300,7 +1482,14 @@
           "event": "scheduled as 6b0239cb0247969092121086"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:56.985Z"
+      }
     },
     {
       "key": "84194650d9f820c1ada7dbfa",
@@ -1347,7 +1536,14 @@
           "event": "moved from 2026-12-05T18:23:00-06:00 to 2026-12-05T15:26:00-06:00"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:57.167Z"
+      }
     },
     {
       "key": "6c2fab4888caf9d97efc1f4c",
@@ -1361,7 +1557,7 @@
       "variant": "profile",
       "countTier": "1M",
       "title": "POV: this finally happens to you #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-22T12:11:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-22-a-b950d223ac28.mp4",
       "status": "scheduled",
@@ -1390,7 +1586,14 @@
           "event": "scheduled as 6b0239b6cc364169c1179034"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "sent",
+        "sentAt": "2026-11-22T18:11:42.889Z",
+        "externalLink": "https://tiktok.com/@oh.my.trillion/video/7711059924540755231",
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:57.319Z"
+      }
     },
     {
       "key": "bab8520531b2409b09e49da4",
@@ -1404,7 +1607,7 @@
       "variant": "profile",
       "countTier": "100K",
       "title": "the follower growth everyone wants #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-22T19:37:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-22-b-cf0b1fee4771.mp4",
       "status": "scheduled",
@@ -1433,7 +1636,14 @@
           "event": "scheduled as 6b0239cdd864a0110586f897"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:57.554Z"
+      }
     },
     {
       "key": "7ad6eb9e89c4dbb323b50247",
@@ -1447,7 +1657,7 @@
       "variant": "analytics",
       "countTier": "10K",
       "title": "POV: your TikTok finally blows up #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-23T10:19:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-23-a-2e2d6ae6e639.mp4",
       "status": "scheduled",
@@ -1480,7 +1690,14 @@
           "event": "moved from 2026-11-23T12:11:00-06:00 to 2026-11-23T10:19:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:57.704Z"
+      }
     },
     {
       "key": "d336165adde59b83636e0690",
@@ -1494,7 +1711,7 @@
       "variant": "analytics",
       "countTier": "1M",
       "title": "POV: your TikTok finally blows up #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-23T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-23-b-bcf08435f9e0.mp4",
       "status": "scheduled",
@@ -1527,7 +1744,14 @@
           "event": "moved from 2026-11-23T19:37:00-06:00 to 2026-11-23T22:14:00-06:00"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:57.854Z"
+      }
     },
     {
       "key": "c8cfbb0bb57bc7c1d4c86623",
@@ -1541,7 +1765,7 @@
       "variant": "analytics",
       "countTier": "300",
       "title": "use this sound to go viral #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-24T12:11:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-24-a-9d2331535931.mp4",
       "status": "scheduled",
@@ -1570,7 +1794,14 @@
           "event": "scheduled as 6b0239cec72676f5e9f0e8c4"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:57.999Z"
+      }
     },
     {
       "key": "e9ca9adba08346b05acb4b9f",
@@ -1584,7 +1815,7 @@
       "variant": "profile",
       "countTier": "100K",
       "title": "POV: your TikTok finally blows up #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-24T19:37:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-24-b-c47f7bf84572.mp4",
       "status": "scheduled",
@@ -1613,7 +1844,14 @@
           "event": "scheduled as 6b0239cfcc364169c1179568"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:58.167Z"
+      }
     },
     {
       "key": "3fc56924be181a8c7baa51cb",
@@ -1627,7 +1865,7 @@
       "variant": "profile",
       "countTier": "1M",
       "title": "imagine opening TikTok to this #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-25T12:11:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-25-a-3f3ebe789c95.mp4",
       "status": "scheduled",
@@ -1656,7 +1894,14 @@
           "event": "scheduled as 6b0239cf024796909212116e"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:58.320Z"
+      }
     },
     {
       "key": "c64977e87e432e8cf3044bae",
@@ -1670,7 +1915,7 @@
       "variant": "analytics",
       "countTier": "1B",
       "title": "POV: this finally happens to you #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-25T19:37:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-25-b-41d80a75bc3a.mp4",
       "status": "scheduled",
@@ -1699,7 +1944,14 @@
           "event": "scheduled as 6b0239d0d864a0110586fb38"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:58.467Z"
+      }
     },
     {
       "key": "5d246766d1d5f3ab72d693b0",
@@ -1713,7 +1965,7 @@
       "variant": "analytics",
       "countTier": "300",
       "title": "the follower growth everyone wants #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-26T07:47:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-26-a-930191bfd25f.mp4",
       "status": "scheduled",
@@ -1746,7 +1998,14 @@
           "event": "moved from 2026-11-26T12:11:00-06:00 to 2026-11-26T07:47:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:58.631Z"
+      }
     },
     {
       "key": "5cdfc9e6c4c987ef8167c994",
@@ -1760,7 +2019,7 @@
       "variant": "analytics",
       "countTier": "10K",
       "title": "imagine opening TikTok to this #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-26T16:08:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-26-b-12b09362b048.mp4",
       "status": "scheduled",
@@ -1793,7 +2052,14 @@
           "event": "moved from 2026-11-26T19:37:00-06:00 to 2026-11-26T16:08:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:58.775Z"
+      }
     },
     {
       "key": "6d7054aeb1ef5a940d213b95",
@@ -1807,7 +2073,7 @@
       "variant": "analytics",
       "countTier": "100K",
       "title": "imagine opening TikTok to this #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-27T07:47:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-27-a-311be9da1137.mp4",
       "status": "scheduled",
@@ -1840,7 +2106,14 @@
           "event": "moved from 2026-11-27T12:11:00-06:00 to 2026-11-27T07:47:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:58.987Z"
+      }
     },
     {
       "key": "40f74ba3cc09526b64ee7a6c",
@@ -1854,7 +2127,7 @@
       "variant": "profile",
       "countTier": "10K",
       "title": "use this sound to go viral #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-27T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-27-b-48fbafb018c1.mp4",
       "status": "scheduled",
@@ -1887,7 +2160,14 @@
           "event": "moved from 2026-11-27T19:37:00-06:00 to 2026-11-27T22:14:00-06:00"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:59.141Z"
+      }
     },
     {
       "key": "06415ba81381c94eaa63877c",
@@ -1901,7 +2181,7 @@
       "variant": "profile",
       "countTier": "300",
       "title": "POV: this finally happens to you #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-28T10:19:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-28-a-e1129d91ce00.mp4",
       "status": "scheduled",
@@ -1934,7 +2214,14 @@
           "event": "moved from 2026-11-28T12:11:00-06:00 to 2026-11-28T10:19:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:59.297Z"
+      }
     },
     {
       "key": "cdf7bf964ee2b0e645060b79",
@@ -1948,7 +2235,7 @@
       "variant": "profile",
       "countTier": "1B",
       "title": "the follower growth everyone wants #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-28T16:08:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-28-b-0a424a3820c0.mp4",
       "status": "scheduled",
@@ -1981,7 +2268,14 @@
           "event": "moved from 2026-11-28T19:37:00-06:00 to 2026-11-28T16:08:00-06:00"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:59.441Z"
+      }
     },
     {
       "key": "45866da2cae5dfa9f8302a04",
@@ -1995,7 +2289,7 @@
       "variant": "profile",
       "countTier": "100K",
       "title": "imagine opening TikTok to this #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-29T12:11:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-29-a-c8c4b5d13375.mp4",
       "status": "scheduled",
@@ -2024,7 +2318,14 @@
           "event": "scheduled as 6b0239d4cc364169c1179639"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:59.588Z"
+      }
     },
     {
       "key": "23f2ff3ba9cb2dc834979328",
@@ -2038,7 +2339,7 @@
       "variant": "profile",
       "countTier": "300",
       "title": "the follower growth everyone wants #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-29T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-29-b-b83d6e1b99fc.mp4",
       "status": "scheduled",
@@ -2071,7 +2372,14 @@
           "event": "moved from 2026-11-29T19:37:00-06:00 to 2026-11-29T22:14:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:59.758Z"
+      }
     },
     {
       "key": "92d921c7b4664da0c9f36268",
@@ -2085,7 +2393,7 @@
       "variant": "profile",
       "countTier": "10K",
       "title": "POV: this finally happens to you #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-30T12:11:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-30-a-8454a395bed7.mp4",
       "status": "scheduled",
@@ -2114,7 +2422,14 @@
           "event": "scheduled as 6b0239d6d864a0110586fbb5"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:54:59.897Z"
+      }
     },
     {
       "key": "0ea15e397868bd6668684b74",
@@ -2128,7 +2443,7 @@
       "variant": "analytics",
       "countTier": "1M",
       "title": "use this sound to go viral #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-11-30T16:08:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-11-30-b-0bd128fa58fa.mp4",
       "status": "scheduled",
@@ -2161,7 +2476,14 @@
           "event": "moved from 2026-11-30T19:37:00-06:00 to 2026-11-30T16:08:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:00.469Z"
+      }
     },
     {
       "key": "6ca99b18bdfb419bd7279de3",
@@ -2175,7 +2497,7 @@
       "variant": "analytics",
       "countTier": "1M",
       "title": "the follower growth everyone wants #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-01T10:19:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-01-a-8d0a40b90ad2.mp4",
       "status": "scheduled",
@@ -2208,7 +2530,14 @@
           "event": "moved from 2026-12-01T12:11:00-06:00 to 2026-12-01T10:19:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:00.672Z"
+      }
     },
     {
       "key": "c8a67863e30927d1e810ad80",
@@ -2222,7 +2551,7 @@
       "variant": "analytics",
       "countTier": "100K",
       "title": "POV: this finally happens to you #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-01T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-01-b-d3cfcbb23c32.mp4",
       "status": "scheduled",
@@ -2255,7 +2584,14 @@
           "event": "moved from 2026-12-01T19:37:00-06:00 to 2026-12-01T22:14:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:00.858Z"
+      }
     },
     {
       "key": "1a6d61220003b886d943fbe0",
@@ -2269,7 +2605,7 @@
       "variant": "profile",
       "countTier": "1B",
       "title": "use this sound to go viral #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-02T07:47:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-02-a-c0aadda4a812.mp4",
       "status": "scheduled",
@@ -2302,7 +2638,14 @@
           "event": "moved from 2026-12-02T12:11:00-06:00 to 2026-12-02T07:47:00-06:00"
         }
       ],
-      "lengthTier": "18s"
+      "lengthTier": "18s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:01.034Z"
+      }
     },
     {
       "key": "7a1438b5e835a028b05b63e1",
@@ -2316,7 +2659,7 @@
       "variant": "profile",
       "countTier": "1B",
       "title": "imagine opening TikTok to this #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-02T22:14:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-02-b-d90527e88e29.mp4",
       "status": "scheduled",
@@ -2349,7 +2692,14 @@
           "event": "moved from 2026-12-02T19:37:00-06:00 to 2026-12-02T22:14:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:01.188Z"
+      }
     },
     {
       "key": "f325213cc6a0c0a6a77944d0",
@@ -2363,7 +2713,7 @@
       "variant": "profile",
       "countTier": "10K",
       "title": "POV: your TikTok finally blows up #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-03T07:47:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-03-a-0371726a7bfe.mp4",
       "status": "scheduled",
@@ -2396,7 +2746,14 @@
           "event": "moved from 2026-12-03T12:11:00-06:00 to 2026-12-03T07:47:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:01.389Z"
+      }
     },
     {
       "key": "f445949990b3d03392aa935e",
@@ -2410,7 +2767,7 @@
       "variant": "analytics",
       "countTier": "10K",
       "title": "the follower growth everyone wants #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-03T19:37:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-03-b-eba69dda0e3a.mp4",
       "status": "scheduled",
@@ -2439,7 +2796,14 @@
           "event": "scheduled as 6b0239dac72676f5e9f0eb8e"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:01.566Z"
+      }
     },
     {
       "key": "611557578f95afb25364b54a",
@@ -2453,7 +2817,7 @@
       "variant": "analytics",
       "countTier": "100K",
       "title": "use this sound to go viral #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-04T10:19:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-04-a-d0baefb8fb3f.mp4",
       "status": "scheduled",
@@ -2486,7 +2850,14 @@
           "event": "moved from 2026-12-04T12:11:00-06:00 to 2026-12-04T10:19:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:01.764Z"
+      }
     },
     {
       "key": "b6ed05ff3605522b0e2e205b",
@@ -2500,7 +2871,7 @@
       "variant": "profile",
       "countTier": "300",
       "title": "POV: your TikTok finally blows up #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-04T16:08:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-04-b-7f6d6a9efeae.mp4",
       "status": "scheduled",
@@ -2533,7 +2904,14 @@
           "event": "moved from 2026-12-04T19:37:00-06:00 to 2026-12-04T16:08:00-06:00"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:01.978Z"
+      }
     },
     {
       "key": "be18857f1a73329ad126ec88",
@@ -2547,7 +2925,7 @@
       "variant": "analytics",
       "countTier": "1B",
       "title": "POV: your TikTok finally blows up #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-05T12:11:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-05-a-09a69e517f0f.mp4",
       "status": "scheduled",
@@ -2576,7 +2954,14 @@
           "event": "scheduled as 6b0239dcd5eabfb8cc703ef6"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:02.123Z"
+      }
     },
     {
       "key": "c02164deb52da2fecf5062b7",
@@ -2590,7 +2975,7 @@
       "variant": "analytics",
       "countTier": "300",
       "title": "imagine opening TikTok to this #fyp",
-      "text": "growth time-lapse animation \u00b7 simulated numbers",
+      "text": "growth time-lapse animation · simulated numbers",
       "dueAt": "2026-12-05T19:37:00-06:00",
       "mediaUrl": "https://pub-5b52fac80f8044f19cda75ecf9b5d076.r2.dev/vts/2026-11-22_14d/tiktok-2026-12-05-b-958b6f8e0d4c.mp4",
       "status": "scheduled",
@@ -2619,7 +3004,14 @@
           "event": "scheduled as 6b0239dcc72676f5e9f0ebdf"
         }
       ],
-      "lengthTier": "13s"
+      "lengthTier": "13s",
+      "published": {
+        "status": "scheduled",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null,
+        "checkedAt": "2026-11-22T18:55:02.278Z"
+      }
     }
   ]
 }
