@@ -353,7 +353,8 @@ test("publishQueue filter sends only the selected item", async () => {
 // ---------- experiment design ---------------------------------------------------
 
 test("14-day experiment: 28 posts per platform, every pair of factors balanced, nothing confounded", () => {
-  const plan = planBatch("2026-11-30", 14);
+  // neutral weights: this checks the balanced design itself, not whatever shares are currently configured
+  const plan = planBatch("2026-11-30", 14, PLATFORMS, { explore: 0.3, minPosts: 3, weights: { youtube: {}, tiktok: {} } });
   for (const platform of PLATFORMS) {
     const ps = plan.filter((p) => p.spec.platform === platform);
     assert.equal(ps.length, 28);

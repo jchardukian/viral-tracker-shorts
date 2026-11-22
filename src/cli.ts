@@ -49,7 +49,8 @@ function computeWeights(rows: ReturnType<typeof readLedger>, print = true): { ne
   const exp = loadExperiment();
   const caps = loadCaptions();
   const ch = loadChannels();
-  const next: ExperimentConfig = { ...exp, weights: { youtube: {}, tiktok: {} } };
+  // dimensions without scored results fall back to their configured starting shares
+  const next: ExperimentConfig = { ...exp, weights: { youtube: { ...(exp.baseShares?.youtube ?? {}) }, tiktok: { ...(exp.baseShares?.tiktok ?? {}) } } };
   const leaders: string[] = [];
   for (const pf of PLATFORMS) {
     const options = {

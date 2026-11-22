@@ -17,6 +17,8 @@ export interface ExperimentConfig {
   /** an option needs this many posts with data before its results count */
   minPosts: number;
   weights: Record<Platform, Weights>;
+  /** starting shares for a dimension, used until it has enough results to be scored */
+  baseShares?: Partial<Record<Platform, Weights>>;
   /** schedule new batches without a manual `queue approve` (owner's standing decision) */
   autoPublish?: boolean;
   /** length of each automatically prepared batch, in days */
