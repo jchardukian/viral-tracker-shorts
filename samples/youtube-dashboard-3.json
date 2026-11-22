@@ -6,7 +6,7 @@
   "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-3.mp4",
   "silentFile": null,
   "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-3.png",
-  "sha256": "bf8c91b56d6219ebdf567c3e33bf0e66d81c27c754fe20410ede2a56ca2361a0",
+  "sha256": "5b547c9eb5690e7dfcd8810583c5b79c64ae5ed1d224a7943a350ba80266248f",
   "probe": {
     "width": 1080,
     "height": 1920,
@@ -15,7 +15,7 @@
     "fps": 30,
     "acodec": "aac",
     "durationSec": 11.633333,
-    "sizeBytes": 825190,
+    "sizeBytes": 822275,
     "meanVolumeDb": -12.1
   },
   "audio": {
