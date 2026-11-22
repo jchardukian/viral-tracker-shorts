@@ -13,7 +13,8 @@
     "test": "tsx --test tests/*.test.ts",
     "media": "tsx src/cli.ts media",
     "analytics": "tsx src/cli.ts analytics",
-    "audio": "tsx src/cli.ts audio"
+    "audio": "tsx src/cli.ts audio",
+    "autopilot": "tsx src/cli.ts autopilot"
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.68"

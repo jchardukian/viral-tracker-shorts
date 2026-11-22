@@ -1,0 +1,1461 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "key": "5273bd35885deaab8446c498",
+      "videoId": "youtube-2026-11-22-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-22-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine waking up to this",
+      "audioId": "trk-hyperpop",
+      "variant": "dashboard",
+      "countTier": "300",
+      "title": "Imagine waking up to this #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-22T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "6bb6d0513a4db886a6c663f3",
+      "videoId": "youtube-2026-11-22-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-22-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this song to go viral",
+      "audioId": "trk-jersey-club",
+      "variant": "dashboard",
+      "countTier": "10K",
+      "title": "Use this song to go viral #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-22T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "722e44b5a901877430a87c4e",
+      "videoId": "youtube-2026-11-23-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-23-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your channel finally takes off",
+      "audioId": "trk-funk-house",
+      "variant": "dashboard",
+      "countTier": "1B",
+      "title": "POV: Your channel finally takes off #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-23T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "c2aee23b8a8caefbf98edf10",
+      "videoId": "youtube-2026-11-23-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-23-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-hyperpop",
+      "variant": "dashboard",
+      "countTier": "1M",
+      "title": "POV: this finally happens to you #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-23T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "65b43e20158365337f2087e4",
+      "videoId": "youtube-2026-11-24-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-24-a.mp4",
+      "audioMode": "embedded",
+      "caption": "One viral video changes everything",
+      "audioId": "trk-feelgood-pop",
+      "variant": "dashboard",
+      "countTier": "100K",
+      "title": "One viral video changes everything #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-24T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "05e67271d619b8ea1fcb7270",
+      "videoId": "youtube-2026-11-24-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-24-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "dashboard",
+      "countTier": "10K",
+      "title": "POV: this finally happens to you #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-24T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "bfcb777062a6f6d4f9318a13",
+      "videoId": "youtube-2026-11-25-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-25-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your channel finally takes off",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "dashboard",
+      "countTier": "1M",
+      "title": "POV: Your channel finally takes off #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-25T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "1d6f3ed82502c7bf381f9407",
+      "videoId": "youtube-2026-11-25-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-25-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine waking up to this",
+      "audioId": "trk-funk-house",
+      "variant": "dashboard",
+      "countTier": "100K",
+      "title": "Imagine waking up to this #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-25T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "d8728cc2d29643c640a01d12",
+      "videoId": "youtube-2026-11-26-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-26-a.mp4",
+      "audioMode": "embedded",
+      "caption": "One viral video changes everything",
+      "audioId": "trk-jersey-club",
+      "variant": "dashboard",
+      "countTier": "300",
+      "title": "One viral video changes everything #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-26T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "c51d1ccd1ca48490dda6961c",
+      "videoId": "youtube-2026-11-26-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-26-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your channel finally takes off",
+      "audioId": "trk-feelgood-pop",
+      "variant": "dashboard",
+      "countTier": "10K",
+      "title": "POV: Your channel finally takes off #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-26T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "6204ae96f7a239b1d04bbb31",
+      "videoId": "youtube-2026-11-27-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-27-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this song to go viral",
+      "audioId": "trk-hype-trap",
+      "variant": "dashboard",
+      "countTier": "1B",
+      "title": "Use this song to go viral #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-27T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "32c4c8bc38e72feec01aa5c4",
+      "videoId": "youtube-2026-11-27-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-27-b.mp4",
+      "audioMode": "embedded",
+      "caption": "One viral video changes everything",
+      "audioId": "trk-hype-trap",
+      "variant": "dashboard",
+      "countTier": "1M",
+      "title": "One viral video changes everything #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-27T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "17ce6cd37ad5fadfe55bb917",
+      "videoId": "youtube-2026-11-28-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-28-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-jersey-club",
+      "variant": "dashboard",
+      "countTier": "100K",
+      "title": "POV: this finally happens to you #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-28T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.149Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "29facf3c6861b1275a79d567",
+      "videoId": "youtube-2026-11-28-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-28-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine waking up to this",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "dashboard",
+      "countTier": "300",
+      "title": "Imagine waking up to this #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-28T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "f497105e1a4c05cf79f03b52",
+      "videoId": "youtube-2026-11-29-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-29-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this song to go viral",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "dashboard",
+      "countTier": "100K",
+      "title": "Use this song to go viral #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-29T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "04b4cf26212367f93515d3c5",
+      "videoId": "youtube-2026-11-29-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-29-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-feelgood-pop",
+      "variant": "dashboard",
+      "countTier": "1B",
+      "title": "POV: this finally happens to you #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-29T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "d8fd9b64f36258f295da4b22",
+      "videoId": "youtube-2026-11-30-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-30-a.mp4",
+      "audioMode": "embedded",
+      "caption": "One viral video changes everything",
+      "audioId": "trk-hyperpop",
+      "variant": "dashboard",
+      "countTier": "10K",
+      "title": "One viral video changes everything #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-30T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "1bf3074d6c03ab53c8a90411",
+      "videoId": "youtube-2026-11-30-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-11-30-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your channel finally takes off",
+      "audioId": "trk-hype-trap",
+      "variant": "dashboard",
+      "countTier": "100K",
+      "title": "POV: Your channel finally takes off #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-11-30T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "7768ed9eb0d72359f34abd6e",
+      "videoId": "youtube-2026-12-01-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-01-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this song to go viral",
+      "audioId": "trk-funk-house",
+      "variant": "dashboard",
+      "countTier": "1M",
+      "title": "Use this song to go viral #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-01T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "b1b64d30a8aed744f8da6ecd",
+      "videoId": "youtube-2026-12-01-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-01-b.mp4",
+      "audioMode": "embedded",
+      "caption": "One viral video changes everything",
+      "audioId": "trk-funk-house",
+      "variant": "dashboard",
+      "countTier": "300",
+      "title": "One viral video changes everything #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-01T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "e93baad89ea4ee6a43faf9b0",
+      "videoId": "youtube-2026-12-02-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-02-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your channel finally takes off",
+      "audioId": "trk-jersey-club",
+      "variant": "dashboard",
+      "countTier": "10K",
+      "title": "POV: Your channel finally takes off #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-02T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "354177b36a51244740f43a53",
+      "videoId": "youtube-2026-12-02-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-02-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your channel finally takes off",
+      "audioId": "trk-hyperpop",
+      "variant": "dashboard",
+      "countTier": "100K",
+      "title": "POV: Your channel finally takes off #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-02T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "0c4a5bc289d385f583c968d0",
+      "videoId": "youtube-2026-12-03-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-03-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-hype-trap",
+      "variant": "dashboard",
+      "countTier": "300",
+      "title": "POV: this finally happens to you #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-03T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "83256e5841ea13e8e9721bf6",
+      "videoId": "youtube-2026-12-03-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-03-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine waking up to this",
+      "audioId": "trk-jersey-club",
+      "variant": "dashboard",
+      "countTier": "1B",
+      "title": "Imagine waking up to this #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-03T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "0d682c249937c6ac0747739a",
+      "videoId": "youtube-2026-12-04-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-04-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine waking up to this",
+      "audioId": "trk-feelgood-pop",
+      "variant": "dashboard",
+      "countTier": "1M",
+      "title": "Imagine waking up to this #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-04T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "37401529b0838bb746180d35",
+      "videoId": "youtube-2026-12-04-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-04-b.mp4",
+      "audioMode": "embedded",
+      "caption": "One viral video changes everything",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "dashboard",
+      "countTier": "1B",
+      "title": "One viral video changes everything #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-04T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "9b86e036df0756e2f1ae477d",
+      "videoId": "youtube-2026-12-05-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-05-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine waking up to this",
+      "audioId": "trk-hype-trap",
+      "variant": "dashboard",
+      "countTier": "10K",
+      "title": "Imagine waking up to this #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-05T11:07:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "cb394b853049fb9f1a0f32ce",
+      "videoId": "youtube-2026-12-05-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "youtube",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/youtube/youtube-2026-12-05-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this song to go viral",
+      "audioId": "trk-feelgood-pop",
+      "variant": "dashboard",
+      "countTier": "300",
+      "title": "Use this song to go viral #shorts",
+      "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+      "dueAt": "2026-12-05T18:23:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "6c2fab4888caf9d97efc1f4c",
+      "videoId": "tiktok-2026-11-22-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-22-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-hyperpop",
+      "variant": "profile",
+      "countTier": "1M",
+      "title": "POV: this finally happens to you #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-22T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "bab8520531b2409b09e49da4",
+      "videoId": "tiktok-2026-11-22-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-22-b.mp4",
+      "audioMode": "embedded",
+      "caption": "The follower growth everyone wants",
+      "audioId": "trk-jersey-club",
+      "variant": "profile",
+      "countTier": "100K",
+      "title": "the follower growth everyone wants #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-22T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "0a2cdb7cfcc65107fb5bd715",
+      "videoId": "tiktok-2026-11-23-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-23-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your TikTok finally blows up",
+      "audioId": "trk-hype-trap",
+      "variant": "analytics",
+      "countTier": "10K",
+      "title": "POV: your TikTok finally blows up #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-23T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "7b2637c2f7d05262581c4e89",
+      "videoId": "tiktok-2026-11-23-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-23-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your TikTok finally blows up",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "analytics",
+      "countTier": "1M",
+      "title": "POV: your TikTok finally blows up #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-23T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "c8cfbb0bb57bc7c1d4c86623",
+      "videoId": "tiktok-2026-11-24-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-24-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this sound to go viral",
+      "audioId": "trk-funk-house",
+      "variant": "analytics",
+      "countTier": "300",
+      "title": "use this sound to go viral #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-24T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "e9ca9adba08346b05acb4b9f",
+      "videoId": "tiktok-2026-11-24-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-24-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your TikTok finally blows up",
+      "audioId": "trk-feelgood-pop",
+      "variant": "profile",
+      "countTier": "100K",
+      "title": "POV: your TikTok finally blows up #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-24T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "3fc56924be181a8c7baa51cb",
+      "videoId": "tiktok-2026-11-25-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-25-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine opening TikTok to this",
+      "audioId": "trk-hype-trap",
+      "variant": "profile",
+      "countTier": "1M",
+      "title": "imagine opening TikTok to this #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-25T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "c64977e87e432e8cf3044bae",
+      "videoId": "tiktok-2026-11-25-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-25-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "analytics",
+      "countTier": "1B",
+      "title": "POV: this finally happens to you #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-25T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "9909fb5d99ce3c38d331f33f",
+      "videoId": "tiktok-2026-11-26-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-26-a.mp4",
+      "audioMode": "embedded",
+      "caption": "The follower growth everyone wants",
+      "audioId": "trk-feelgood-pop",
+      "variant": "analytics",
+      "countTier": "300",
+      "title": "the follower growth everyone wants #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-26T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "d7f071a82bd91f1bacd9faaa",
+      "videoId": "tiktok-2026-11-26-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-26-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine opening TikTok to this",
+      "audioId": "trk-jersey-club",
+      "variant": "analytics",
+      "countTier": "10K",
+      "title": "imagine opening TikTok to this #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-26T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "655a94fb37a9526d208da994",
+      "videoId": "tiktok-2026-11-27-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-27-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine opening TikTok to this",
+      "audioId": "trk-hyperpop",
+      "variant": "analytics",
+      "countTier": "100K",
+      "title": "imagine opening TikTok to this #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-27T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "b5601999542f450de5bb2fcb",
+      "videoId": "tiktok-2026-11-27-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-27-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this sound to go viral",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "profile",
+      "countTier": "10K",
+      "title": "use this sound to go viral #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-27T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "ae82455a2faed8ab9b1ae4bd",
+      "videoId": "tiktok-2026-11-28-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-28-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-jersey-club",
+      "variant": "profile",
+      "countTier": "300",
+      "title": "POV: this finally happens to you #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-28T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "0c4f2b457e60095334bd77fc",
+      "videoId": "tiktok-2026-11-28-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-28-b.mp4",
+      "audioMode": "embedded",
+      "caption": "The follower growth everyone wants",
+      "audioId": "trk-funk-house",
+      "variant": "profile",
+      "countTier": "1B",
+      "title": "the follower growth everyone wants #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-28T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "45866da2cae5dfa9f8302a04",
+      "videoId": "tiktok-2026-11-29-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-29-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine opening TikTok to this",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "profile",
+      "countTier": "100K",
+      "title": "imagine opening TikTok to this #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-29T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "553a1d2ca06d066cd10908d2",
+      "videoId": "tiktok-2026-11-29-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-29-b.mp4",
+      "audioMode": "embedded",
+      "caption": "The follower growth everyone wants",
+      "audioId": "trk-hype-trap",
+      "variant": "profile",
+      "countTier": "300",
+      "title": "the follower growth everyone wants #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-29T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "92d921c7b4664da0c9f36268",
+      "videoId": "tiktok-2026-11-30-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-30-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-feelgood-pop",
+      "variant": "profile",
+      "countTier": "10K",
+      "title": "POV: this finally happens to you #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-30T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "05e6c13ef36174c3e3ea223d",
+      "videoId": "tiktok-2026-11-30-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-11-30-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this sound to go viral",
+      "audioId": "trk-jersey-club",
+      "variant": "analytics",
+      "countTier": "1M",
+      "title": "use this sound to go viral #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-11-30T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "da0043f820212e64df4670a8",
+      "videoId": "tiktok-2026-12-01-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-01-a.mp4",
+      "audioMode": "embedded",
+      "caption": "The follower growth everyone wants",
+      "audioId": "trk-phonk-cowbell",
+      "variant": "analytics",
+      "countTier": "1M",
+      "title": "the follower growth everyone wants #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-01T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "e5e2aa45587de5ec2a687ebf",
+      "videoId": "tiktok-2026-12-01-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-01-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: This finally happens to you",
+      "audioId": "trk-hype-trap",
+      "variant": "analytics",
+      "countTier": "100K",
+      "title": "POV: this finally happens to you #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-01T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "2b6ad7097775985c3f372088",
+      "videoId": "tiktok-2026-12-02-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-02-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this sound to go viral",
+      "audioId": "trk-hype-trap",
+      "variant": "profile",
+      "countTier": "1B",
+      "title": "use this sound to go viral #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-02T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "7d37d1b09ff4df7ff9aece33",
+      "videoId": "tiktok-2026-12-02-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-02-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine opening TikTok to this",
+      "audioId": "trk-feelgood-pop",
+      "variant": "profile",
+      "countTier": "1B",
+      "title": "imagine opening TikTok to this #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-02T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "42d7f389699f974813b5b491",
+      "videoId": "tiktok-2026-12-03-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-03-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your TikTok finally blows up",
+      "audioId": "trk-funk-house",
+      "variant": "profile",
+      "countTier": "10K",
+      "title": "POV: your TikTok finally blows up #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-03T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "f445949990b3d03392aa935e",
+      "videoId": "tiktok-2026-12-03-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-03-b.mp4",
+      "audioMode": "embedded",
+      "caption": "The follower growth everyone wants",
+      "audioId": "trk-hyperpop",
+      "variant": "analytics",
+      "countTier": "10K",
+      "title": "the follower growth everyone wants #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-03T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "921c8827048154bba11ceed7",
+      "videoId": "tiktok-2026-12-04-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-04-a.mp4",
+      "audioMode": "embedded",
+      "caption": "Use this sound to go viral",
+      "audioId": "trk-feelgood-pop",
+      "variant": "analytics",
+      "countTier": "100K",
+      "title": "use this sound to go viral #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-04T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "8197e120e6839df7ca132a50",
+      "videoId": "tiktok-2026-12-04-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-04-b.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your TikTok finally blows up",
+      "audioId": "trk-hyperpop",
+      "variant": "profile",
+      "countTier": "300",
+      "title": "POV: your TikTok finally blows up #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-04T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "be18857f1a73329ad126ec88",
+      "videoId": "tiktok-2026-12-05-a",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-05-a.mp4",
+      "audioMode": "embedded",
+      "caption": "POV: Your TikTok finally blows up",
+      "audioId": "trk-jersey-club",
+      "variant": "analytics",
+      "countTier": "1B",
+      "title": "POV: your TikTok finally blows up #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-05T12:11:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    },
+    {
+      "key": "c02164deb52da2fecf5062b7",
+      "videoId": "tiktok-2026-12-05-b",
+      "batchId": "2026-11-22_14d",
+      "platform": "tiktok",
+      "file": "/home/user/viral-tracker-shorts/out/batches/2026-11-22_14d/tiktok/tiktok-2026-12-05-b.mp4",
+      "audioMode": "embedded",
+      "caption": "Imagine opening TikTok to this",
+      "audioId": "trk-funk-house",
+      "variant": "analytics",
+      "countTier": "300",
+      "title": "imagine opening TikTok to this #fyp",
+      "text": "growth time-lapse animation · simulated numbers",
+      "dueAt": "2026-12-05T19:37:00-06:00",
+      "mediaUrl": null,
+      "status": "pending_approval",
+      "attempts": 0,
+      "remoteId": null,
+      "lastError": null,
+      "history": [
+        {
+          "at": "2026-11-22T00:25:47.150Z",
+          "event": "queued (pending approval)"
+        }
+      ]
+    }
+  ]
+}

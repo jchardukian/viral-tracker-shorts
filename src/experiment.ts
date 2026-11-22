@@ -17,6 +17,12 @@ export interface ExperimentConfig {
   /** an option needs this many posts with data before its results count */
   minPosts: number;
   weights: Record<Platform, Weights>;
+  /** schedule new batches without a manual `queue approve` (owner's standing decision) */
+  autoPublish?: boolean;
+  /** length of each automatically prepared batch, in days */
+  batchDays?: number;
+  /** prepare the next batch when fewer than this many days of posts remain scheduled */
+  topUpWhenDaysLeftBelow?: number;
 }
 
 /**

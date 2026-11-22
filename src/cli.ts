@@ -9,7 +9,9 @@ import { type AudioLibrary, loadLibrary } from "./audio/library.ts";
 import { DIMENSIONS, type ExperimentConfig, recommend } from "./experiment.ts";
 import { enqueueBatch, loadExperiment, type Manifest, planBatch, planCsv, planSamples, renderOne } from "./pipeline.ts";
 import { type BufferConfig, BufferPublisher, fetchPost, listChannels } from "./publish/buffer.ts";
-import { mediaConfigFromEnv, uploadVideo, verifyPublicUrl } from "./publish/media.ts";
+import { discoverAccountId, type MediaConfig, mediaConfigFromEnv, uploadVideo, verifyPublicUrl } from "./publish/media.ts";
+import { addDays } from "./publish/schedule.ts";
+import { readJson } from "./spec.ts";
 import { DryRunPublisher, publishQueue, Queue, slotKey } from "./publish/queue.ts";
 import { loadCaptions, loadChannels, TEMPLATES } from "./spec.ts";
 import { type Platform, PLATFORMS } from "./templates/types.ts";
@@ -32,6 +34,55 @@ function bufferConfig(): BufferConfig {
     channelIds: { youtube: ch.youtube.bufferChannelId, tiktok: ch.tiktok.bufferChannelId },
     youtubeCategoryId: ch.youtube.youtubeCategoryId ?? "24",
   };
+}
+
+async function mediaConfig(): Promise<MediaConfig> {
+  const env = { ...process.env };
+  if (!env.CLOUDFLARE_ACCOUNT_ID && env.CLOUDFLARE_API_TOKEN) env.CLOUDFLARE_ACCOUNT_ID = await discoverAccountId(env.CLOUDFLARE_API_TOKEN);
+  return mediaConfigFromEnv(env, readJson<{ bucket: string; publicBaseUrl: string }>("config/media.json"));
+}
+
+/** Results -> each option's share of the next batch. Prints the tables; returns the config to save. */
+function computeWeights(rows: ReturnType<typeof readLedger>, print = true): { next: ExperimentConfig; leaders: string[] } {
+  const exp = loadExperiment();
+  const caps = loadCaptions();
+  const ch = loadChannels();
+  const next: ExperimentConfig = { ...exp, weights: { youtube: {}, tiktok: {} } };
+  const leaders: string[] = [];
+  for (const pf of PLATFORMS) {
+    const options = {
+      caption: caps[pf].captions,
+      audio_id: loadLibrary(pf).sounds.map((x) => x.id),
+      template_variant: ch[pf].variants?.length ? ch[pf].variants! : [Object.keys(TEMPLATES[pf])[0]],
+      count_tier: (ch.countTiers ?? []).map((t) => t.id),
+    };
+    for (const by of DIMENSIONS) {
+      const ranked = recommend(rows, pf, by, options[by], exp);
+      if (print) {
+        console.log(`\n${pf} · ${by}  (score 1.00 = platform average; blank = fewer than ${exp.minPosts} posts with data)`);
+        console.table(ranked.map((r) => ({ option: r.option, posts: r.posts, score: r.score ?? "", "share of next batch": `${(r.weight * 100).toFixed(0)}%` })));
+      }
+      if (ranked.some((r) => r.score !== null) && ranked.length > 1) {
+        next.weights[pf][by] = Object.fromEntries(ranked.map((r) => [r.option, r.weight]));
+        const scored = ranked.filter((r) => r.score !== null).sort((a, b) => b.score! - a.score!);
+        leaders.push(`${pf} ${by}: best "${scored[0].option}" (${scored[0].score}x avg, ${scored[0].posts} posts)` + (scored.length > 1 ? `, weakest "${scored[scored.length - 1].option}" (${scored[scored.length - 1].score}x)` : ""));
+      }
+    }
+  }
+  return { next, leaders };
+}
+
+async function uploadApproved(queue: Queue, only?: string) {
+  const cfg = await mediaConfig();
+  const todo = queue.items.filter((i) => i.status === "approved" && !i.mediaUrl && (!only || i.videoId === only));
+  for (const i of todo) {
+    const r = await uploadVideo(i.file, cfg, `vts/${i.batchId}`);
+    i.mediaUrl = r.url;
+    i.history.push({ at: new Date().toISOString(), event: `uploaded, publicly retrievable: ${r.url}` });
+    queue.save();
+    console.log(`${i.videoId} -> ${r.url}`);
+  }
+  return todo.length;
 }
 
 /** Technical checks on every MP4 in a directory. Returns true when all pass. */
@@ -241,22 +292,79 @@ async function main() {
   } else if (cmd === "media") {
     // upload approved videos to R2 and record their public URLs on the queue
     if (argv[1] !== "upload") throw new Error("media upload [--id <videoId>] [--file <mp4>]");
-    const cfg = mediaConfigFromEnv();
     if (flag("file")) {
-      const r = await uploadVideo(flag("file")!, cfg, flag("prefix", "vts"));
+      const r = await uploadVideo(flag("file")!, await mediaConfig(), flag("prefix", "vts"));
       console.log(`${r.url}  (${r.bytes} bytes, public fetch: HTTP ${r.verification.status} ${r.verification.contentType})`);
       return;
     }
+    const n = await uploadApproved(new Queue(QUEUE_PATH), flag("id"));
+    console.log(`uploaded and verified ${n} approved video(s)`);
+  } else if (cmd === "autopilot") {
+    // The weekly job: record what happened, learn from it, keep the schedule topped up.
+    const exp = loadExperiment();
     const queue = new Queue(QUEUE_PATH);
-    const todo = queue.items.filter((i) => i.status === "approved" && (!flag("id") || i.videoId === flag("id")));
-    for (const i of todo) {
-      const r = await uploadVideo(i.file, cfg, `vts/${i.batchId}`);
-      i.mediaUrl = r.url;
-      i.history.push({ at: new Date().toISOString(), event: `uploaded, publicly retrievable: ${r.url}` });
-      queue.save();
-      console.log(`${i.videoId} -> ${r.url}`);
+    const cfg = bufferConfig();
+    const now = new Date();
+    const log = (l: string) => console.log(`[${new Date().toISOString()}] ${l}`);
+    const summary: Record<string, unknown> = {};
+
+    // 1. what happened to posts that were due
+    const remote = new Map<string, Awaited<ReturnType<typeof fetchPost>>>();
+    for (const i of queue.items.filter((i) => i.status === "scheduled" && i.remoteId)) {
+      const p = await fetchPost(cfg, i.remoteId!);
+      remote.set(i.remoteId!, p);
+      i.published = { status: p.status, sentAt: p.sentAt, externalLink: p.externalLink, error: p.error, checkedAt: now.toISOString() };
     }
-    console.log(`uploaded and verified ${todo.length} approved video(s)`);
+    queue.save();
+    const due = queue.items.filter((i) => i.status === "scheduled" && new Date(i.dueAt) <= now);
+    summary.published = due.filter((i) => i.published?.status === "sent").length;
+    summary.errors = due.filter((i) => i.published?.status === "error").map((i) => `${i.videoId}: ${i.published?.error}`);
+    summary.notSentYet = due.filter((i) => i.published && !["sent", "error"].includes(i.published.status)).map((i) => i.videoId);
+
+    // 2. results into the ledger (Buffer's numbers; viewed rate and watch % come from imports)
+    let rows = syncFromQueue(readLedger(LEDGER_PATH), queue.items);
+    for (const r of rows.filter((r) => r.post_id && remote.has(r.post_id))) applyBufferMetrics(r, remote.get(r.post_id)!);
+    writeLedger(LEDGER_PATH, rows);
+    rows = readLedger(LEDGER_PATH);
+    summary.postsWithViews = rows.filter((r) => r.views !== "").length;
+    summary.postsWithViewedRate = rows.filter((r) => r.viewed_rate !== "").length;
+
+    // 3. shift the mix towards what worked
+    const { next, leaders } = computeWeights(rows, flag("verbose") === "true");
+    writeFileSync(join(ROOT, "config", "experiment.json"), JSON.stringify(next, null, 2) + "\n");
+    summary.leaders = leaders;
+
+    // 4. keep the schedule topped up
+    const future = queue.items.filter((i) => i.batchId !== "validation" && new Date(i.dueAt) > now);
+    const lastDue = queue.items.filter((i) => i.batchId !== "validation").map((i) => i.dueAt).sort().pop();
+    const daysLeft = future.length ? (Math.max(...future.map((i) => Date.parse(i.dueAt))) - now.getTime()) / 86400000 : 0;
+    summary.daysOfPostsLeft = +daysLeft.toFixed(1);
+    if (daysLeft < (exp.topUpWhenDaysLeftBelow ?? 8)) {
+      const tomorrow = addDays(now.toISOString().slice(0, 10), 1);
+      const after = lastDue ? addDays(lastDue.slice(0, 10), 1) : tomorrow;
+      const start = after > tomorrow ? after : tomorrow;
+      const days = exp.batchDays ?? 7;
+      const batchId = `${start}_${days}d`;
+      const dir = join(ROOT, "out", "batches", batchId);
+      const plans = planBatch(start, days);
+      mkdirSync(join(ROOT, "experiments", batchId), { recursive: true });
+      writeFileSync(join(ROOT, "experiments", batchId, "plan.csv"), planCsv(plans));
+      const manifests: Manifest[] = [];
+      for (const p of plans) manifests.push(await renderOne(p, join(dir, p.spec.platform)));
+      for (const pf of new Set(manifests.map((m) => m.platform))) if (!qa(join(dir, pf))) throw new Error(`QA failed for ${batchId}/${pf}; nothing scheduled`);
+      const added = enqueueBatch(queue, batchId, manifests);
+      summary.newBatch = { batchId, videos: plans.length, queued: added, autoPublish: exp.autoPublish === true };
+      if (exp.autoPublish === true) queue.approve((i) => i.batchId === batchId);
+      queue.save();
+    }
+
+    // 5. host and schedule everything approved (also finishes a run that was interrupted)
+    if (queue.items.some((i) => i.status === "approved")) {
+      summary.uploaded = await uploadApproved(queue);
+      summary.scheduled = await publishQueue(queue, new BufferPublisher(cfg), { log, requireAudio: loadChannels().publishSilent !== true });
+    }
+    summary.pendingApproval = queue.items.filter((i) => i.status === "pending_approval").length;
+    console.log("\nAUTOPILOT SUMMARY\n" + JSON.stringify(summary, null, 2));
   } else if (cmd === "audio") {
     const sub = argv[1];
     if (sub === "detect") {
@@ -327,24 +435,7 @@ async function main() {
       }
     } else if (sub === "recommend") {
       // turn results into weights for the next batch; --write saves them
-      const exp = loadExperiment();
-      const caps = loadCaptions();
-      const ch = loadChannels();
-      const next: ExperimentConfig = { ...exp, weights: { youtube: {}, tiktok: {} } };
-      for (const pf of PLATFORMS) {
-        const options = {
-          caption: caps[pf].captions,
-          audio_id: loadLibrary(pf).sounds.map((x) => x.id),
-          template_variant: ch[pf].variants?.length ? ch[pf].variants! : [Object.keys(TEMPLATES[pf])[0]],
-          count_tier: (ch.countTiers ?? []).map((t) => t.id),
-        };
-        for (const by of DIMENSIONS) {
-          const ranked = recommend(rows, pf, by, options[by], exp);
-          console.log(`\n${pf} · ${by}  (score 1.00 = platform average; blank = fewer than ${exp.minPosts} posts with data)`);
-          console.table(ranked.map((r) => ({ option: r.option, posts: r.posts, score: r.score ?? "", "share of next batch": `${(r.weight * 100).toFixed(0)}%` })));
-          if (ranked.some((r) => r.score !== null) && ranked.length > 1) next.weights[pf][by] = Object.fromEntries(ranked.map((r) => [r.option, r.weight]));
-        }
-      }
+      const { next } = computeWeights(rows);
       if (flag("write") === "true") {
         writeFileSync(join(ROOT, "config", "experiment.json"), JSON.stringify(next, null, 2) + "\n");
         console.log("\nsaved to config/experiment.json; the next `batch` will follow these shares");
@@ -363,6 +454,7 @@ async function main() {
   npm run queue -- sync                    fetch what happened to scheduled posts
   npm run queue -- export                  upload-ready package of approved items
   npm run media -- upload [--id <videoId>] upload approved MP4s to R2, verify public URLs
+  npm run autopilot                        weekly: record results, update weights, top up and schedule
   npm run analytics -- export|import <csv>|pull|report|recommend [--write]
   npm run audio -- generate --id <id> (--prompt "..." | --like <id>) | detect <file>`);
   }

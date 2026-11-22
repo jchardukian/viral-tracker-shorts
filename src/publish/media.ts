@@ -23,12 +23,26 @@ export interface MediaConfig {
   fetchImpl?: typeof fetch;
 }
 
-export function mediaConfigFromEnv(env: NodeJS.ProcessEnv = process.env): MediaConfig {
-  const need = ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN", "R2_BUCKET", "MEDIA_BASE_URL"] as const;
-  const missing = need.filter((k) => !env[k]);
+export function mediaConfigFromEnv(env: NodeJS.ProcessEnv = process.env, defaults: { bucket?: string; publicBaseUrl?: string } = {}): MediaConfig {
+  const bucket = env.R2_BUCKET ?? defaults.bucket;
+  const publicBaseUrl = env.MEDIA_BASE_URL ?? defaults.publicBaseUrl;
+  const missing = [
+    !env.CLOUDFLARE_ACCOUNT_ID && "CLOUDFLARE_ACCOUNT_ID",
+    !env.CLOUDFLARE_API_TOKEN && "CLOUDFLARE_API_TOKEN",
+    !bucket && "R2_BUCKET",
+    !publicBaseUrl && "MEDIA_BASE_URL",
+  ].filter(Boolean);
   if (missing.length) throw new Error(`media upload needs ${missing.join(", ")} in the environment`);
-  if (!/^https:\/\//.test(env.MEDIA_BASE_URL!)) throw new Error("MEDIA_BASE_URL must be a public https:// URL");
-  return { accountId: env.CLOUDFLARE_ACCOUNT_ID!, apiToken: env.CLOUDFLARE_API_TOKEN!, bucket: env.R2_BUCKET!, publicBaseUrl: env.MEDIA_BASE_URL! };
+  if (!/^https:\/\//.test(publicBaseUrl!)) throw new Error("MEDIA_BASE_URL must be a public https:// URL");
+  return { accountId: env.CLOUDFLARE_ACCOUNT_ID!, apiToken: env.CLOUDFLARE_API_TOKEN!, bucket: bucket!, publicBaseUrl: publicBaseUrl! };
+}
+
+/** The account id is not a secret, but it need not live in the repo: look it up with the token when unset. */
+export async function discoverAccountId(apiToken: string, fetchImpl: typeof fetch = fetch): Promise<string> {
+  const res = await fetchImpl("https://api.cloudflare.com/client/v4/accounts", { headers: { Authorization: `Bearer ${apiToken}` } });
+  const body = (await res.json().catch(() => ({}))) as { result?: { id: string }[] };
+  if (!res.ok || !body.result?.length) throw new Error(`could not look up the Cloudflare account (HTTP ${res.status}); set CLOUDFLARE_ACCOUNT_ID`);
+  return body.result[0].id;
 }
 
 /** Content-addressed key: re-uploading the same file is a no-op, and a URL never changes meaning. */
