@@ -1,0 +1,8 @@
+node_modules/
+out/
+assets/audio/generated/
+assets/audio/licensed/*
+!assets/audio/licensed/.gitkeep
+.env
+.env.*
+*.log

@@ -1,0 +1,92 @@
+[
+  {
+    "file": "tiktok-analytics-1.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -10.9 dB",
+    "sec": 18.5,
+    "MB": 1.15,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-analytics-2.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13.6 dB",
+    "sec": 15.47,
+    "MB": 1.37,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-analytics-3.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -12.1 dB",
+    "sec": 11.63,
+    "MB": 1.2,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-profile-1.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -10.9 dB",
+    "sec": 18.5,
+    "MB": 1.04,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-profile-2.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13.6 dB",
+    "sec": 15.47,
+    "MB": 1.15,
+    "result": "pass"
+  },
+  {
+    "file": "tiktok-profile-3.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -12.1 dB",
+    "sec": 11.63,
+    "MB": 1.04,
+    "result": "pass"
+  },
+  {
+    "file": "youtube-dashboard-1.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -10.9 dB",
+    "sec": 18.5,
+    "MB": 0.97,
+    "result": "pass"
+  },
+  {
+    "file": "youtube-dashboard-2.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -13.6 dB",
+    "sec": 15.47,
+    "MB": 0.93,
+    "result": "pass"
+  },
+  {
+    "file": "youtube-dashboard-3.mp4",
+    "res": "1080x1920",
+    "video": "h264/yuv420p",
+    "fps": 30,
+    "audio": "aac -12.1 dB",
+    "sec": 11.63,
+    "MB": 0.82,
+    "result": "pass"
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "youtube": {
+    "captions": [
+      "POV: Your channel finally takes off",
+      "Imagine waking up to this",
+      "One viral video changes everything",
+      "POV: This finally happens to you",
+      "Use this song to go viral",
+      "POV: You used this sound and got {count} subscribers"
+    ],
+    "contentTitles": [
+      "Day 1",
+      "The one that took off",
+      "Posting every day",
+      "Small channel update",
+      "Why this worked"
+    ],
+    "titles": [
+      "POV: Your channel finally takes off #shorts",
+      "Imagine waking up to this #shorts",
+      "One viral video changes everything #shorts",
+      "POV: this finally happens to you #shorts",
+      "Use this song to go viral #shorts",
+      "POV: you used this sound #shorts"
+    ],
+    "description": "Growth time-lapse animation. The figures shown are simulated, not live analytics."
+  },
+  "tiktok": {
+    "captions": [
+      "POV: Your TikTok finally blows up",
+      "Imagine opening TikTok to this",
+      "The follower growth everyone wants",
+      "POV: This finally happens to you",
+      "Use this sound to go viral",
+      "POV: You used this sound and got {count} followers"
+    ],
+    "contentTitles": [
+      "day 1",
+      "the one that blew up",
+      "posting every day",
+      "small account update"
+    ],
+    "titles": [
+      "POV: your TikTok finally blows up #fyp",
+      "imagine opening TikTok to this #fyp",
+      "the follower growth everyone wants #fyp",
+      "POV: this finally happens to you #fyp",
+      "use this sound to go viral #fyp",
+      "POV: you used this sound #fyp"
+    ],
+    "description": "growth time-lapse animation · simulated numbers"
+  }
+}

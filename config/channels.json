@@ -1,0 +1,66 @@
+{
+  "disclosure": "simulated numbers",
+  "publishSilent": false,
+  "countTiers": [
+    {
+      "id": "300",
+      "base": 230
+    },
+    {
+      "id": "10K",
+      "base": 9000
+    },
+    {
+      "id": "100K",
+      "base": 85000
+    },
+    {
+      "id": "1M",
+      "base": 1020000
+    },
+    {
+      "id": "1B",
+      "base": 1010000000
+    }
+  ],
+  "youtube": {
+    "name": "Oh My Trillion",
+    "handle": "@ohmytrillion",
+    "initial": "O",
+    "avatar": [
+      "#ff5a36",
+      "#e5322d"
+    ],
+    "startDate": "2026-01-12",
+    "asOf": "2026-11-21",
+    "currentCount": 110266,
+    "dailyGrowth": 310,
+    "history": null,
+    "bufferChannelId": "6b02282bece6dfde5f4d121b",
+    "youtubeCategoryId": "24",
+    "variants": [
+      "dashboard"
+    ],
+    "avatarImage": "assets/brand/avatar.jpg"
+  },
+  "tiktok": {
+    "name": "Oh My Trillion",
+    "handle": "@oh.my.trillion",
+    "initial": "O",
+    "avatar": [
+      "#7b6bff",
+      "#fe2c55"
+    ],
+    "startDate": "2026-03-02",
+    "asOf": "2026-11-21",
+    "currentCount": 48350,
+    "dailyGrowth": 190,
+    "history": null,
+    "bufferChannelId": "6b02289bece6dfde5f4d1de6",
+    "variants": [
+      "analytics",
+      "profile"
+    ],
+    "avatarImage": "assets/brand/avatar.jpg"
+  }
+}

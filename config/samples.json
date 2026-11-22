@@ -1,0 +1,11 @@
+[
+  {"id": "youtube-dashboard-1", "platform": "youtube", "variant": "dashboard", "soundIndex": 0, "caption": 0, "targetSec": 18, "currentCount": 312, "historySeed": "a", "countTier": "300"},
+  {"id": "youtube-dashboard-2", "platform": "youtube", "variant": "dashboard", "soundIndex": 1, "caption": 1, "targetSec": 15, "currentCount": 1284930, "historySeed": "b", "countTier": "1M"},
+  {"id": "youtube-dashboard-3", "platform": "youtube", "variant": "dashboard", "soundIndex": 2, "caption": 2, "targetSec": 12, "currentCount": 1037442118, "historySeed": "c", "countTier": "1B"},
+  {"id": "tiktok-analytics-1", "platform": "tiktok", "variant": "analytics", "soundIndex": 0, "caption": 0, "targetSec": 18, "currentCount": 312, "historySeed": "d", "countTier": "300"},
+  {"id": "tiktok-analytics-2", "platform": "tiktok", "variant": "analytics", "soundIndex": 1, "caption": 1, "targetSec": 15, "currentCount": 1284930, "historySeed": "e", "countTier": "1M"},
+  {"id": "tiktok-analytics-3", "platform": "tiktok", "variant": "analytics", "soundIndex": 2, "caption": 2, "targetSec": 12, "currentCount": 1037442118, "historySeed": "f", "countTier": "1B"},
+  {"id": "tiktok-profile-1", "platform": "tiktok", "variant": "profile", "soundIndex": 0, "caption": 0, "targetSec": 18, "currentCount": 312, "historySeed": "d", "countTier": "300"},
+  {"id": "tiktok-profile-2", "platform": "tiktok", "variant": "profile", "soundIndex": 1, "caption": 1, "targetSec": 15, "currentCount": 1284930, "historySeed": "e", "countTier": "1M"},
+  {"id": "tiktok-profile-3", "platform": "tiktok", "variant": "profile", "soundIndex": 2, "caption": 2, "targetSec": 12, "currentCount": 1037442118, "historySeed": "f", "countTier": "1B"}
+]

@@ -1,0 +1,13 @@
+{
+  "_comment": "Empty weights = balanced rotation. `npm run analytics -- recommend --write` fills them from results.",
+  "explore": 0.3,
+  "minPosts": 3,
+  "weights": {
+    "youtube": {},
+    "tiktok": {}
+  },
+  "autoPublish": true,
+  "_autoPublish": "Owner authorised fully automatic scheduling of new batches on 2026-11-21. Set to false to require `queue approve` again.",
+  "batchDays": 7,
+  "topUpWhenDaysLeftBelow": 8
+}

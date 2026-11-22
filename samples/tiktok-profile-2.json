@@ -1,0 +1,42 @@
+{
+  "id": "tiktok-profile-2",
+  "platform": "tiktok",
+  "variant": "profile",
+  "countTier": "1M",
+  "file": "/home/user/viral-tracker-shorts/samples/tiktok-profile-2.mp4",
+  "silentFile": null,
+  "still": "/home/user/viral-tracker-shorts/samples/tiktok-profile-2.png",
+  "sha256": "ba7e2402c3abb9998aa307dcc4c939db4d3677c6f8e7cfb092acee5310837261",
+  "probe": {
+    "width": 1080,
+    "height": 1920,
+    "vcodec": "h264",
+    "pixFmt": "yuv420p",
+    "fps": 30,
+    "acodec": "aac",
+    "durationSec": 15.466667,
+    "sizeBytes": 1151153,
+    "meanVolumeDb": -13.6
+  },
+  "audio": {
+    "soundId": "trk-jersey-club",
+    "bpm": 140,
+    "beatOffsetSec": 0.035,
+    "link": null,
+    "mode": "embedded",
+    "file": "/home/user/viral-tracker-shorts/assets/audio/tracks/trk-jersey-club.mp3",
+    "note": "embedded (licensed, ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan)"
+  },
+  "title": "imagine opening TikTok to this #fyp",
+  "text": "growth time-lapse animation · simulated numbers",
+  "dueAt": null,
+  "counter": {
+    "start": 0,
+    "end": 1284930
+  },
+  "caption": "Imagine opening TikTok to this",
+  "cuts": 171,
+  "dataSource": "simulated",
+  "seed": 2118477422,
+  "durationSec": 15.466666666666667
+}

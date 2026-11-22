@@ -1,0 +1,42 @@
+{
+  "id": "youtube-dashboard-1",
+  "platform": "youtube",
+  "variant": "dashboard",
+  "countTier": "300",
+  "file": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-1.mp4",
+  "silentFile": null,
+  "still": "/home/user/viral-tracker-shorts/samples/youtube-dashboard-1.png",
+  "sha256": "88bc86ad42dbc25fbdf026a89ff05678f2764414533b4b378f035c6dcf1d20a9",
+  "probe": {
+    "width": 1080,
+    "height": 1920,
+    "vcodec": "h264",
+    "pixFmt": "yuv420p",
+    "fps": 30,
+    "acodec": "aac",
+    "durationSec": 18.5,
+    "sizeBytes": 968729,
+    "meanVolumeDb": -10.9
+  },
+  "audio": {
+    "soundId": "trk-phonk-cowbell",
+    "bpm": 130,
+    "beatOffsetSec": 0.023,
+    "link": null,
+    "mode": "embedded",
+    "file": "/home/user/viral-tracker-shorts/assets/audio/tracks/trk-phonk-cowbell.mp3",
+    "note": "embedded (licensed, ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan)"
+  },
+  "title": "POV: Your channel finally takes off #shorts",
+  "text": "Growth time-lapse animation. The figures shown are simulated, not live analytics.",
+  "dueAt": null,
+  "counter": {
+    "start": 0,
+    "end": 312
+  },
+  "caption": "POV: Your channel finally takes off",
+  "cuts": 220,
+  "dataSource": "simulated",
+  "seed": 1670033675,
+  "durationSec": 18.5
+}
