@@ -8,7 +8,7 @@
       "Use this song to go viral",
       "POV: You used this sound and got {count} subscribers",
       "Will you subscribe?",
-      "Subscribe or swipe?"
+      "POV: Getting {count} subscribers"
     ],
     "contentTitles": [
       "Day 1",
@@ -25,7 +25,7 @@
       "Use this song to go viral #shorts",
       "POV: you used this sound #shorts",
       "Will you subscribe? #shorts",
-      "Subscribe or swipe? #shorts"
+      "POV: getting there #shorts"
     ],
     "description": "Growth time-lapse animation. The figures shown are simulated, not live analytics."
   },
@@ -38,7 +38,7 @@
       "Use this sound to go viral",
       "POV: You used this sound and got {count} followers",
       "Will you follow?",
-      "Follow or swipe?"
+      "POV: Getting {count} followers"
     ],
     "contentTitles": [
       "day 1",
@@ -54,7 +54,7 @@
       "use this sound to go viral #fyp",
       "POV: you used this sound #fyp",
       "will you follow? #fyp",
-      "follow or swipe? #fyp"
+      "POV: getting there #fyp"
     ],
     "description": "growth time-lapse animation · simulated numbers"
   }
