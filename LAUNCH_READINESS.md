@@ -23,7 +23,7 @@ Updated 2026-11-21 (evening, US Central).
 | Link | https://www.youtube.com/watch?v=N0OGH4KB1kw | https://tiktok.com/@oh.my.trillion/video/7710787833107139854 |
 | Buffer fetched the R2 file | yes | yes |
 | Classified by Buffer as | Short | video post |
-| Audio survived the upload | to be confirmed by the owner in the app | to be confirmed by the owner in the app |
+| Audio survived the upload | yes, confirmed by the owner | yes, confirmed by the owner |
 
 The two validation posts went through the Buffer connector; the 56 batch posts
 went through `src/publish/buffer.ts` with the API key.

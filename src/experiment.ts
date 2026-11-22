@@ -83,7 +83,7 @@ export function apportion(options: string[], weights: Record<string, number> | u
   const total = w.reduce((a, b) => a + b, 0);
   const exact = w.map((x) => (x / total) * n);
   const counts = exact.map(Math.floor);
-  const order = exact.map((x, i) => [x - Math.floor(x), i] as const).sort((a, b) => b[0] - a[0] || a[1] - b[1]);
+  const order = exact.map((x, i) => [x - Math.floor(x), i] as const).sort((a, b) => b[0] - a[0] || b[1] - a[1]); // ties go to the most recently added option
   for (let k = 0; counts.reduce((a, b) => a + b, 0) < n; k++) counts[order[k % order.length][1]]++;
   return counts;
 }

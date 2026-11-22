@@ -24,7 +24,7 @@
       "bpm": 130,
       "beatOffsetSec": 0.023,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-31"
+      "expiresAt": "2027-03-31"
     },
     {
       "id": "trk-jersey-club",
@@ -49,7 +49,7 @@
       "bpm": 140,
       "beatOffsetSec": 0.035,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-31"
+      "expiresAt": "2027-03-31"
     },
     {
       "id": "trk-feelgood-pop",
@@ -74,7 +74,7 @@
       "bpm": 124,
       "beatOffsetSec": 0.023,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-31"
+      "expiresAt": "2027-03-31"
     },
     {
       "id": "trk-hype-trap",
@@ -99,7 +99,7 @@
       "bpm": 150,
       "beatOffsetSec": 0.023,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-31"
+      "expiresAt": "2027-03-31"
     },
     {
       "id": "trk-hyperpop",
@@ -124,7 +124,7 @@
       "bpm": 160,
       "beatOffsetSec": 0.209,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-31"
+      "expiresAt": "2027-03-31"
     },
     {
       "id": "trk-funk-house",
@@ -149,7 +149,57 @@
       "bpm": 122,
       "beatOffsetSec": 0.012,
       "activeFrom": "2026-11-21",
-      "expiresAt": "2026-12-31"
+      "expiresAt": "2027-03-31"
+    },
+    {
+      "id": "trk-vocal-pop-trillion",
+      "title": "Vocal pop: Oh My Trillion",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-vocal-pop-trillion.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Catchy upbeat dance pop song with a bright female vocal, 124 BPM, starts immediately on the sung chorus with no intro. Lyrics: Oh my, oh my, oh my trillion, watch the numbers climb. Oh my, oh my, oh my trillion, going up every time. Simple, repetitive, earworm hook, claps and plucky synths",
+        "generatedAt": "2026-11-21"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan",
+        "notes": "Original song with vocals; lyrics written for this channel. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 124,
+      "beatOffsetSec": 0.023,
+      "activeFrom": "2026-11-22",
+      "expiresAt": "2027-03-31"
+    },
+    {
+      "id": "trk-vocal-trap-chant",
+      "title": "Vocal trap chant: check the count",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-vocal-trap-chant.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Hype trap anthem with a confident male rap chant, 150 BPM half-time, booming 808 and brass stabs, starts immediately on the vocal hook with no intro. Lyrics: Woke up, check the count, numbers going up. Woke up, check the count, never enough. Oh my trillion, oh my trillion, run it up. Crowd shouts on the last words",
+        "generatedAt": "2026-11-21"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-21 on the owner's Creator plan",
+        "notes": "Original song with vocals; lyrics written for this channel. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 150,
+      "beatOffsetSec": 0.023,
+      "activeFrom": "2026-11-22",
+      "expiresAt": "2027-03-31"
     }
   ]
 }

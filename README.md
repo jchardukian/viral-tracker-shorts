@@ -212,8 +212,8 @@ attaching a platform-native sound on either platform (`metadata.tiktok` is
 `title` + `isAiGenerated` only). A native sound can only be attached by hand
 in the app. Nothing here tries to work around that.
 
-The six tracks in `assets/audio/tracks/` are original instrumentals generated
-with ElevenLabs Music for this project (prompts stored in the audio config).
+The tracks in `assets/audio/tracks/` are originals generated with ElevenLabs
+Music for this project: six instrumentals and two songs with vocals (prompts stored in the audio config).
 The owner should confirm the plan's terms for commercial use. Tempo comes from
 local beat detection (`npm run audio -- detect <file>`).
 
