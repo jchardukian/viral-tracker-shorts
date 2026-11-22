@@ -2,11 +2,12 @@ import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { once } from "node:events";
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { templateFor } from "../spec.ts";
 import { snapshotIndex, type VideoSpec } from "../templates/types.ts";
-import { registerFonts } from "./draw.ts";
+import { registerFonts, ROOT } from "./draw.ts";
+import { rng } from "./util.ts";
 
 export function renderFrame(spec: VideoSpec, t: number) {
   registerFonts();
@@ -66,6 +67,83 @@ export async function renderVideo(spec: VideoSpec, out: string, opts: { forceSil
   ff.stdin.end();
   const [code] = await closed;
   if (code !== 0) throw new Error(`ffmpeg failed (${code}): ${err}`);
+}
+
+export interface Clip {
+  id: string;
+  theme: string;
+  title: string;
+  seconds: number;
+  url: string;
+}
+
+/** Local path of a stock clip, downloading it once into assets/footage/ if needed. */
+export async function ensureClip(clip: Clip): Promise<string> {
+  const file = join(ROOT, "assets", "footage", `${clip.id}.mp4`);
+  if (!existsSync(file)) {
+    const res = await fetch(clip.url, { headers: { "User-Agent": "Mozilla/5.0" } });
+    if (!res.ok) throw new Error(`footage ${clip.id}: download failed (HTTP ${res.status})`);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+  }
+  return file;
+}
+
+/** Which clips a scenic video uses and where each segment starts. Deterministic per video. */
+export function pickFootage(spec: VideoSpec, clips: Clip[]): { clip: Clip; start: number; seconds: number }[] {
+  const r = rng(spec.seed ^ 0x5ce1c);
+  const n = Math.max(1, Math.round(spec.durationSec / 6.5));
+  const seg = spec.durationSec / n;
+  const themes = [...new Set(clips.map((c) => c.theme))].filter((t) => clips.filter((c) => c.theme === t && c.seconds >= seg + 0.3).length >= Math.min(n, 2));
+  const theme = themes[Math.floor(r() * themes.length)];
+  const pool = clips.filter((c) => c.theme === theme && c.seconds >= seg + 0.3);
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(r() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return Array.from({ length: n }, (_, k) => {
+    const clip = pool[k % pool.length];
+    return { clip, start: +(r() * Math.max(0, clip.seconds - seg - 0.2)).toFixed(2), seconds: seg };
+  });
+}
+
+/**
+ * Scenic videos: stock clips cut together by ffmpeg, the template's header
+ * overlaid, and the same audio handling as every other video.
+ */
+export async function renderScenic(spec: VideoSpec, out: string, clips: Clip[], opts: { forceSilent?: boolean } = {}): Promise<string[]> {
+  registerFonts();
+  mkdirSync(dirname(out), { recursive: true });
+  const segs = pickFootage(spec, clips);
+  const files = await Promise.all(segs.map((s) => ensureClip(s.clip)));
+  const canvas = createCanvas(spec.width, spec.height);
+  templateFor(spec).render(canvas.getContext("2d"), spec, 0);
+  const overlay = `${out}.overlay.png`;
+  writeFileSync(overlay, canvas.toBuffer("image/png"));
+  const embed = spec.audio.mode === "embedded" && spec.audio.file && !opts.forceSilent;
+  const n = segs.length;
+  const fit = `scale=${spec.width}:${spec.height}:force_original_aspect_ratio=increase,crop=${spec.width}:${spec.height},fps=${spec.fps},setsar=1`;
+  const args = [
+    "-y", "-loglevel", "error",
+    ...segs.flatMap((s, i) => ["-ss", String(s.start), "-t", s.seconds.toFixed(3), "-i", files[i]]),
+    "-i", overlay,
+    ...(embed ? ["-i", spec.audio.file as string] : ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100"]),
+    "-filter_complex",
+    `${segs.map((_, i) => `[${i}:v]${fit}[v${i}]`).join(";")};${segs.map((_, i) => `[v${i}]`).join("")}concat=n=${n}:v=1:a=0[bg];[bg][${n}:v]overlay=0:0[o]`,
+    "-map", "[o]", "-map", `${n + 1}:a`,
+    "-c:v", "libx264", "-preset", "medium", "-crf", "23", "-maxrate", "8M", "-bufsize", "16M", "-pix_fmt", "yuv420p", "-profile:v", "high", "-level", "4.2", "-r", String(spec.fps),
+    "-c:a", "aac", "-b:a", "160k", "-ar", "44100",
+    ...(embed ? ["-af", `afade=t=out:st=${Math.max(0, spec.durationSec - 0.25).toFixed(3)}:d=0.25`] : []),
+    "-t", spec.durationSec.toFixed(4), "-movflags", "+faststart", out,
+  ];
+  execFileSync("ffmpeg", args, { stdio: ["ignore", "inherit", "inherit"] });
+  rmSync(overlay, { force: true });
+  return segs.map((s) => s.clip.id);
+}
+
+/** One frame of a finished video as PNG (used for scenic stills). */
+export function frameStill(video: string, t: number, out: string) {
+  execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-ss", t.toFixed(2), "-i", video, "-frames:v", "1", out]);
 }
 
 /** Same picture, silent AAC track: the video stream is copied, not re-encoded. */

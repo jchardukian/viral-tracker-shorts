@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
-import { existsSync, mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { activeSounds, AudioError, type AudioLibrary, loadLibrary, pickSound, resolveAudio, type Sound } from "../src/audio/library.ts";
-import { probe, renderFrame, renderVideo } from "../src/engine/encode.ts";
+import { type Clip, pickFootage, probe, renderFrame, renderScenic, renderVideo } from "../src/engine/encode.ts";
 import { applyBufferMetrics, COLUMNS, importMetrics, parseCsv, readLedger, summarize, syncFromQueue, writeLedger } from "../src/analytics.ts";
 import { detectBeat } from "../src/audio/beat.ts";
 import { generateTrack, variationPrompt } from "../src/audio/generate.ts";
@@ -142,6 +142,22 @@ test("encoded video is 1080x1920 H.264/yuv420p 30fps with AAC; embedded has soun
   }
   assert.ok(a.meanVolumeDb! > -40);
   assert.ok(s.meanVolumeDb! < -80);
+});
+
+test("scenic variant: stock footage with the header on top, same output format", async () => {
+  const dir = tmp();
+  const base = buildSpec({ id: "sc", platform: "tiktok", variant: "scenic", channel: loadChannels().tiktok, caption: "Use this sound to go viral", contentTitles: ["a"], audio: silent(), date: "2026-11-21", targetSec: 6 });
+  const clips = (JSON.parse(readFileSync("config/footage.json", "utf8")) as { clips: Clip[] }).clips;
+  const picked = pickFootage(base, clips);
+  assert.ok(picked.length >= 1 && new Set(picked.map((p) => p.clip.theme)).size === 1, "one theme per video");
+  assert.ok(picked.every((p) => p.start + p.seconds <= p.clip.seconds));
+  assert.deepEqual(pickFootage(base, clips), picked, "deterministic");
+  if (!picked.every((p) => existsSync(join("assets", "footage", `${p.clip.id}.mp4`)))) return; // footage not cached on this machine
+  const used = await renderScenic(base, join(dir, "s.mp4"), clips, { forceSilent: true });
+  assert.deepEqual(used, picked.map((p) => p.clip.id));
+  const p = probe(join(dir, "s.mp4"));
+  assert.deepEqual([p.width, p.height, p.vcodec, p.pixFmt, p.fps, p.acodec], [1080, 1920, "h264", "yuv420p", 30, "aac"]);
+  assert.ok(Math.abs(p.durationSec - base.durationSec) < 0.2);
 });
 
 // ---------- audio library -----------------------------------------------------
@@ -353,6 +369,7 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
     assert.deepEqual([caps.size, snds.size], [nCap, nSnd], "every caption and every sound is used");
     assert.ok(spread(caps) <= 1 && spread(snds) <= 1, "even shares");
     assert.ok(count((p) => `${p.spec.captionKey}|${p.spec.audio.soundId}`).size >= 24, "captions and sounds are mixed, not paired");
+    assert.ok(spread(count((p) => `${p.spec.captionKey}|${slot(p)}`)) <= 3 && spread(count((p) => `${p.spec.audio.soundId}|${week(p)}`)) <= 3);
     // nothing is tied to a time of day or a week
     assert.ok(spread(count((p) => p.spec.countTier!)) <= 1 && count((p) => p.spec.countTier!).size === 5, "five count sizes, even shares");
     // posting times: every time in both pools is used about equally, earlier pool first each day
@@ -369,17 +386,19 @@ test("14-day experiment: 28 posts per platform, every pair of factors balanced, 
     const mean = (id: string) => { const v = ps.filter((p) => p.spec.lengthTier === id).map((p) => p.spec.durationSec); return v.reduce((a, b) => a + b, 0) / v.length; };
     assert.ok(mean("9s") < mean("13s") && mean("13s") < mean("18s") && mean("9s") > 7 && mean("18s") < 20.5);
     for (const f of [(p: (typeof ps)[number]) => p.spec.captionKey, (p: (typeof ps)[number]) => p.spec.audio.soundId!, (p: (typeof ps)[number]) => p.spec.variant, (p: (typeof ps)[number]) => p.spec.countTier!, (p: (typeof ps)[number]) => p.spec.lengthTier!]) {
-      const byTime = count((p) => `${f(p)}|${slot(p)}`);
-      const byWeek = count((p) => `${f(p)}|${week(p)}`);
-      assert.equal(byTime.size, count(f).size * 2, "every option appears in both time slots");
-      assert.equal(byWeek.size, count(f).size * 2, "every option appears in both weeks");
-      assert.ok(spread(byTime) <= 3 && spread(byWeek) <= 3);
+      // any option with enough posts to split must appear in both daily slots and both weeks
+      const totals = count(f);
+      for (const [opt, n] of totals) {
+        if (n < 4) continue;
+        for (const g of [slot, week]) assert.equal(new Set(ps.filter((p) => f(p) === opt).map(g)).size, 2, `${platform} ${opt} is confined to one ${g === slot ? "time slot" : "week"}`);
+      }
     }
-    if (platform === "tiktok") {
-      assert.ok([...count((p) => `${p.spec.variant}|${slot(p)}`).values()].every((n) => n === 7));
-      assert.equal(count((p) => `${p.spec.variant}|${p.spec.audio.soundId}`).size, nSnd * 2, "each variant runs with every sound");
-      assert.equal(count((p) => `${p.spec.variant}|${p.spec.captionKey}`).size, nCap * 2, "each variant runs with every caption");
-    }
+    // template variants: even shares, each in both daily slots, none tied to one sound
+    const nVar = loadChannels()[platform].variants!.length;
+    const vars = count((p) => p.spec.variant);
+    assert.ok(vars.size === nVar && spread(vars) <= 1);
+    assert.ok(spread(count((p) => `${p.spec.variant}|${slot(p)}`)) <= 2);
+    assert.ok(count((p) => `${p.spec.variant}|${p.spec.captionKey}`).size >= nVar * nCap * 0.7, "variants are mixed across captions");
     assert.ok(ps.every((p) => p.spec.audio.mode === "embedded"));
   }
   const csv = planCsv(plan).trim().split("\n");

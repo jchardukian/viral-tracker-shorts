@@ -430,7 +430,9 @@ async function main() {
       if (!prompt) throw new Error("give --prompt or --like");
       if (libs.some(([, l]) => l.sounds.some((x) => x.id === id))) throw new Error(`sound id ${id} already exists`);
       const rel = `assets/audio/tracks/${id}.mp3`;
-      await generateTrack(`${prompt}, ${HOOK_FIRST}`, join(ROOT, rel));
+      // songs with lyrics must not get the instrumental-only suffix
+      const vocal = /lyrics|vocal|sung|rap/i.test(prompt);
+      await generateTrack(vocal ? `${prompt}. Starts immediately on the vocal hook, no intro` : `${prompt}, ${HOOK_FIRST}`, join(ROOT, rel));
       const beat = detectBeat(join(ROOT, rel));
       const start = flag("from", today())!;
       const until = new Date(Date.parse(start) + 40 * 86400000).toISOString().slice(0, 10);

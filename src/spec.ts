@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { ROOT } from "./engine/draw.ts";
 import { hashSeed, pick, rng, shortCount } from "./engine/util.ts";
 import { type DayPoint, type HistoryConfig, historyFor } from "./history.ts";
+import { scenicTemplate } from "./templates/scenic.ts";
 import { tiktokProfileTemplate } from "./templates/tiktok-profile.ts";
 import { tiktokTemplate } from "./templates/tiktok.ts";
 import { type AudioAssignment, type ContentCard, FPS, HEIGHT, type Platform, type Snapshot, type Template, type VideoSpec, WIDTH } from "./templates/types.ts";
@@ -10,8 +11,8 @@ import { youtubeTemplate } from "./templates/youtube.ts";
 
 /** Template variants per platform; the first one is the default. */
 export const TEMPLATES: Record<Platform, Record<string, Template>> = {
-  youtube: { dashboard: youtubeTemplate },
-  tiktok: { analytics: tiktokTemplate, profile: tiktokProfileTemplate },
+  youtube: { dashboard: youtubeTemplate, scenic: scenicTemplate("youtube") },
+  tiktok: { analytics: tiktokTemplate, profile: tiktokProfileTemplate, scenic: scenicTemplate("tiktok") },
 };
 
 export function templateFor(spec: Pick<VideoSpec, "platform" | "variant">): Template {

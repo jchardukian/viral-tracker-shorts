@@ -1,12 +1,12 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { activeSounds, loadLibrary, pickSound, resolveAudio } from "./audio/library.ts";
-import { fileSha256, probe, type Probe, renderStill, renderVideo, silenceCopy } from "./engine/encode.ts";
+import { type Clip, fileSha256, frameStill, probe, type Probe, renderScenic, renderStill, renderVideo, silenceCopy } from "./engine/encode.ts";
 import { hashSeed, rng } from "./engine/util.ts";
 import { apportion, design, type ExperimentConfig } from "./experiment.ts";
 import { Queue, slotKey } from "./publish/queue.ts";
 import { addDays, zonedIso } from "./publish/schedule.ts";
-import { buildSpec, loadCaptions, loadChannels, readJson, TEMPLATES } from "./spec.ts";
+import { buildSpec, loadCaptions, loadChannels, readJson, templateFor, TEMPLATES } from "./spec.ts";
 import { type Platform, PLATFORMS, type VideoSpec } from "./templates/types.ts";
 
 export interface Manifest {
@@ -15,6 +15,8 @@ export interface Manifest {
   variant: string;
   countTier: string | null;
   lengthTier: string | null;
+  /** stock clip ids, for scenic videos */
+  footage: string[] | null;
   file: string;
   silentFile: string | null;
   still: string;
@@ -44,19 +46,24 @@ export async function renderOne(p: Planned, dir: string, opts: { silentTwin?: bo
   const { spec } = p;
   const file = join(dir, `${spec.id}.mp4`);
   const still = join(dir, `${spec.id}.png`);
-  await renderVideo(spec, file);
+  const scenic = templateFor(spec).footage === true;
+  let footage: string[] | null = null;
+  if (scenic) footage = await renderScenic(spec, file, readJson<{ clips: Clip[] }>("config/footage.json").clips);
+  else await renderVideo(spec, file);
   let silentFile: string | null = null;
   if (opts.silentTwin && spec.audio.mode === "embedded") {
     silentFile = join(dir, `${spec.id}.silent.mp4`);
     silenceCopy(file, silentFile);
   }
-  renderStill(spec, spec.durationSec - 0.1, still); // the final held dashboard
+  if (scenic) frameStill(file, spec.durationSec * 0.3, still);
+  else renderStill(spec, spec.durationSec - 0.1, still); // the final held dashboard
   const m: Manifest = {
     id: spec.id,
     platform: spec.platform,
     variant: spec.variant,
     countTier: spec.countTier,
     lengthTier: spec.lengthTier,
+    footage,
     file,
     silentFile,
     still,

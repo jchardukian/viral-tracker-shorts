@@ -200,6 +200,156 @@
       "beatOffsetSec": 0.023,
       "activeFrom": "2026-11-22",
       "expiresAt": "2027-03-31"
+    },
+    {
+      "id": "trk-vocal-rnb-numbers",
+      "title": "Vocal R&B: numbers going up",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-vocal-rnb-numbers.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Smooth catchy R&B pop song with a warm male vocal and stacked harmonies, 110 BPM, snappy drums and a bouncy bassline. Lyrics: Numbers going up, up, up, can't stop now. Every single day I wake up, wow. Simple repetitive sing-along chorus",
+        "generatedAt": "2026-11-22"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-22",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 110,
+      "beatOffsetSec": 0.035,
+      "activeFrom": "2026-11-22",
+      "expiresAt": "2027-03-31"
+    },
+    {
+      "id": "trk-vocal-edm-wake-up",
+      "title": "Vocal EDM: woke up to this",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-vocal-edm-wake-up.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Euphoric festival EDM pop song with an airy female vocal, 128 BPM, big supersaw chords, claps building straight into the drop. Lyrics: I woke up to this, I woke up to this, tell me that it's real. Short repeated vocal hook then an instrumental drop with vocal chops",
+        "generatedAt": "2026-11-22"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-22",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 128,
+      "beatOffsetSec": 0.035,
+      "activeFrom": "2026-11-22",
+      "expiresAt": "2027-03-31"
+    },
+    {
+      "id": "trk-vocal-afrobeats-run-it-up",
+      "title": "Vocal afrobeats: run it up",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-vocal-afrobeats-run-it-up.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Feel-good afrobeats song with a relaxed melodic male vocal, 104 BPM, log drums, shakers and bright guitar plucks. Lyrics: Run it up, run it up, watch it grow. Oh my trillion, here we go. Catchy call and response chorus with backing chants",
+        "generatedAt": "2026-11-22"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-22",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 104,
+      "beatOffsetSec": 0.035,
+      "activeFrom": "2026-11-22",
+      "expiresAt": "2027-03-31"
+    },
+    {
+      "id": "trk-vocal-poppunk-blow-up",
+      "title": "Vocal pop punk: blow up",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-vocal-poppunk-blow-up.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "High-energy pop punk chorus with a shouted group vocal, 170 BPM, crunchy guitars and fast drums. Lyrics: One video and everything blows up, hey! One video and we never slow up, hey! Gang vocals on every hey",
+        "generatedAt": "2026-11-22"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-22",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 170,
+      "beatOffsetSec": 0.139,
+      "activeFrom": "2026-11-22",
+      "expiresAt": "2027-03-31"
+    },
+    {
+      "id": "trk-vocal-kpop-oh-my",
+      "title": "Vocal dance pop: oh my",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-vocal-kpop-oh-my.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Glossy K-pop style dance pop chorus sung in English by a bright girl-group vocal, 122 BPM, punchy bass and sparkling synth stabs. Lyrics: Oh my, oh my, look at it climb. Oh my, oh my, trillion on my mind. Tight harmonies, extremely catchy hook",
+        "generatedAt": "2026-11-22"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-22",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 122,
+      "beatOffsetSec": 0.023,
+      "activeFrom": "2026-11-22",
+      "expiresAt": "2027-03-31"
+    },
+    {
+      "id": "trk-vocal-drill-check-the-count",
+      "title": "Vocal drill: check the count",
+      "approvedPlatforms": [
+        "youtube",
+        "tiktok"
+      ],
+      "link": null,
+      "file": "assets/audio/tracks/trk-vocal-drill-check-the-count.mp3",
+      "generator": {
+        "type": "elevenlabs-music",
+        "prompt": "Bouncy UK drill beat with a confident melodic rap hook, 142 BPM, sliding 808s and crisp hi-hats. Lyrics: Check the count, check the count, yesterday was nothing now it's all amount. Check the count, check the count, trillion on the way no doubt. Repeated chant hook",
+        "generatedAt": "2026-11-22"
+      },
+      "license": {
+        "status": "licensed",
+        "embedAllowed": true,
+        "proof": "ElevenLabs Music, generated 2026-11-22",
+        "notes": "Original instrumental. Owner to confirm plan terms for commercial use."
+      },
+      "bpm": 142,
+      "beatOffsetSec": 0.012,
+      "activeFrom": "2026-11-22",
+      "expiresAt": "2027-03-31"
     }
   ]
 }

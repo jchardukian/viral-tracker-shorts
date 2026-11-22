@@ -108,6 +108,8 @@ export interface Template {
   /** bounding boxes of the elements that must stay readable under the player UI */
   layout: Record<string, Rect>;
   render(ctx: Ctx, spec: VideoSpec, t: number): void;
+  /** true when the template only draws an overlay and ffmpeg supplies stock footage underneath */
+  footage?: boolean;
 }
 
 /** Index of the snapshot on screen at frame f (hard cuts, no blending). */

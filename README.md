@@ -45,6 +45,7 @@ per-frame change detection on the subscriber number:
 | YouTube | `dashboard` | creator-dashboard layout from the recording: channel + total subscribers, 28-day cards, latest published content |
 | TikTok | `analytics` | follower-analytics screen: total followers with 7-day change, key metrics, growth chart that draws itself, recent posts |
 | TikTok | `profile` | simplified profile screen: profile name, avatar, one very large follower count, posts grid |
+| Both | `scenic` | free-licence stock footage (city, coast, landscape; `config/footage.json`) cut together, with the header on top |
 
 Original mark and icons; no platform logos. `variants` in
 `config/channels.json` lists which variants a batch rotates through.
@@ -217,7 +218,7 @@ attaching a platform-native sound on either platform (`metadata.tiktok` is
 in the app. Nothing here tries to work around that.
 
 The tracks in `assets/audio/tracks/` are originals generated with ElevenLabs
-Music for this project: six instrumentals and two songs with vocals (prompts stored in the audio config).
+Music for this project: six instrumentals and eight songs with vocals (prompts stored in the audio config).
 The owner should confirm the plan's terms for commercial use. Tempo comes from
 local beat detection (`npm run audio -- detect <file>`).
 
