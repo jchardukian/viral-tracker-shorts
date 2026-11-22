@@ -6,7 +6,9 @@
       "One viral video changes everything",
       "POV: This finally happens to you",
       "Use this song to go viral",
-      "POV: You used this sound and got {count} subscribers"
+      "POV: You used this sound and got {count} subscribers",
+      "Will you subscribe?",
+      "Subscribe or swipe?"
     ],
     "contentTitles": [
       "Day 1",
@@ -21,7 +23,9 @@
       "One viral video changes everything #shorts",
       "POV: this finally happens to you #shorts",
       "Use this song to go viral #shorts",
-      "POV: you used this sound #shorts"
+      "POV: you used this sound #shorts",
+      "Will you subscribe? #shorts",
+      "Subscribe or swipe? #shorts"
     ],
     "description": "Growth time-lapse animation. The figures shown are simulated, not live analytics."
   },
@@ -32,7 +36,9 @@
       "The follower growth everyone wants",
       "POV: This finally happens to you",
       "Use this sound to go viral",
-      "POV: You used this sound and got {count} followers"
+      "POV: You used this sound and got {count} followers",
+      "Will you follow?",
+      "Follow or swipe?"
     ],
     "contentTitles": [
       "day 1",
@@ -46,7 +52,9 @@
       "the follower growth everyone wants #fyp",
       "POV: this finally happens to you #fyp",
       "use this sound to go viral #fyp",
-      "POV: you used this sound #fyp"
+      "POV: you used this sound #fyp",
+      "will you follow? #fyp",
+      "follow or swipe? #fyp"
     ],
     "description": "growth time-lapse animation · simulated numbers"
   }
