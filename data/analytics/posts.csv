@@ -1,8 +1,8 @@
 platform,post_id,video_id,publish_date,caption,audio_id,template_variant,count_tier,final_count,views,viewed_rate,avg_watch_pct,followers_gained,shares,post_url,source
 tiktok,6b0239b6cc364169c1179034,tiktok-2026-11-22-a,2026-11-22,POV: This finally happens to you,trk-hyperpop,profile,1M,,,,,,,,
 tiktok,6b0239cdd864a0110586f897,tiktok-2026-11-22-b,2026-11-22,The follower growth everyone wants,trk-jersey-club,profile,100K,,,,,,,,
-tiktok,6b0234ded5eabfb8cc6ed30e,validation-tiktok,2026-11-22,POV: Your TikTok finally blows up,trk-phonk-cowbell,analytics,300,,,,,,,https://tiktok.com/@oh.my.trillion/video/7710787833107139854,
-youtube,6b0234dccc364169c1160770,validation-youtube,2026-11-22,POV: Your channel finally takes off,trk-phonk-cowbell,dashboard,300,,,,,,,https://www.youtube.com/watch?v=N0OGH4KB1kw,
+tiktok,6b0234ded5eabfb8cc6ed30e,validation-tiktok,2026-11-22,POV: Your TikTok finally blows up,trk-phonk-cowbell,analytics,300,,6,,,0,,https://tiktok.com/@oh.my.trillion/video/7710787833107139854,manual
+youtube,6b0234dccc364169c1160770,validation-youtube,2026-11-22,POV: Your channel finally takes off,trk-phonk-cowbell,dashboard,300,,160,,,3,,https://www.youtube.com/watch?v=N0OGH4KB1kw,manual
 youtube,6b0239bb846b0ee9074bad5d,youtube-2026-11-22-a,2026-11-22,Imagine waking up to this,trk-hyperpop,dashboard,300,,,,,,,,
 youtube,6b0239bb0247969092120dec,youtube-2026-11-22-b,2026-11-22,Use this song to go viral,trk-jersey-club,dashboard,10K,,,,,,,,
 tiktok,6b0239cd846b0ee9074bb00a,tiktok-2026-11-23-a,2026-11-23,POV: Your TikTok finally blows up,trk-hype-trap,analytics,10K,,,,,,,,
