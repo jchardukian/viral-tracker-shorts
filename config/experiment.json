@@ -3,38 +3,16 @@
   "explore": 0.3,
   "minPosts": 3,
   "weights": {
-    "youtube": {
-      "template_variant": {
-        "dashboard": 0.75,
-        "scenic": 0.25
-      }
-    },
-    "tiktok": {
-      "template_variant": {
-        "analytics": 0.4,
-        "profile": 0.4,
-        "scenic": 0.2
-      }
-    }
+    "youtube": {},
+    "tiktok": {}
   },
   "autoPublish": true,
   "_autoPublish": "Owner authorised fully automatic scheduling of new batches on 2026-11-21. Set to false to require `queue approve` again.",
   "batchDays": 7,
   "topUpWhenDaysLeftBelow": 8,
   "baseShares": {
-    "youtube": {
-      "template_variant": {
-        "dashboard": 0.75,
-        "scenic": 0.25
-      }
-    },
-    "tiktok": {
-      "template_variant": {
-        "analytics": 0.4,
-        "profile": 0.4,
-        "scenic": 0.2
-      }
-    }
+    "youtube": {},
+    "tiktok": {}
   },
-  "_baseShares": "Starting shares used until a dimension has enough results to be scored. The analytics formats are the proven ones; stock footage starts as a minority test."
+  "_baseShares": "Starting shares used until a dimension has enough results to be scored. Empty = even."
 }

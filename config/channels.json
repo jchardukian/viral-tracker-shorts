@@ -53,8 +53,7 @@
     "bufferChannelId": "6b02282bece6dfde5f4d121b",
     "youtubeCategoryId": "24",
     "variants": [
-      "dashboard",
-      "scenic"
+      "dashboard"
     ],
     "avatarImage": "assets/brand/avatar.jpg"
   },
@@ -74,8 +73,7 @@
     "bufferChannelId": "6b02289bece6dfde5f4d1de6",
     "variants": [
       "analytics",
-      "profile",
-      "scenic"
+      "profile"
     ],
     "avatarImage": "assets/brand/avatar.jpg"
   }
